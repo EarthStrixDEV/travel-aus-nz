@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TravelAusNZ — Gallery</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.sc{--bg:#F6F2EA;--surface:#FBF9F4;--ink:#13213A;--ink2:#4A5468;--ink3:#8A92A3;--line:rgba(19,33,58,.14);--line2:rgba(19,33,58,.07);--copper:#9E5229;--copper-tint:rgba(158,82,41,.09);--on-copper:#FBF9F4;--ph1:#D6D8DD;--ph2:#C2C7D0;--ph3:#A7AEBB;--shadow:0 1px 2px rgba(19,33,58,.04),0 14px 36px rgba(19,33,58,.07);font-family:'Prompt',sans-serif;font-weight:300;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+.sc.dark{--bg:#0E1729;--surface:#14203A;--ink:#F3EEE4;--ink2:#B7BDC8;--ink3:#7D8698;--line:rgba(243,238,228,.16);--line2:rgba(243,238,228,.07);--copper:#D08A5E;--copper-tint:rgba(208,138,94,.14);--on-copper:#0E1729;--ph1:#22304A;--ph2:#2A3953;--ph3:#344462}
+.sc *{box-sizing:border-box}
+.sc h1,.sc h2,.sc h3,.sc p{margin:0}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase}
+a{color:var(--ink);text-decoration:none}a:hover{color:var(--copper)}
+.navlink{font-size:14px;font-weight:500;padding:10px 0}
+.navlink.cur{color:var(--copper)}
+.chip{font-family:inherit;font-size:13px;font-weight:400;min-height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink2);cursor:pointer;transition:all .5s ease;white-space:nowrap}
+.chip:hover{border-color:var(--ink);color:var(--ink)}
+.chip.on{border-color:var(--copper);color:var(--copper);background:var(--copper-tint);font-weight:500}
+.tile{break-inside:avoid;margin:0 0 28px;display:block;cursor:pointer;background:none;border:0;padding:0;width:100%;text-align:left;font-family:inherit;color:var(--ink)}
+.tile .img{position:relative;overflow:hidden;border-radius:6px;background:var(--ph2)}
+.tile .in{position:absolute;inset:0;transition:transform 1.8s cubic-bezier(.2,.6,.2,1)}
+.tile:hover .in{transform:scale(1.04)}
+.btn{font-family:inherit;font-size:14px;font-weight:500;border-radius:6px;min-height:44px;padding:0 20px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:1px solid transparent}
+.icon-btn{width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.lb-row{display:flex;gap:14px;padding:16px 0;border-top:1px solid var(--line2)}
+.fadein{animation:fi .9s ease}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+</style>
+</helmet>
+<div class="sc {{themeClass}}" style="width: 100%; min-height: 100vh; position: relative;">
+
+<header style="border-bottom: 1px solid var(--line2);">
+<nav aria-label="Primary" style="max-width: 1440px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 56px); display: flex; align-items: center; gap: 32px; flex-wrap: wrap;">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px;"><svg width="24" height="24" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="13" cy="13" r="11.5"></circle><path d="M13 4.5 L15.4 13 L13 21.5 L10.6 13 Z"></path><path d="M13 4.5 L15.4 13 L10.6 13 Z" fill="currentColor"></path></svg><span style="font-size: 15px; font-weight: 600; letter-spacing: .02em;">TravelAusNZ</span></a>
+<div style="display: flex; gap: 28px; flex-wrap: wrap; flex: 1;"><a class="navlink" href="Main.dc.html">Destinations</a><a class="navlink" href="Map.dc.html">Map</a><a class="navlink" href="Transport.dc.html">Transport</a><a class="navlink" href="Dining.dc.html">Eat &amp; Drink</a><a class="navlink cur" href="Gallery.dc.html" aria-current="page">Gallery</a></div>
+<a class="btn" href="Trip.dc.html" style="border-color: var(--line); color: var(--ink);">My Trip · 3</a>
+</nav>
+</header>
+
+<section style="max-width: 1440px; margin: 0 auto; padding: 96px clamp(16px, 4vw, 56px) 48px; display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between; align-items: flex-end;">
+<div style="max-width: 720px;">
+<p class="eyebrow" style="color: var(--copper);">Gallery</p>
+<h1 style="font-size: clamp(40px, 5vw, 68px); font-weight: 600; line-height: 1.04; letter-spacing: -0.02em; margin-top: 16px;">Seen in good light.</h1>
+<p style="font-size: 17px; line-height: 1.7; color: var(--ink2); margin-top: 18px; max-width: 560px;">Every frame links to its place: when to go, how to get there without a car, and where to eat nearby.</p>
+</div>
+<p style="font-size: 14px; color: var(--ink2);">{{shownCount}} photographs</p>
+</section>
+
+<div style="position: sticky; top: 0; z-index: 10; background: var(--bg); border-top: 1px solid var(--line2); border-bottom: 1px solid var(--line2);">
+<div style="max-width: 1440px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 56px); display: flex; flex-wrap: wrap; gap: 20px 36px; align-items: center;">
+<div role="group" aria-label="Region" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+<span class="eyebrow" style="color: var(--ink2); margin-right: 6px;">Region</span>
+<sc-for list="{{regionChips}}" as="c" hint-placeholder-count="5"><button class="chip {{c.cls}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for>
+</div>
+<div role="group" aria-label="Type" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+<span class="eyebrow" style="color: var(--ink2); margin-right: 6px;">Type</span>
+<sc-for list="{{typeChips}}" as="c" hint-placeholder-count="6"><button class="chip {{c.cls}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for>
+</div>
+<div role="group" aria-label="Season" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+<span class="eyebrow" style="color: var(--ink2); margin-right: 6px;">Season</span>
+<sc-for list="{{seasonChips}}" as="c" hint-placeholder-count="5"><button class="chip {{c.cls}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for>
+</div>
+</div>
+</div>
+
+<section aria-label="Photographs" style="max-width: 1440px; margin: 0 auto; padding: 40px clamp(16px, 4vw, 56px) 120px; column-width: 360px; column-gap: 28px;">
+<sc-for list="{{photos}}" as="p" hint-placeholder-count="9">
+<button class="tile fadein" onClick="{{p.open}}" aria-label="Open {{p.title}}">
+<div class="img" style="aspect-ratio: {{p.ratio}};">
+<div class="in" style="background: var(--ph2);">
+<svg viewBox="0 0 300 300" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><path d="{{p.shape}}" style="fill: var(--ph3)"></path><path d="M0 250 Q150 232 300 246 V300 H0Z" style="fill: var(--ph1)"></path></svg>
+</div>
+<span style="position: absolute; left: 14px; top: 12px; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; font-weight: 500;">Photo · {{p.ratioLabel}}</span>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 12px;">
+<h3 style="font-size: 17px; font-weight: 500;">{{p.title}}</h3>
+<span style="font-size: 12px; color: var(--ink2); white-space: nowrap;">{{p.type}}</span>
+</div>
+<p style="font-size: 13px; color: var(--ink2); margin-top: 2px;">{{p.region}} · {{p.season}}</p>
+</button>
+</sc-for>
+<sc-if value="{{empty}}" hint-placeholder-val="{{false}}">
+<div style="padding: 80px 0; text-align: center; color: var(--ink2);">
+<p style="font-size: 18px; font-weight: 500; color: var(--ink);">Nothing matches every filter.</p>
+<button class="btn" onClick="{{reset}}" style="margin-top: 16px; border-color: var(--line); color: var(--ink); background: transparent;">Clear filters</button>
+</div>
+</sc-if>
+</section>
+
+<sc-if value="{{lbOpen}}" hint-placeholder-val="{{false}}">
+<div role="dialog" aria-modal="true" aria-label="{{lb.title}}" class="fadein" style="position: fixed; inset: 0; z-index: 50; background: rgba(9,17,33,.94); display: flex; align-items: stretch; color: #F6F2EA;">
+<div style="flex: 1 1 auto; display: flex; align-items: center; justify-content: center; padding: 56px; position: relative; min-width: 0;">
+<div style="width: 100%; max-width: 900px; aspect-ratio: {{lb.ratio}}; max-height: 100%; position: relative; background: #2A3953; border-radius: 4px; overflow: hidden;">
+<svg viewBox="0 0 300 300" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><path d="{{lb.shape}}" style="fill: #344462"></path><path d="M0 250 Q150 232 300 246 V300 H0Z" style="fill: #22304A"></path></svg>
+<span style="position: absolute; left: 16px; top: 14px; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: rgba(246,242,234,.7);">Photo · {{lb.ratioLabel}}</span>
+</div>
+<button onClick="{{prev}}" aria-label="Previous photo" style="position: absolute; left: 16px; top: 50%; width: 48px; height: 48px; border-radius: 999px; border: 1px solid rgba(246,242,234,.3); background: transparent; color: #F6F2EA; cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
+<button onClick="{{next}}" aria-label="Next photo" style="position: absolute; right: 16px; top: 50%; width: 48px; height: 48px; border-radius: 999px; border: 1px solid rgba(246,242,234,.3); background: transparent; color: #F6F2EA; cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+<p style="position: absolute; left: 56px; bottom: 20px; font-size: 13px; color: rgba(246,242,234,.72);">{{lbIndex}} / {{shownCount}}</p>
+</div>
+<aside style="flex: 0 0 400px; background: var(--surface); color: var(--ink); padding: 32px; overflow: auto; position: relative;">
+<button class="icon-btn" onClick="{{close}}" aria-label="Close" style="position: absolute; right: 20px; top: 20px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+<p class="eyebrow" style="color: var(--copper);">{{lb.type}} · {{lb.region}}</p>
+<h2 style="font-size: 30px; font-weight: 600; line-height: 1.15; margin-top: 12px; padding-right: 48px;">{{lb.title}}</h2>
+<p style="font-size: 15px; line-height: 1.65; color: var(--ink2); margin-top: 12px;">{{lb.desc}}</p>
+<div style="margin-top: 24px;">
+<div class="lb-row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"></path></svg><div><p class="eyebrow" style="color: var(--ink2);">Best time to visit</p><p style="font-size: 15px; font-weight: 500; margin-top: 4px;">{{lb.best}}</p></div></div>
+<div class="lb-row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="6" y="3" width="12" height="13" rx="3"></rect><path d="M6 10h12M9 20l1.5-4M15 20l-1.5-4"></path></svg><div><p class="eyebrow" style="color: var(--ink2);">How to get there</p><p style="font-size: 15px; line-height: 1.55; margin-top: 4px;">{{lb.how}}</p></div></div>
+<div class="lb-row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 3v18M5 3v5a2 2 0 0 0 4 0V3M17 21V3c-2 1-3.5 3-3.5 7v3H17"></path></svg><div><p class="eyebrow" style="color: var(--ink2);">Nearby dining</p><p style="font-size: 15px; line-height: 1.55; margin-top: 4px;">{{lb.eat}}</p></div></div>
+</div>
+<div style="display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap;">
+<a class="btn" href="Map.dc.html" style="background: var(--copper); color: var(--on-copper); flex: 1;">Open attraction page</a>
+<button class="btn" style="border-color: var(--line); background: transparent; color: var(--ink);">Add to trip</button>
+</div>
+</aside>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":1440,"height":2500}}'>
+class Component extends DCLogic {
+  state = { region: 'All', type: 'All', season: 'Any', open: null };
+  renderVals() {
+    const S = ['M0 180 L60 120 L120 160 L200 80 L300 150 V300 H0Z', 'M0 200 L300 190 V300 H0Z', 'M0 160 L80 200 L150 110 L230 170 L300 130 V300 H0Z', 'M40 300 L40 120 L90 90 L90 300 Z M150 300 V60 H210 V300Z', 'M0 220 C80 180 160 230 300 190 V300 H0Z'];
+    const P = [
+      ['Bondi to Coogee coastal walk', 'Sydney', 'Beach', 'Summer', '4 / 5', 1, 'Six kilometres of sandstone cliffs, ocean pools and bays.', 'Nov–Mar, early morning', 'Bus 333 from the CBD to Bondi Beach, about 30 min. Return on bus 373 from Coogee.', 'Saltbush Dining Room (Surry Hills) · Low Tide (Potts Point)'],
+      ['Sydney Opera House', 'Sydney', 'Heritage', 'Spring', '3 / 2', 4, 'Utzon’s sails seen from the ferry, then up close on a morning tour.', 'Year-round; Sep–Nov is mild', 'Train or ferry to Circular Quay, then a 7-minute harbourside walk.', 'Harbourline Oyster Room · Wharf Street Trattoria'],
+      ['Hosier Lane at dusk', 'Melbourne', 'City', 'Autumn', '2 / 3', 3, 'The city’s most photographed laneway, repainted every few weeks.', 'Mar–May', 'Tram to Flinders Street, 3-minute walk. Free Tram Zone.', 'Hollow Lane (cocktails) · Degraves Street cafés'],
+      ['Yarra Valley vines', 'Melbourne', 'Wine region', 'Autumn', '3 / 2', 4, 'Cool-climate chardonnay and pinot an hour from the city.', 'Mar–May, during vintage', 'Train to Lilydale, then bus 685 to Healesville. Tour shuttles from the CBD.', 'Cellar-door lunches in Healesville'],
+      ['Wineglass Bay', 'Tasmania', 'Beach', 'Summer', '4 / 5', 1, 'The lookout is a 1.5-hour return walk; the beach itself is worth the descent.', 'Dec–Mar', 'Coach from Hobart to Coles Bay (seasonal), then park shuttle.', 'Freycinet oyster farms · Coles Bay cafés'],
+      ['Cradle Mountain', 'Tasmania', 'Mountain', 'Winter', '3 / 2', 0, 'Dove Lake circuit under the jagged peak, often in snow from June.', 'Jun–Aug for snow; Dec–Mar for walking', 'Coach from Launceston to Cradle Mountain (seasonal), then park shuttle bus.', 'Lodge dining at the park entrance'],
+      ['Port Arthur', 'Tasmania', 'Heritage', 'Autumn', '3 / 2', 3, 'Convict-era ruins on a quiet bay, best on the evening ghost tour.', 'Mar–May', 'Day tours from Hobart; no public bus.', 'Pier Seventeen Oyster Room (Hobart)'],
+      ['Whitehaven Beach', 'Great Barrier Reef', 'Beach', 'Winter', '16 / 9', 1, 'Pure silica sand at Hill Inlet, reached by boat from Airlie Beach.', 'Jun–Oct, stinger-free season', 'Fly to Proserpine, coach to Airlie Beach, then day cruise.', 'Airlie Beach marina restaurants'],
+      ['Agincourt Reef', 'Great Barrier Reef', 'Wildlife', 'Winter', '4 / 5', 4, 'Ribbon reef on the outer edge, with clear water and turtles.', 'Jun–Oct', 'Fast catamaran from Port Douglas, 90 minutes.', 'Port Douglas Macrossan Street'],
+      ['The Remarkables', 'Queenstown', 'Mountain', 'Winter', '3 / 2', 0, 'Skiing in winter, alpine lakes in summer, both above Lake Wakatipu.', 'Jul–Sep for ski; Dec–Mar for hiking', 'Ski shuttle from Queenstown centre, 45 min.', 'Queenstown waterfront'],
+      ['Gibbston Valley', 'Queenstown', 'Wine region', 'Autumn', '4 / 5', 2, 'Pinot noir country along the Kawarau River.', 'Mar–Apr', 'Orbus to Arrowtown, then the Queenstown Trail by e-bike.', 'Gibbston cellar doors'],
+      ['Milford Sound', 'Fiordland', 'Mountain', 'Spring', '2 / 3', 0, 'Mitre Peak and waterfalls at their fullest after rain.', 'Nov–Apr; rain makes the falls', 'Coach from Queenstown or Te Anau, then cruise from the terminal.', 'Te Anau lakefront'],
+      ['Waiheke Island vineyards', 'Auckland', 'Wine region', 'Summer', '3 / 2', 4, 'Olive groves and Bordeaux-style reds, a 40-minute ferry ride away.', 'Dec–Mar', 'Fullers ferry from Auckland Downtown, then the island bus.', 'Vineyard lunches at Onetangi'],
+      ['Zealandia', 'Wellington', 'Wildlife', 'Spring', '4 / 5', 2, 'An urban eco-sanctuary with kākā, takahē and night tours.', 'Sep–Nov', 'Free shuttle from the i-SITE, or a 10-min bus ride.', 'Tūī & Fern (Te Aro)'],
+      ['Cuba Street', 'Wellington', 'City', 'Autumn', '2 / 3', 3, 'Wellington’s bohemian spine of cafés, record shops and bars.', 'Year-round', 'Walk from Wellington Station, 15 min, or bus to Courtenay Place.', 'Tūī & Fern · Cuba Street cafés']
+    ];
+    const { region, type, season, open } = this.state;
+    const ratioLabel = (r) => r.replace(/ /g, '');
+    const list = P.map((p, i) => ({ id: i, title: p[0], region: p[1], type: p[2], season: p[3], ratio: p[4], ratioLabel: ratioLabel(p[4]), shape: S[p[5]], desc: p[6], best: p[7], how: p[8], eat: p[9] }))
+      .filter((p) => (region === 'All' || p.region === region) && (type === 'All' || p.type === type) && (season === 'Any' || p.season === season));
+    const photos = list.map((p, idx) => ({ ...p, open: () => this.setState({ open: idx }) }));
+    const chips = (vals, key) => vals.map((v) => ({ label: v, on: this.state[key] === v, cls: this.state[key] === v ? 'on' : '', pick: () => this.setState({ [key]: v, open: null }) }));
+    const lbOpen = open !== null && photos[open];
+    const n = photos.length;
+    return {
+      themeClass: this.props.dark ? 'dark' : '',
+      regionChips: chips(['All', 'Sydney', 'Melbourne', 'Tasmania', 'Great Barrier Reef', 'Queenstown', 'Fiordland', 'Auckland', 'Wellington'], 'region'),
+      typeChips: chips(['All', 'Beach', 'Mountain', 'City', 'Wildlife', 'Wine region', 'Heritage'], 'type'),
+      seasonChips: chips(['Any', 'Summer', 'Autumn', 'Winter', 'Spring'], 'season'),
+      photos, shownCount: n, empty: n === 0,
+      reset: () => this.setState({ region: 'All', type: 'All', season: 'Any' }),
+      lbOpen: !!lbOpen, lb: lbOpen ? photos[open] : (photos[0] || {}), lbIndex: (open ?? 0) + 1,
+      close: () => this.setState({ open: null }),
+      prev: () => this.setState({ open: (open - 1 + n) % n }), next: () => this.setState({ open: (open + 1) % n })
+    };
+  }
+}
+</script>
+</body>
+</html>

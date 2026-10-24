@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TravelAusNZ — Map, mobile</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.sc{--bg:#F6F2EA;--surface:#FBF9F4;--ink:#13213A;--ink2:#4A5468;--ink3:#8A92A3;--line:rgba(19,33,58,.14);--line2:rgba(19,33,58,.07);--copper:#9E5229;--copper-tint:rgba(158,82,41,.12);--on-copper:#FBF9F4;--ph1:#D6D8DD;--ph2:#C2C7D0;--ph3:#A7AEBB;--shadow:0 -1px 2px rgba(19,33,58,.04),0 -16px 40px rgba(19,33,58,.10);--land:#ECE8E1;--water:#C8CFDA;--road:#FBF9F4;--minor:#F3F0EA;--park:#DFE0DD;--maplabel:#4A5468;font-family:'Prompt',sans-serif;font-weight:300;color:var(--ink);-webkit-font-smoothing:antialiased}
+.sc.dark{--bg:#0E1729;--surface:#14203A;--ink:#F3EEE4;--ink2:#B7BDC8;--ink3:#7D8698;--line:rgba(243,238,228,.16);--line2:rgba(243,238,228,.07);--copper:#D08A5E;--copper-tint:rgba(208,138,94,.16);--on-copper:#0E1729;--ph1:#22304A;--ph2:#2A3953;--ph3:#344462;--shadow:0 -16px 40px rgba(0,0,0,.4);--land:#16223A;--water:#0B1325;--road:#26344F;--minor:#1C2942;--park:#1A2943;--maplabel:#B7BDC8}
+.sc *{box-sizing:border-box}
+.sc h2,.sc h3,.sc p{margin:0}
+.eyebrow{font-size:10px;font-weight:500;letter-spacing:.22em;text-transform:uppercase}
+.chip{font-family:inherit;font-size:13px;font-weight:500;min-height:40px;padding:0 14px 0 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);display:inline-flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;flex:none}
+.chip.on{color:var(--ink);box-shadow:inset 0 0 0 1px var(--copper);border-color:var(--copper)}
+.pin{position:absolute;width:44px;height:44px;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;background:none;border:0;padding:0;cursor:pointer}
+.shape{display:flex;align-items:center;justify-content:center;background:var(--ink);color:var(--bg);transition:all .6s ease}
+.t-a .shape{width:26px;height:26px;border-radius:999px}
+.t-r .shape{width:24px;height:24px;border-radius:6px}
+.t-b .shape{width:20px;height:20px;border-radius:3px;transform:rotate(45deg)}
+.t-t .shape{width:22px;height:22px;border-radius:2px;background:var(--surface);color:var(--ink);border:1.5px solid var(--ink)}
+.pin.sel .shape{background:var(--copper);color:var(--on-copper);border-color:var(--copper);box-shadow:0 0 0 6px var(--copper-tint)}
+.cards{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 20px 16px;scrollbar-width:none}
+.cards::-webkit-scrollbar{display:none}
+.pcard{scroll-snap-align:center;flex:0 0 300px;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;gap:12px;padding:10px;cursor:pointer;text-align:left;font-family:inherit;color:var(--ink);transition:border-color .6s ease}
+.pcard.sel{border-color:var(--copper);box-shadow:inset 0 0 0 1px var(--copper)}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;font-weight:500;letter-spacing:.06em;color:var(--ink2);text-decoration:none;min-width:56px;padding-top:10px}
+.tab.cur{color:var(--copper)}
+.maplbl{font-family:'Prompt',sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}
+.mini{font-family:inherit;font-size:12px;font-weight:500;height:32px;padding:0 10px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.mini.on{background:var(--copper);color:var(--on-copper);border-color:var(--copper)}
+</style>
+</helmet>
+<div class="sc {{themeClass}}" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: var(--land);">
+
+<svg viewBox="330 110 380 822" width="390" height="844" style="position: absolute; inset: 0;" aria-hidden="true">
+<rect x="0" y="0" width="1440" height="1000" style="fill: var(--land)"></rect>
+<path d="M0 150 C120 160 200 140 300 165 L310 360 C318 372 340 372 345 360 L355 175 C400 168 440 172 470 190 L478 285 C482 296 508 296 512 285 L520 200 C545 188 570 186 600 196 C610 250 620 300 660 310 C690 300 700 240 712 205 C740 196 760 200 780 212 L790 330 C795 342 822 342 826 330 L836 220 C900 205 960 200 1440 190 L1440 70 C1100 80 900 95 760 100 C600 80 400 110 0 95 Z" style="fill: var(--water)"></path>
+<path d="M530 228 L598 214 C612 280 636 322 662 322 C690 316 702 262 714 226 L728 360 L566 386 Z" style="fill: var(--park)"></path>
+<rect x="598" y="470" width="62" height="168" rx="4" style="fill: var(--park)"></rect>
+<g style="stroke: var(--minor); stroke-width: 6; fill: none"><path d="M390 200 V900"></path><path d="M535 300 V900"></path><path d="M360 500 H700"></path><path d="M360 600 H700"></path><path d="M360 700 H700"></path></g>
+<g style="stroke: var(--road); stroke-width: 10; fill: none; stroke-linecap: round"><path d="M440 190 V900"></path><path d="M490 300 V900"></path><path d="M590 360 V900"></path><path d="M360 380 H760"></path><path d="M360 450 H600"></path><path d="M360 540 H600"></path><path d="M360 640 H700"></path></g>
+<path d="M432 92 L442 196" style="stroke: var(--ink3); stroke-width: 4"></path>
+<g class="maplbl" style="fill: var(--maplabel)"><text x="560" y="150" text-anchor="middle">PORT JACKSON</text><text x="400" y="330">The Rocks</text><text x="606" y="660">Hyde Park</text></g>
+<path d="{{route.d}}" style="stroke: var(--copper); stroke-width: 3.5; fill: none; stroke-dasharray: 2 7; stroke-linecap: round"></path>
+<circle cx="{{route.sx}}" cy="{{route.sy}}" r="6" style="fill: var(--surface); stroke: var(--copper); stroke-width: 2.5"></circle>
+</svg>
+
+<sc-for list="{{pins}}" as="p" hint-placeholder-count="10">
+<button class="pin t-{{p.type}} {{p.selCls}}" style="left: {{p.px}}px; top: {{p.py}}px;" aria-label="{{p.name}}" onClick="{{p.pick}}"><span class="shape"></span></button>
+</sc-for>
+
+<!-- top controls -->
+<div style="position: absolute; left: 0; right: 0; top: 16px; display: flex; flex-direction: column; gap: 10px;">
+<div style="display: flex; gap: 8px; padding: 0 16px;">
+<label style="flex: 1; height: 48px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; display: flex; align-items: center; gap: 10px; padding: 0 16px; box-shadow: 0 8px 24px rgba(19,33,58,.08);">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+<input type="text" aria-label="Search the map" placeholder="Search Sydney" style="font-family: inherit; font-size: 14px; border: 0; background: transparent; color: var(--ink); outline: none; width: 100%;">
+</label>
+<button aria-label="Switch country, currently Australia" style="height: 48px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer;">AU · NZ</button>
+</div>
+<div role="group" aria-label="Map layers" style="display: flex; gap: 8px; overflow-x: auto; padding: 0 16px; scrollbar-width: none;">
+<sc-for list="{{layers}}" as="l" hint-placeholder-count="4">
+<button class="chip {{l.cls}}" onClick="{{l.toggle}}" aria-pressed="{{l.on}}"><span style="{{l.swatch}}"></span>{{l.label}}</button>
+</sc-for>
+</div>
+</div>
+
+<!-- bottom sheet -->
+<section aria-label="Places nearby" style="position: absolute; left: 0; right: 0; bottom: 72px; background: var(--bg); border-radius: 18px 18px 0 0; box-shadow: var(--shadow); padding-top: 10px;">
+<div aria-hidden="true" style="width: 40px; height: 4px; border-radius: 999px; background: var(--line); margin: 0 auto 14px;"></div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; padding: 0 20px 12px;">
+<div>
+<p class="eyebrow" style="color: var(--copper);">Sydney CBD</p>
+<h2 style="font-size: 20px; font-weight: 600; margin-top: 4px;">{{count}} places in view</h2>
+</div>
+<span style="font-size: 12px; color: var(--ink2);">Swipe for more</span>
+</div>
+<div class="cards">
+<sc-for list="{{pins}}" as="p" hint-placeholder-count="3">
+<div class="pcard {{p.selCls}}" role="button" tabindex="0" onClick="{{p.pick}}">
+<div style="width: 92px; height: 112px; border-radius: 6px; background: var(--ph2); flex: none; position: relative; overflow: hidden;">
+<svg viewBox="0 0 92 112" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><path d="M0 70 L30 50 L55 66 L92 44 V112 H0Z" style="fill: var(--ph3)"></path></svg>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1;">
+<p class="eyebrow" style="color: var(--ink2);">{{p.typeLabel}}</p>
+<h3 style="font-size: 15px; font-weight: 600; line-height: 1.3;">{{p.name}}</h3>
+<p style="font-size: 12px; color: var(--ink2);">{{p.meta}}</p>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+<span style="font-size: 12px; color: var(--ink2);">{{p.stop}}</span>
+<button class="mini {{p.addCls}}" onClick="{{p.add}}">{{p.addLabel}}</button>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<nav aria-label="Primary" style="position: absolute; left: 0; right: 0; bottom: 0; height: 72px; background: var(--bg); border-top: 1px solid var(--line2); display: flex; justify-content: space-around;">
+<a class="tab" href="HomeMobile.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 5l2 7-2 7-2-7z"></path></svg>Discover</a>
+<a class="tab cur" href="MapMobile.dc.html" aria-current="page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"></path><path d="M9 4v14M15 6v14"></path></svg>Map</a>
+<a class="tab" href="Transport.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="6" y="3" width="12" height="13" rx="3"></rect><path d="M6 10h12M9 20l1.5-4M15 20l-1.5-4"></path></svg>Transit</a>
+<a class="tab" href="Dining.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 3v18M5 3v5a2 2 0 0 0 4 0V3M17 21V3c-2 1-3.5 3-3.5 7v3H17"></path></svg>Eat</a>
+<a class="tab" href="Trip.dc.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg>Trip</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  state = { sel: 'harbourline', layers: { a: true, r: true, b: true, t: true }, added: { opera: true } };
+  renderVals() {
+    const dark = this.props.dark ?? false;
+    const TL = { a: 'Attraction', r: 'Restaurant', b: 'Bar', t: 'Station' };
+    const st = { cq: ['Circular Quay', 495, 300], wy: ['Wynyard', 440, 378], mp: ['Martin Place', 560, 412], th: ['Town Hall', 440, 560] };
+    const raw = [
+      ['harbourline', 'r', 'Harbourline Oyster Room', 410, 226, 'Seafood · $$$ · The Rocks', 'cq', 6],
+      ['opera', 'a', 'Sydney Opera House', 548, 202, 'Tours A$45–69 · Bennelong Pt', 'cq', 7],
+      ['lantern', 'b', 'The Lantern Room', 478, 424, 'Rooftop · $$$ · CBD', 'wy', 4],
+      ['garden', 'a', 'Royal Botanic Garden', 640, 290, 'Free · Daily 7:00–17:30', 'cq', 6],
+      ['ash', 'r', 'Ash & Ember', 520, 476, 'Tasting menu · $$$$', 'mp', 3],
+      ['archive', 'b', 'Archive Bar', 556, 580, 'Hidden whisky bar · $$', 'th', 5],
+      ['barracks', 'a', 'Hyde Park Barracks', 640, 460, 'Museum · A$26', 'mp', 5],
+      ['st-cq', 't', 'Circular Quay', 495, 300, 'Train · Ferry · Light rail', 'cq', 0],
+      ['st-wy', 't', 'Wynyard', 440, 378, 'Train · Bus interchange', 'wy', 0],
+      ['st-mp', 't', 'Martin Place', 560, 412, 'Train · Metro', 'mp', 0],
+      ['st-th', 't', 'Town Hall', 440, 560, 'Train', 'th', 0]
+    ];
+    const k = 390 / 380;
+    const L = this.state.layers;
+    const sel = this.state.sel;
+    const added = this.state.added;
+    const pins = raw.filter((r) => L[r[1]]).map(([id, type, name, x, y, meta, stop, walk]) => ({
+      id, type, name, meta, typeLabel: TL[type], px: Math.round((x - 330) * k), py: Math.round((y - 110) * k),
+      stop: walk ? st[stop][0] + ' · ' + walk + ' min' : 'Opal / contactless',
+      selCls: id === sel ? 'sel' : '', pick: () => this.setState({ sel: id }),
+      addCls: added[id] ? 'on' : '', addLabel: added[id] ? 'Added' : 'Add',
+      add: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.setState((s) => ({ added: { ...s.added, [id]: !s.added[id] } })); }
+    }));
+    const sp = raw.find((r) => r[0] === sel) || raw[0];
+    const s = st[sp[6]];
+    const sw = { a: 'width:11px;height:11px;border-radius:999px;background:currentColor', r: 'width:11px;height:11px;border-radius:3px;background:currentColor', b: 'width:9px;height:9px;transform:rotate(45deg);background:currentColor', t: 'width:11px;height:11px;border:1.5px solid currentColor' };
+    const layers = [['a', 'Attractions'], ['r', 'Restaurants'], ['b', 'Bars'], ['t', 'Transport']].map(([key, label]) => ({ label, on: L[key], cls: L[key] ? 'on' : '', swatch: sw[key], toggle: () => this.setState((x) => ({ layers: { ...x.layers, [key]: !x.layers[key] } })) }));
+    return { themeClass: dark ? 'dark' : '', pins, layers, count: pins.length,
+      route: { d: 'M' + s[1] + ' ' + s[2] + ' L' + s[1] + ' ' + sp[4] + ' L' + sp[3] + ' ' + sp[4], sx: s[1], sy: s[2] } };
+  }
+}
+</script>
+</body>
+</html>

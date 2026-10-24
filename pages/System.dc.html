@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TravelAusNZ — Design System</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.ds{font-family:'Prompt',sans-serif;font-weight:300;color:#13213A;background:#F6F2EA;-webkit-font-smoothing:antialiased}
+.ds *{box-sizing:border-box}
+.ds h1,.ds h2,.ds h3,.ds p{margin:0}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase}
+.sec{border-top:1px solid rgba(19,33,58,.14);padding-top:28px;display:flex;flex-direction:column;gap:24px}
+.sw{display:flex;flex-direction:column;gap:10px;flex:1 1 150px}
+.sw .c{height:120px;border-radius:8px;border:1px solid rgba(19,33,58,.1)}
+.meta{font-size:12px;color:#4A5468;line-height:1.6}
+.trow{display:grid;grid-template-columns:200px minmax(0,1fr) 220px;gap:24px;align-items:baseline;padding:14px 0;border-top:1px solid rgba(19,33,58,.07)}
+.btn{font-family:inherit;font-size:14px;font-weight:500;border-radius:6px;min-height:44px;padding:0 22px;display:inline-flex;align-items:center;gap:8px;border:1px solid transparent}
+.chip{font-family:inherit;font-size:13px;min-height:36px;padding:0 14px;border-radius:999px;border:1px solid rgba(19,33,58,.14);background:transparent;color:#4A5468;display:inline-flex;align-items:center}
+.tag{font-size:12px;border:1px solid rgba(19,33,58,.14);border-radius:999px;padding:4px 10px;color:#4A5468}
+</style>
+</helmet>
+<div class="ds" style="width: 1440px; padding: 88px 80px 100px; display: flex; flex-direction: column; gap: 72px;">
+
+<div style="display: flex; justify-content: space-between; align-items: flex-end;">
+<div>
+<p class="eyebrow" style="color: #9E5229;">TravelAusNZ · v1.0</p>
+<h1 style="font-size: 64px; font-weight: 600; letter-spacing: -0.02em; margin-top: 14px;">Design system</h1>
+</div>
+<p class="meta" style="max-width: 420px; font-size: 14px;">Three colours, one typeface. Photography carries the colour; the interface stays quiet around it.</p>
+</div>
+
+<section class="sec">
+<p class="eyebrow">01 · Colour</p>
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+<div class="sw"><div class="c" style="background: #13213A;"></div><p style="font-size: 15px; font-weight: 500;">Deep navy</p><p class="meta">#13213A · text, headings, dark surfaces</p></div>
+<div class="sw"><div class="c" style="background: #F6F2EA;"></div><p style="font-size: 15px; font-weight: 500;">Warm off-white</p><p class="meta">#F6F2EA · background · surface #FBF9F4</p></div>
+<div class="sw"><div class="c" style="background: #9E5229;"></div><p style="font-size: 15px; font-weight: 500;">Burnt copper</p><p class="meta">#9E5229 · the only accent · 5.0:1 on off-white</p></div>
+<div class="sw" style="flex: 2 1 320px;"><div style="display: flex; height: 120px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(19,33,58,.1);"><span style="flex: 1; background: #4A5468;"></span><span style="flex: 1; background: #8A92A3;"></span><span style="flex: 1; background: #C2C7D0;"></span><span style="flex: 1; background: #ECE8E1;"></span></div><p style="font-size: 15px; font-weight: 500;">Navy neutrals</p><p class="meta">#4A5468 secondary text · #8A92A3 decor · #C2C7D0 image ground · #ECE8E1 map land · hairlines navy at 14% / 7%</p></div>
+</div>
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+<div style="flex: 1 1 400px; background: #0E1729; color: #F3EEE4; border-radius: 10px; padding: 28px; display: flex; flex-direction: column; gap: 16px;">
+<p class="eyebrow" style="color: #D08A5E;">Dark mode · same three, inverted</p>
+<div style="display: flex; gap: 12px;"><span style="width: 64px; height: 64px; border-radius: 6px; background: #0E1729; border: 1px solid rgba(243,238,228,.2);"></span><span style="width: 64px; height: 64px; border-radius: 6px; background: #F3EEE4;"></span><span style="width: 64px; height: 64px; border-radius: 6px; background: #D08A5E;"></span><span style="width: 64px; height: 64px; border-radius: 6px; background: #14203A; border: 1px solid rgba(243,238,228,.2);"></span></div>
+<p style="font-size: 13px; color: #B7BDC8; line-height: 1.6;">Ground #0E1729 · text #F3EEE4 · copper lifted to #D08A5E for contrast · surface #14203A</p>
+</div>
+<div style="flex: 1 1 400px; border: 1px solid rgba(19,33,58,.14); border-radius: 10px; padding: 28px; display: flex; flex-direction: column; gap: 14px;">
+<p class="eyebrow">Map palette</p>
+<div style="display: flex; gap: 12px; align-items: center;"><span style="width: 64px; height: 64px; border-radius: 6px; background: #ECE8E1;"></span><span style="width: 64px; height: 64px; border-radius: 6px; background: #C8CFDA;"></span><span style="width: 64px; height: 64px; border-radius: 6px; background: #DFE0DD;"></span><span style="width: 64px; height: 64px; border-radius: 6px; background: #FBF9F4; border: 1px solid rgba(19,33,58,.1);"></span><span style="width: 30px; height: 30px; border-radius: 999px; background: #9E5229; margin-left: 12px;"></span><span style="width: 48px; border-top: 3px dotted #9E5229;"></span></div>
+<p class="meta">Land · water · park · roads in navy greys. Copper appears only on the selected pin and active route.</p>
+</div>
+</div>
+</section>
+
+<section class="sec">
+<p class="eyebrow">02 · Type · Prompt, Thai &amp; Latin</p>
+<div>
+<div class="trow"><span class="meta">Display · SemiBold 600</span><span style="font-size: 72px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.02;">The far south</span><span class="meta">84 / 72 / 44 mobile · −2%</span></div>
+<div class="trow"><span class="meta">H1 · SemiBold 600</span><span style="font-size: 52px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.08;">ทางใต้สุดของโลก</span><span class="meta">52 / 1.08 · −1.5%</span></div>
+<div class="trow"><span class="meta">H2 · SemiBold 600</span><span style="font-size: 36px; font-weight: 600; line-height: 1.12;">Where to eat &amp; drink now</span><span class="meta">36–46 / 1.1</span></div>
+<div class="trow"><span class="meta">H3 · SemiBold 600</span><span style="font-size: 24px; font-weight: 600;">10 days, coast to coast by rail</span><span class="meta">20–26 / 1.25</span></div>
+<div class="trow"><span class="meta">Body L · Light 300</span><span style="font-size: 17px; line-height: 1.7; color: #4A5468;">Places worth the long flight, routes that don't need a car. เดินทางโดยไม่ต้องใช้รถยนต์</span><span class="meta">17 / 1.7</span></div>
+<div class="trow"><span class="meta">Body · Light 300</span><span style="font-size: 15px; line-height: 1.65;">Train to Lilydale, then bus 685 to Healesville.</span><span class="meta">14–15 / 1.65</span></div>
+<div class="trow"><span class="meta">UI · Medium 500</span><span style="font-size: 14px; font-weight: 500;">Add to my trip · Find routes · Save</span><span class="meta">13–14</span></div>
+<div class="trow"><span class="meta">Label · Medium 500</span><span class="eyebrow">Best time to visit · Nearest stop</span><span class="meta">10–11 · uppercase · +22% tracking</span></div>
+</div>
+</section>
+
+<section class="sec">
+<p class="eyebrow">03 · Space, radius, depth, motion</p>
+<div style="display: flex; gap: 48px; flex-wrap: wrap; align-items: flex-end;">
+<div style="display: flex; gap: 14px; align-items: flex-end;">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><span style="width: 4px; height: 4px; background: #13213A;"></span><span class="meta">4</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; background: #13213A;"></span><span class="meta">8</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><span style="width: 16px; height: 16px; background: #13213A;"></span><span class="meta">16</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><span style="width: 24px; height: 24px; background: #13213A;"></span><span class="meta">24</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><span style="width: 40px; height: 40px; background: #13213A;"></span><span class="meta">40</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><span style="width: 64px; height: 64px; background: #13213A;"></span><span class="meta">64</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><span style="width: 120px; height: 120px; background: #13213A;"></span><span class="meta">120 section</span></div>
+</div>
+<div style="display: flex; gap: 14px; align-items: flex-end;">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><span style="width: 64px; height: 64px; border: 1px solid #13213A; border-radius: 4px;"></span><span class="meta">4 tag</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><span style="width: 64px; height: 64px; border: 1px solid #13213A; border-radius: 6px;"></span><span class="meta">6 button</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><span style="width: 64px; height: 64px; border: 1px solid #13213A; border-radius: 10px;"></span><span class="meta">8–10 card</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px;"><span style="width: 64px; height: 64px; border-radius: 10px; background: #FBF9F4; box-shadow: 0 1px 2px rgba(19,33,58,.04), 0 14px 36px rgba(19,33,58,.07);"></span><span class="meta">soft shadow</span></div>
+</div>
+<p class="meta" style="max-width: 300px; font-size: 13px;">Motion: fades 1.2–2.2 s ease; image drift scale 1.035 over 1.8 s; state changes 0.5–0.6 s. Nothing bounces.</p>
+</div>
+</section>
+
+<section class="sec">
+<p class="eyebrow">04 · Map pins &amp; transit line styles</p>
+<div style="display: flex; gap: 56px; flex-wrap: wrap; align-items: center;">
+<div style="display: flex; gap: 32px; align-items: center;">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;"><span style="width: 30px; height: 30px; border-radius: 999px; background: #13213A;"></span><span class="meta">Attraction · circle</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;"><span style="width: 27px; height: 27px; border-radius: 7px; background: #13213A;"></span><span class="meta">Restaurant · rounded square</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;"><span style="width: 23px; height: 23px; border-radius: 3px; background: #13213A; transform: rotate(45deg); margin: 2px;"></span><span class="meta">Bar · diamond</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;"><span style="width: 26px; height: 26px; border: 1.5px solid #13213A; border-radius: 2px;"></span><span class="meta">Transport · outlined</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;"><span style="width: 30px; height: 30px; border-radius: 999px; background: #9E5229; box-shadow: 0 0 0 7px rgba(158,82,41,.12);"></span><span class="meta">Selected</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;"><span style="width: 46px; height: 46px; border-radius: 999px; border: 1.5px solid #13213A; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600;">48</span><span class="meta">Cluster</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px; flex: 1 1 320px;">
+<div style="display: flex; align-items: center; gap: 16px;"><span style="width: 120px; border-top: 4px solid #13213A;"></span><span class="meta">Train · solid</span></div>
+<div style="display: flex; align-items: center; gap: 16px;"><span style="width: 120px; height: 6px; border-top: 1.5px solid #13213A; border-bottom: 1.5px solid #13213A;"></span><span class="meta">Tram / light rail · double rule</span></div>
+<div style="display: flex; align-items: center; gap: 16px;"><span style="width: 120px; border-top: 3px dashed #13213A;"></span><span class="meta">Bus / coach · dashed</span></div>
+<div style="display: flex; align-items: center; gap: 16px;"><span style="width: 120px; border-top: 4px dotted #13213A;"></span><span class="meta">Ferry · dotted</span></div>
+<div style="display: flex; align-items: center; gap: 16px;"><span style="width: 120px; border-top: 4px solid #9E5229;"></span><span class="meta">Active route · copper</span></div>
+</div>
+</div>
+</section>
+
+<section class="sec">
+<p class="eyebrow">05 · Components</p>
+<div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center;">
+<span class="btn" style="background: #9E5229; color: #FBF9F4;">Primary action</span>
+<span class="btn" style="border-color: rgba(19,33,58,.14);">Secondary</span>
+<span style="width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(19,33,58,.14); display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#13213A" stroke-width="1.5" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg></span>
+<span style="width: 44px; height: 44px; border-radius: 999px; border: 1px solid #9E5229; display: inline-flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9E5229" stroke-width="1.5" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg></span>
+<span style="display: inline-flex; border: 1px solid rgba(19,33,58,.14); border-radius: 999px; padding: 3px; margin-left: 12px;"><span style="font-size: 13px; font-weight: 500; padding: 9px 16px; border-radius: 999px; background: #13213A; color: #F6F2EA;">Australia</span><span style="font-size: 13px; font-weight: 500; padding: 9px 16px; color: #4A5468;">New Zealand</span></span>
+<span class="chip">Rooftop</span>
+<span class="chip" style="border-color: #9E5229; color: #9E5229; background: rgba(158,82,41,.09); font-weight: 500;">Waterfront</span>
+<span class="tag">Natural wine</span>
+<span style="font-size: 14px; font-weight: 500; letter-spacing: .06em;">$$$<span style="color: #8A92A3;">$</span></span>
+</div>
+<div style="display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start;">
+<div style="width: 300px; display: flex; flex-direction: column; gap: 12px;">
+<div style="aspect-ratio: 4 / 3; border-radius: 8px; background: #C2C7D0; position: relative;"><span style="position: absolute; left: 14px; top: 12px; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; font-weight: 500;">Photo · 4:3</span></div>
+<div style="display: flex; justify-content: space-between;"><p class="eyebrow" style="color: #4A5468;">Wine bar</p><p style="font-size: 13px; font-weight: 500;">$$<span style="color: #8A92A3;">$$</span></p></div>
+<p style="font-size: 20px; font-weight: 600;">Tūī &amp; Fern</p>
+<p style="font-size: 14px; color: #4A5468;">Te Aro, Wellington</p>
+<p class="meta">Place card · image 4:3 or 4:5 · eyebrow · price · title · location · tags</p>
+</div>
+<div style="flex: 1 1 400px; border: 1px solid rgba(19,33,58,.14); border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 14px;">
+<p class="eyebrow">Image placeholders</p>
+<div style="display: flex; gap: 12px; align-items: flex-end;"><span style="width: 160px; aspect-ratio: 16 / 9; background: #C2C7D0; border-radius: 6px;"></span><span style="width: 120px; aspect-ratio: 4 / 3; background: #C2C7D0; border-radius: 6px;"></span><span style="width: 96px; aspect-ratio: 4 / 5; background: #C2C7D0; border-radius: 6px;"></span><span style="width: 80px; aspect-ratio: 2 / 3; background: #C2C7D0; border-radius: 6px;"></span></div>
+<p class="meta">Approved ratios: 16:9 hero · 4:3 cards &amp; journeys · 4:5 editorial · 2:3 gallery portrait. Photography graded warm-neutral, slightly lifted shadows, no heavy saturation.</p>
+</div>
+<div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 10px;">
+<p class="eyebrow">Icons</p>
+<div style="display: flex; gap: 18px; color: #13213A;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="6" y="3" width="12" height="13" rx="3"></rect><path d="M6 10h12M9 20l1.5-4M15 20l-1.5-4"></path></svg>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 17c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0 3-1 4.5 0M5 14l1-5h12l1 5M9 9V6h6v3"></path></svg>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 3v18M5 3v5a2 2 0 0 0 4 0V3M17 21V3c-2 1-3.5 3-3.5 7v3H17"></path></svg>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M5 4h14l-7 8zM12 12v8M8 20h8"></path></svg>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 10l9-6 9 6M5 20h14M7 11v8M12 11v8M17 11v8"></path></svg>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg>
+</div>
+<p class="meta">Thin 1.4 px line icons, single colour (navy, or copper when active). No fills, no multi-colour.</p>
+</div>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

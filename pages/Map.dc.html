@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TravelAusNZ — Interactive Map</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.sc{--bg:#F6F2EA;--surface:#FBF9F4;--ink:#13213A;--ink2:#4A5468;--ink3:#8A92A3;--line:rgba(19,33,58,.14);--line2:rgba(19,33,58,.07);--copper:#9E5229;--copper-tint:rgba(158,82,41,.12);--on-copper:#FBF9F4;--ph1:#D6D8DD;--ph2:#C2C7D0;--ph3:#A7AEBB;--shadow:0 1px 2px rgba(19,33,58,.05),0 16px 40px rgba(19,33,58,.10);--land:#ECE8E1;--water:#C8CFDA;--road:#FBF9F4;--minor:#F3F0EA;--park:#DFE0DD;--maplabel:#4A5468;font-family:'Prompt',sans-serif;font-weight:300;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+.sc.dark{--bg:#0E1729;--surface:#14203A;--ink:#F3EEE4;--ink2:#B7BDC8;--ink3:#7D8698;--line:rgba(243,238,228,.16);--line2:rgba(243,238,228,.07);--copper:#D08A5E;--copper-tint:rgba(208,138,94,.16);--on-copper:#0E1729;--ph1:#22304A;--ph2:#2A3953;--ph3:#344462;--shadow:0 1px 2px rgba(0,0,0,.3),0 16px 40px rgba(0,0,0,.35);--land:#16223A;--water:#0B1325;--road:#26344F;--minor:#1C2942;--park:#1A2943;--maplabel:#B7BDC8}
+.sc *{box-sizing:border-box}
+.sc h1,.sc h2,.sc h3,.sc p{margin:0}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase}
+a{color:var(--ink);text-decoration:none}a:hover{color:var(--copper)}
+.navlink{font-size:14px;font-weight:500;color:var(--ink);padding:10px 0}
+.navlink.cur{color:var(--copper)}
+.btn{font-family:inherit;font-size:14px;font-weight:500;border-radius:6px;min-height:44px;padding:0 20px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:1px solid transparent;transition:all .5s ease}
+.btn-primary{background:var(--copper);color:var(--on-copper)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
+.icon-btn{width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--surface)}
+.seg button{font-family:inherit;font-size:13px;font-weight:500;border:0;background:transparent;color:var(--ink2);min-height:36px;padding:0 16px;border-radius:999px;cursor:pointer;transition:background .6s ease,color .6s ease}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.chip{font-family:inherit;font-size:13px;font-weight:500;min-height:40px;padding:0 14px 0 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);display:inline-flex;align-items:center;gap:8px;cursor:pointer;transition:all .5s ease}
+.chip.on{border-color:var(--copper);color:var(--ink);background:var(--surface);box-shadow:inset 0 0 0 1px var(--copper)}
+.chip .n{font-size:11px;color:var(--ink2);font-weight:400}
+.pin{position:absolute;width:44px;height:44px;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;background:none;border:0;padding:0;cursor:pointer;z-index:2}
+.shape{display:flex;align-items:center;justify-content:center;background:var(--ink);color:var(--bg);transition:background .6s ease,color .6s ease,box-shadow .6s ease}
+.pin:hover .shape{box-shadow:0 0 0 5px var(--line)}
+.t-a .shape{width:30px;height:30px;border-radius:999px}
+.t-r .shape{width:27px;height:27px;border-radius:7px}
+.t-b .shape{width:23px;height:23px;border-radius:3px;transform:rotate(45deg)}
+.t-b .shape svg{transform:rotate(-45deg)}
+.t-t .shape{width:26px;height:26px;border-radius:2px;background:var(--surface);color:var(--ink);border:1.5px solid var(--ink)}
+.pin.sel{z-index:3}
+.pin.sel .shape{background:var(--copper);color:var(--on-copper);border-color:var(--copper);box-shadow:0 0 0 7px var(--copper-tint)}
+.cluster{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:0;cursor:pointer;font-family:inherit;color:var(--ink)}
+.cluster .c{border-radius:999px;background:var(--surface);border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--ink);transition:box-shadow .6s ease}
+.cluster:hover .c{box-shadow:0 0 0 6px var(--line)}
+.cluster .nm{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--maplabel);background:var(--land);padding:0 4px}
+.panel-row{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--line2)}
+.panel-row svg{flex:none;margin-top:2px}
+.tag{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:4px 10px;color:var(--ink2)}
+.maplbl{font-family:'Prompt',sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}
+.search input{font-family:inherit;font-size:14px;border:0;background:transparent;color:var(--ink);outline:none;width:100%}
+.search input::placeholder{color:var(--ink2)}
+.fadein{animation:fi 1.2s ease}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div class="sc {{themeClass}}" style="width: 1440px; height: 900px; position: relative; overflow: hidden;">
+
+<header style="height: 64px; position: relative; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line2); display: flex; align-items: center; gap: 32px; padding: 0 32px;">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px;">
+<svg width="24" height="24" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="13" cy="13" r="11.5"></circle><path d="M13 4.5 L15.4 13 L13 21.5 L10.6 13 Z"></path><path d="M13 4.5 L15.4 13 L10.6 13 Z" fill="currentColor"></path></svg>
+<span style="font-size: 15px; font-weight: 600; letter-spacing: .02em;">TravelAusNZ</span>
+</a>
+<nav aria-label="Primary" style="display: flex; gap: 28px; flex: 1;">
+<a class="navlink" href="Main.dc.html">Destinations</a>
+<a class="navlink cur" href="Map.dc.html" aria-current="page">Map</a>
+<a class="navlink" href="Transport.dc.html">Transport</a>
+<a class="navlink" href="Dining.dc.html">Eat &amp; Drink</a>
+<a class="navlink" href="Gallery.dc.html">Gallery</a>
+</nav>
+<button class="icon-btn" aria-label="Toggle dark mode" onClick="{{toggleDark}}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"></path></svg>
+</button>
+<a class="btn btn-ghost" href="Trip.dc.html">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg>
+My Trip · {{tripCount}}
+</a>
+</header>
+
+<!-- MAP CANVAS -->
+<div role="application" aria-label="Map" style="position: absolute; left: 0; top: 64px; width: 1440px; height: 836px; background: var(--land); overflow: hidden;">
+
+<sc-if value="{{isCity}}" hint-placeholder-val="{{true}}">
+<div class="fadein" style="position: absolute; inset: 0;">
+<svg viewBox="0 0 1440 836" width="1440" height="836" style="position: absolute; inset: 0;" aria-hidden="true">
+<path d="M0 150 C120 160 200 140 300 165 L310 360 C318 372 340 372 345 360 L355 175 C400 168 440 172 470 190 L478 285 C482 296 508 296 512 285 L520 200 C545 188 570 186 600 196 C610 250 620 300 660 310 C690 300 700 240 712 205 C740 196 760 200 780 212 L790 330 C795 342 822 342 826 330 L836 220 C900 205 960 200 1440 190 L1440 70 C1100 80 900 95 760 100 C600 80 400 110 0 95 Z" style="fill: var(--water)"></path>
+<path d="M530 228 L598 214 C612 280 636 322 662 322 C690 316 702 262 714 226 L728 360 L566 386 Z" style="fill: var(--park)"></path>
+<rect x="598" y="470" width="62" height="168" rx="4" style="fill: var(--park)"></rect>
+<path d="M680 372 L770 362 L776 462 L690 470 Z" style="fill: var(--park)"></path>
+<path d="M220 200 L296 186 L302 270 L232 282 Z" style="fill: var(--park)"></path>
+<path d="M60 60 L260 40 L280 92 L80 100 Z" style="fill: var(--park)"></path>
+<g style="stroke: var(--minor); stroke-width: 6; fill: none; stroke-linecap: round">
+<path d="M390 200 V836"></path><path d="M535 300 V836"></path><path d="M360 300 H600"></path><path d="M360 500 H600"></path><path d="M360 600 H600"></path><path d="M360 700 H600"></path>
+<path d="M120 380 L300 380"></path><path d="M100 460 L300 470"></path><path d="M160 300 L180 640"></path><path d="M60 560 L330 560"></path>
+<path d="M620 690 L820 690"></path><path d="M640 760 L860 760"></path><path d="M700 660 L720 836"></path><path d="M780 660 L800 836"></path>
+<path d="M840 360 L1000 340"></path><path d="M850 440 L1000 430"></path><path d="M860 560 L1000 560"></path><path d="M920 300 L940 640"></path>
+<path d="M200 60 L700 40"></path><path d="M320 20 L340 96"></path><path d="M560 10 L580 92"></path>
+</g>
+<g style="stroke: var(--road); stroke-width: 11; fill: none; stroke-linecap: round">
+<path d="M440 190 V836"></path><path d="M490 300 V836"></path><path d="M590 360 V836"></path><path d="M680 470 V660"></path>
+<path d="M360 380 H760"></path><path d="M360 450 H600"></path><path d="M360 540 H600"></path><path d="M360 640 H680"></path><path d="M360 740 H600"></path>
+<path d="M660 640 C760 660 860 720 1020 820"></path><path d="M760 470 C820 480 860 500 900 520 L1020 520"></path>
+<path d="M300 420 L360 420"></path><path d="M60 420 L300 420"></path><path d="M60 640 L360 640"></path>
+<path d="M432 96 L440 190"></path><path d="M120 70 L760 50"></path>
+</g>
+<path d="M432 92 L442 196" style="stroke: var(--ink3); stroke-width: 4; fill: none"></path>
+<g class="maplbl" style="fill: var(--maplabel)">
+<text x="560" y="140" text-anchor="middle" style="letter-spacing: .5em">PORT JACKSON</text>
+<text x="380" y="88" text-anchor="end">Harbour Bridge</text>
+<text x="252" y="300">Darling Harbour</text>
+<text x="640" y="345" text-anchor="middle">Botanic Garden</text>
+<text x="606" y="660">Hyde Park</text>
+<text x="400" y="330">The Rocks</text>
+<text x="620" y="810">Surry Hills</text>
+<text x="860" y="610">Darlinghurst</text>
+<text x="850" y="300">Woolloomooloo</text>
+<text x="110" y="500">Pyrmont</text>
+<text x="400" y="30">North Sydney</text>
+</g>
+<path d="{{route.d}}" style="stroke: var(--copper); stroke-width: 3.5; fill: none; stroke-dasharray: 2 7; stroke-linecap: round"></path>
+<circle cx="{{route.sx}}" cy="{{route.sy}}" r="6" style="fill: var(--surface); stroke: var(--copper); stroke-width: 2.5"></circle>
+</svg>
+
+<sc-for list="{{pins}}" as="p" hint-placeholder-count="12">
+<button class="pin t-{{p.type}} {{p.selCls}}" style="left: {{p.x}}px; top: {{p.y}}px;" aria-label="{{p.typeLabel}}: {{p.name}}" aria-pressed="{{p.sel}}" onClick="{{p.pick}}">
+<span class="shape">
+<sc-if value="{{p.isA}}" hint-placeholder-val="{{false}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 10l9-6 9 6M5 20h14M7 11v8M12 11v8M17 11v8"></path></svg></sc-if>
+<sc-if value="{{p.isR}}" hint-placeholder-val="{{false}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 3v18M5 3v5a2 2 0 0 0 4 0V3M17 21V3c-2 1-3.5 3-3.5 7v3H17"></path></svg></sc-if>
+<sc-if value="{{p.isB}}" hint-placeholder-val="{{false}}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 4h14l-7 8zM12 12v8M8 20h8"></path></svg></sc-if>
+<sc-if value="{{p.isT}}" hint-placeholder-val="{{false}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="6" y="3" width="12" height="13" rx="3"></rect><path d="M6 10h12M9 20l1.5-4M15 20l-1.5-4"></path></svg></sc-if>
+</span>
+<sc-if value="{{p.sel}}" hint-placeholder-val="{{false}}">
+<span style="position: absolute; bottom: 44px; left: 50%; transform: translateX(-50%); white-space: nowrap; background: var(--ink); color: var(--bg); font-size: 12px; font-weight: 500; padding: 6px 10px; border-radius: 4px;">{{p.name}}</span>
+</sc-if>
+</button>
+</sc-for>
+
+<button class="cluster" style="left: 330px; top: 48px;" aria-label="14 places in North Sydney"><span class="c" style="width: 40px; height: 40px;">14</span></button>
+<button class="cluster" style="left: 70px; top: 610px;" aria-label="12 places in Glebe"><span class="c" style="width: 38px; height: 38px;">12</span><span class="nm">Glebe</span></button>
+<button class="cluster" style="left: 960px; top: 720px;" aria-label="11 places in Paddington"><span class="c" style="width: 38px; height: 38px;">11</span><span class="nm">Paddington</span></button>
+</div>
+</sc-if>
+
+<sc-if value="{{isAU}}" hint-placeholder-val="{{false}}">
+<div class="fadein" style="position: absolute; inset: 0; background: var(--water);">
+<svg viewBox="0 0 1440 836" width="1440" height="836" style="position: absolute; inset: 0;" aria-hidden="true">
+<path d="M881 75 L871 115 L847 218 L768 165 L783 102 L683 110 L644 165 L593 144 L536 228 L475 276 L397 308 L389 396 L407 455 L428 520 L416 572 L463 585 L531 562 L650 516 L686 512 L732 524 L769 579 L802 533 L788 589 L815 583 L836 627 L866 654 L899 665 L922 644 L948 671 L1009 638 L1021 585 L1029 562 L1040 541 L1070 450 L1062 428 L1018 341 L995 293 L955 255 L938 205 Z" style="fill: var(--land); stroke: var(--ink3); stroke-width: 1; stroke-linejoin: round"></path>
+<path d="M919 705 L980 709 L975 757 L941 766 L927 736 Z" style="fill: var(--land); stroke: var(--ink3); stroke-width: 1; stroke-linejoin: round"></path>
+<text class="maplbl" x="700" y="330" text-anchor="middle" style="fill: var(--maplabel); letter-spacing: .6em; font-size: 14px">AUSTRALIA</text>
+<text class="maplbl" x="1180" y="560" style="fill: var(--maplabel); letter-spacing: .4em">TASMAN SEA</text>
+</svg>
+<sc-for list="{{auClusters}}" as="c" hint-placeholder-count="9">
+<button class="cluster" style="left: {{c.x}}px; top: {{c.y}}px;" aria-label="{{c.n}} places in {{c.name}}" onClick="{{c.go}}"><span class="c" style="width: {{c.size}}px; height: {{c.size}}px;">{{c.n}}</span><span class="nm">{{c.name}}</span></button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{isNZ}}" hint-placeholder-val="{{false}}">
+<div class="fadein" style="position: absolute; inset: 0; background: var(--water);">
+<svg viewBox="0 0 1440 836" width="1440" height="836" style="position: absolute; inset: 0;" aria-hidden="true">
+<path d="M748 62 L787 107 L800 140 L829 180 L860 240 L910 247 L896 303 L865 348 L820 466 L806 449 L796 410 L790 375 L770 338 L786 322 L806 268 L790 200 L775 170 L759 113 Z" style="fill: var(--land); stroke: var(--ink3); stroke-width: 1; stroke-linejoin: round"></path>
+<path d="M748 404 L764 449 L792 432 L792 471 L776 510 L748 560 L762 590 L740 600 L708 622 L686 706 L652 746 L624 746 L574 712 L613 634 L644 594 L697 527 L717 474 L731 443 Z" style="fill: var(--land); stroke: var(--ink3); stroke-width: 1; stroke-linejoin: round"></path>
+<ellipse cx="612" cy="772" rx="14" ry="10" style="fill: var(--land); stroke: var(--ink3); stroke-width: 1"></ellipse>
+<text class="maplbl" x="960" y="420" style="fill: var(--maplabel); letter-spacing: .6em; font-size: 14px">AOTEAROA NEW ZEALAND</text>
+<text class="maplbl" x="420" y="460" style="fill: var(--maplabel); letter-spacing: .4em">TASMAN SEA</text>
+</svg>
+<sc-for list="{{nzClusters}}" as="c" hint-placeholder-count="6">
+<button class="cluster" style="left: {{c.x}}px; top: {{c.y}}px;" aria-label="{{c.n}} places in {{c.name}}" onClick="{{c.go}}"><span class="c" style="width: {{c.size}}px; height: {{c.size}}px;">{{c.n}}</span><span class="nm">{{c.name}}</span></button>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- FILTER BAR -->
+<div style="position: absolute; left: 24px; top: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 5;">
+<div style="display: flex; gap: 10px; align-items: center;">
+<label class="search" style="width: 340px; height: 48px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; display: flex; align-items: center; gap: 10px; padding: 0 18px; box-shadow: var(--shadow);">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden;">Search the map</span>
+<input type="text" placeholder="{{searchPh}}">
+</label>
+<div class="seg" role="group" aria-label="Country view" style="box-shadow: var(--shadow);">
+<button class="{{auCls}}" onClick="{{goAU}}">Australia</button>
+<button class="{{nzCls}}" onClick="{{goNZ}}">New Zealand</button>
+</div>
+<sc-if value="{{isCity}}" hint-placeholder-val="{{true}}">
+<button class="btn btn-ghost" onClick="{{goAU}}" style="background: var(--surface); box-shadow: var(--shadow); min-height: 44px; font-size: 13px;">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
+Australia / <span style="color: var(--copper);">Sydney</span>
+</button>
+</sc-if>
+</div>
+<div role="group" aria-label="Map layers" style="display: flex; gap: 8px;">
+<sc-for list="{{layers}}" as="l" hint-placeholder-count="4">
+<button class="chip {{l.cls}}" aria-pressed="{{l.on}}" onClick="{{l.toggle}}">
+<span style="width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center;"><span style="{{l.swatch}}"></span></span>
+{{l.label}} <span class="n">{{l.count}}</span>
+</button>
+</sc-for>
+</div>
+</div>
+
+<!-- ZOOM + LEGEND -->
+<div style="position: absolute; left: 24px; bottom: 24px; display: flex; gap: 12px; align-items: flex-end; z-index: 5;">
+<div style="display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); overflow: hidden;">
+<button aria-label="Zoom in" onClick="{{zoomIn}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: var(--ink); cursor: pointer; border-bottom: 1px solid var(--line2);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+<button aria-label="Zoom out" onClick="{{goAU}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: var(--ink); cursor: pointer; border-bottom: 1px solid var(--line2);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+<button aria-label="My location" style="width: 44px; height: 44px; border: 0; background: transparent; color: var(--ink); cursor: pointer;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v4M12 18v4M2 12h4M18 12h4"></path></svg></button>
+</div>
+<div style="background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); padding: 14px 18px; display: flex; gap: 20px; align-items: center; font-size: 12px; color: var(--ink2);">
+<span style="display: flex; align-items: center; gap: 8px;"><span style="width: 12px; height: 12px; border-radius: 999px; background: var(--ink);"></span>Attraction</span>
+<span style="display: flex; align-items: center; gap: 8px;"><span style="width: 12px; height: 12px; border-radius: 3px; background: var(--ink);"></span>Restaurant</span>
+<span style="display: flex; align-items: center; gap: 8px;"><span style="width: 10px; height: 10px; transform: rotate(45deg); background: var(--ink);"></span>Bar</span>
+<span style="display: flex; align-items: center; gap: 8px;"><span style="width: 12px; height: 12px; border: 1.5px solid var(--ink);"></span>Transport</span>
+<span style="width: 1px; height: 16px; background: var(--line);"></span>
+<span style="display: flex; align-items: center; gap: 8px;"><span style="width: 22px; border-top: 3px dotted var(--copper);"></span>Selected route</span>
+</div>
+</div>
+
+<!-- SIDE PANEL -->
+<sc-if value="{{isCity}}" hint-placeholder-val="{{true}}">
+<aside aria-label="Place details" style="position: absolute; right: 20px; top: 20px; bottom: 20px; width: 420px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); overflow: auto; z-index: 6;">
+<div class="ph" style="position: relative; height: 250px; background: var(--ph2); overflow: hidden;">
+<svg viewBox="0 0 420 250" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><path d="M0 170 L80 130 L160 160 L250 100 L330 150 L420 120 V250 H0Z" style="fill: var(--ph3)"></path><path d="M0 210 Q110 196 210 206 T420 202 V250 H0Z" style="fill: var(--ph1)"></path></svg>
+<span style="position: absolute; left: 16px; top: 14px; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; font-weight: 500; color: var(--ink);">Photo · 16:10</span>
+<button class="icon-btn" aria-label="Close panel" style="position: absolute; right: 12px; top: 12px; width: 40px; height: 40px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+<div class="fadein" style="padding: 24px 28px 28px; display: flex; flex-direction: column;">
+<p class="eyebrow" style="color: var(--copper);">{{sel.typeLabel}} · {{sel.area}}</p>
+<h2 style="font-size: 28px; font-weight: 600; line-height: 1.2; margin-top: 10px; letter-spacing: -0.01em;">{{sel.name}}</h2>
+<p style="font-size: 15px; line-height: 1.65; color: var(--ink2); margin-top: 12px;">{{sel.desc}}</p>
+<div style="display: flex; gap: 6px; flex-wrap: wrap; margin: 16px 0 20px;">
+<sc-for list="{{sel.tags}}" as="t" hint-placeholder-count="2"><span class="tag">{{t}}</span></sc-for>
+</div>
+<div class="panel-row">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+<div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 14px; font-weight: 500;">{{sel.hours}}</span><span style="font-size: 13px; color: var(--ink2);">{{sel.hoursNote}}</span></div>
+</div>
+<div class="panel-row">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"></rect><circle cx="12" cy="12" r="2.5"></circle></svg>
+<div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 14px; font-weight: 500; letter-spacing: .06em;">{{sel.priceOn}}<span style="color: var(--ink3);">{{sel.priceOff}}</span></span><span style="font-size: 13px; color: var(--ink2);">{{sel.priceNote}}</span></div>
+</div>
+<div class="panel-row">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="6" y="3" width="12" height="13" rx="3"></rect><path d="M6 10h12M9 20l1.5-4M15 20l-1.5-4"></path></svg>
+<div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 14px; font-weight: 500;">{{sel.stop}}</span><span style="font-size: 13px; color: var(--ink2);">{{sel.walk}} · route shown on map</span></div>
+</div>
+<div style="display: flex; gap: 10px; margin-top: 20px;">
+<button class="btn {{addCls}}" onClick="{{toggleAdd}}" style="flex: 1;">
+<sc-if value="{{added}}" hint-placeholder-val="{{false}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></sc-if>
+<sc-if value="{{notAdded}}" hint-placeholder-val="{{true}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></sc-if>
+{{addLabel}}
+</button>
+<button class="icon-btn" aria-label="Share"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 14v6h14v-6"></path></svg></button>
+</div>
+</div>
+</aside>
+</sc-if>
+
+<sc-if value="{{notCity}}" hint-placeholder-val="{{false}}">
+<div class="fadein" style="position: absolute; right: 24px; top: 20px; width: 340px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); padding: 24px; z-index: 6;">
+<p class="eyebrow" style="color: var(--copper);">{{overview.eyebrow}}</p>
+<h2 style="font-size: 24px; font-weight: 600; margin-top: 10px;">{{overview.title}}</h2>
+<p style="font-size: 14px; line-height: 1.65; color: var(--ink2); margin-top: 10px;">{{overview.text}}</p>
+<button class="btn btn-primary" onClick="{{goCity}}" style="margin-top: 20px; width: 100%;">Open Sydney in detail</button>
+</div>
+</sc-if>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  state = { view: 'city', sel: 'harbourline', layers: { a: true, r: true, b: true, t: true }, dark: null, added: {} };
+  renderVals() {
+    const dark = this.state.dark ?? this.props.dark ?? false;
+    const view = this.state.view;
+    const TL = { a: 'Attraction', r: 'Restaurant', b: 'Bar', t: 'Transport' };
+    const stations = {
+      cq: { name: 'Circular Quay', x: 495, y: 300 }, wy: { name: 'Wynyard', x: 440, y: 378 },
+      mp: { name: 'Martin Place', x: 560, y: 412 }, th: { name: 'Town Hall', x: 440, y: 560 },
+      mu: { name: 'Museum', x: 600, y: 660 }, ce: { name: 'Central', x: 470, y: 790 }, kx: { name: 'Kings Cross', x: 880, y: 520 }
+    };
+    const places = [
+      { id: 'opera', type: 'a', name: 'Sydney Opera House', x: 548, y: 202, area: 'Bennelong Point', stop: 'cq', walk: '7 min walk', price: 2, priceNote: 'Guided tours A$45–69', hours: 'Tours daily 9:00–17:00', hoursNote: 'Performances most evenings', desc: 'Join the first morning tour for the quietest halls, then walk the forecourt to the Botanic Garden.', tags: ['Heritage', 'Harbourfront'] },
+      { id: 'garden', type: 'a', name: 'Royal Botanic Garden', x: 640, y: 290, area: 'Farm Cove', stop: 'cq', walk: '6 min walk', price: 0, priceNote: 'Free entry', hours: 'Daily 7:00–17:30', hoursNote: 'Until 20:00 in summer', desc: 'Harbour-edge lawns and the walk to Mrs Macquarie’s Chair, best in the early light.', tags: ['Gardens', 'Walk'] },
+      { id: 'agnsw', type: 'a', name: 'Art Gallery of NSW', x: 730, y: 420, area: 'The Domain', stop: 'mp', walk: '12 min walk', price: 0, priceNote: 'General entry free', hours: 'Daily 10:00–17:00', hoursNote: 'Wednesday until 22:00', desc: 'Two buildings joined by a garden path. The underground Tank gallery is worth the descent.', tags: ['Art', 'Architecture'] },
+      { id: 'barracks', type: 'a', name: 'Hyde Park Barracks', x: 640, y: 460, area: 'Macquarie Street', stop: 'mp', walk: '5 min walk', price: 1, priceNote: 'Adults A$26', hours: 'Daily 10:00–17:00', hoursNote: 'Audio guide included', desc: 'A convict-era building turned into one of the city’s best small museums.', tags: ['Heritage', 'Museum'] },
+      { id: 'barangaroo', type: 'a', name: 'Barangaroo Reserve', x: 262, y: 232, area: 'Barangaroo', stop: 'wy', walk: '10 min walk', price: 0, priceNote: 'Free', hours: 'Open 24 hours', hoursNote: 'Cultural walks on weekends', desc: 'A sandstone headland park planted with native species, at its best around sunset.', tags: ['Park', 'Sunset'] },
+      { id: 'harbourline', type: 'r', name: 'Harbourline Oyster Room', x: 410, y: 226, area: 'The Rocks', stop: 'cq', walk: '6 min walk', price: 3, priceNote: 'Mains A$42–68', hours: 'Tue–Sun 12:00–22:00', hoursNote: 'Closed Mondays', desc: 'Sydney rock oysters by the dozen and a short, coastal wine list, in a sandstone warehouse by the water.', tags: ['Seafood', 'Waterfront', 'Book ahead'] },
+      { id: 'ash', type: 'r', name: 'Ash & Ember', x: 520, y: 476, area: 'CBD', stop: 'mp', walk: '3 min walk', price: 4, priceNote: 'Set menu A$195', hours: 'Wed–Sat 18:00–23:00', hoursNote: 'Lunch Friday only', desc: 'Wood-fired tasting menu built around NSW producers, with a counter facing the hearth.', tags: ['Tasting menu', 'Counter seats'] },
+      { id: 'kin', type: 'r', name: 'Kin Noodle Bar', x: 466, y: 690, area: 'Haymarket', stop: 'ce', walk: '6 min walk', price: 1, priceNote: 'Bowls A$18–24', hours: 'Daily 11:00–21:30', hoursNote: 'No bookings', desc: 'Hand-pulled noodles and chilli oil, fast and very good, a block from Chinatown.', tags: ['Casual', 'Vegetarian options'] },
+      { id: 'wharf', type: 'r', name: 'Wharf Street Trattoria', x: 812, y: 370, area: 'Woolloomooloo', stop: 'kx', walk: '9 min walk', price: 2, priceNote: 'Pasta A$28–36', hours: 'Daily 12:00–22:00', hoursNote: 'Terrace seats unbooked', desc: 'Fresh pasta on the finger wharf, with a view back across to the gardens.', tags: ['Italian', 'Waterfront'] },
+      { id: 'saltbush', type: 'r', name: 'Saltbush Dining Room', x: 690, y: 772, area: 'Surry Hills', stop: 'ce', walk: '11 min walk', price: 3, priceNote: 'Mains A$38–56', hours: 'Tue–Sat 17:30–23:00', hoursNote: 'Bar seats held for walk-ins', desc: 'Native produce handled lightly: wattleseed bread, kangaroo tartare, finger-lime desserts.', tags: ['Modern Australian', 'Native produce'] },
+      { id: 'lantern', type: 'b', name: 'The Lantern Room', x: 478, y: 424, area: 'CBD rooftop', stop: 'wy', walk: '4 min walk', price: 3, priceNote: 'Cocktails A$24–28', hours: 'Daily 16:00–late', hoursNote: 'Dress: smart casual', desc: 'Rooftop cocktails twelve floors up, with a narrow view to the bridge.', tags: ['Rooftop', 'Cocktail lounge'] },
+      { id: 'archive', type: 'b', name: 'Archive Bar', x: 556, y: 580, area: 'CBD', stop: 'th', walk: '5 min walk', price: 2, priceNote: 'Cocktails A$22', hours: 'Tue–Sat 17:00–02:00', hoursNote: 'Unmarked door off the lane', desc: 'A basement whisky bar with more than 400 bottles and a librarian’s patience.', tags: ['Hidden', 'Whisky'] },
+      { id: 'lowtide', type: 'b', name: 'Low Tide', x: 910, y: 440, area: 'Potts Point', stop: 'kx', walk: '4 min walk', price: 2, priceNote: 'Glass A$15–22', hours: 'Daily 15:00–23:00', hoursNote: 'Snacks until 22:00', desc: 'Natural wine and tinned fish on a leafy corner terrace.', tags: ['Wine bar', 'Terrace'] },
+      { id: 'pyrmont', type: 'b', name: 'Pyrmont Social', x: 170, y: 340, area: 'Pyrmont', stop: 'th', walk: '14 min walk', price: 2, priceNote: 'Pints A$13', hours: 'Daily 12:00–24:00', hoursNote: 'Live music Fridays', desc: 'A local’s pub with an excellent NSW craft beer list.', tags: ['Craft beer', 'Pub'] }
+    ];
+    const stationPins = Object.keys(stations).map((k) => ({ id: 'st-' + k, type: 't', name: stations[k].name + ' Station', x: stations[k].x, y: stations[k].y, area: 'Sydney Trains', stop: k, walk: 'You are here', price: 0, priceNote: 'Opal card or contactless', hours: 'Daily 4:30–01:00', hoursNote: 'NightRide buses overnight', desc: 'Trains every 3–5 minutes on the City Circle. Tap on and off with Opal or a contactless card.', tags: ['Train', 'Accessible'] }));
+    stationPins[0].tags = ['Train', 'Ferry', 'Light rail'];
+    const all = places.concat(stationPins);
+    const layers = this.state.layers;
+    const selId = this.state.sel;
+    const pins = all.filter((p) => layers[p.type]).map((p) => ({ ...p, typeLabel: TL[p.type], isA: p.type === 'a', isR: p.type === 'r', isB: p.type === 'b', isT: p.type === 't',
+      sel: p.id === selId, selCls: p.id === selId ? 'sel' : '', pick: () => this.setState({ sel: p.id }) }));
+    const selP = all.find((p) => p.id === selId) || all[0];
+    const st = stations[selP.stop];
+    const sel = { ...selP, typeLabel: TL[selP.type], priceOn: selP.price ? '$'.repeat(selP.price) : 'Free', priceOff: selP.price ? '$'.repeat(4 - selP.price) : '', stop: st.name + ' Station' };
+    const route = { d: 'M' + st.x + ' ' + st.y + ' L' + st.x + ' ' + selP.y + ' L' + selP.x + ' ' + selP.y, sx: st.x, sy: st.y };
+    const count = (t) => all.filter((p) => p.type === t).length;
+    const sw = { a: 'width:12px;height:12px;border-radius:999px;background:currentColor', r: 'width:12px;height:12px;border-radius:3px;background:currentColor', b: 'width:10px;height:10px;transform:rotate(45deg);background:currentColor', t: 'width:12px;height:12px;border:1.5px solid currentColor' };
+    const layerList = [['a', 'Attractions'], ['r', 'Restaurants'], ['b', 'Bars'], ['t', 'Public Transport']].map(([k, label]) => ({
+      label, count: count(k), on: layers[k], cls: layers[k] ? 'on' : '', swatch: sw[k],
+      toggle: () => this.setState((s) => ({ layers: { ...s.layers, [k]: !s.layers[k] } })) }));
+    const goCity = () => this.setState({ view: 'city' });
+    const mk = (arr) => arr.map(([name, x, y, n]) => ({ name, x, y, n, size: n > 40 ? 54 : n > 20 ? 46 : n > 10 ? 40 : 34, go: name === 'Sydney' ? goCity : () => {} }));
+    const auClusters = mk([['Sydney', 1029, 556, 48], ['Melbourne', 922, 628, 41], ['Hobart', 958, 738, 17], ['Cairns & Reef', 938, 200, 19], ['Brisbane', 1062, 420, 15], ['Adelaide', 815, 572, 12], ['Perth', 428, 512, 13], ['Darwin', 683, 110, 6], ['Uluru', 686, 381, 4]]);
+    const nzClusters = mk([['Auckland', 806, 197, 31], ['Rotorua', 848, 272, 8], ['Wellington', 806, 446, 22], ['Christchurch', 745, 568, 14], ['Queenstown', 662, 668, 27], ['Fiordland', 600, 640, 9]]);
+    const added = !!this.state.added[selId];
+    const overview = view === 'nz'
+      ? { eyebrow: 'New Zealand · 111 places', title: 'Zoom in to explore', text: 'Clusters group places by area. Select one to see attractions, tables, bars and the nearest stop, all on one map.' }
+      : { eyebrow: 'Australia · 175 places', title: 'Zoom in to explore', text: 'Clusters group places by area. Select Sydney to see attractions, tables, bars and the nearest station.' };
+    return {
+      themeClass: dark ? 'dark' : '', toggleDark: () => this.setState({ dark: !dark }),
+      isCity: view === 'city', notCity: view !== 'city', isAU: view === 'au', isNZ: view === 'nz',
+      auCls: view === 'nz' ? '' : 'on', nzCls: view === 'nz' ? 'on' : '',
+      goAU: () => this.setState({ view: 'au' }), goNZ: () => this.setState({ view: 'nz' }), goCity, zoomIn: goCity,
+      searchPh: view === 'nz' ? 'Search New Zealand' : 'Search places in Sydney',
+      pins, sel, route, showRoute: layers[selP.type] !== false,
+      layers: layerList, auClusters, nzClusters, overview,
+      added, notAdded: !added, addCls: added ? 'btn-ghost' : 'btn-primary', addLabel: added ? 'Added to Day 2' : 'Add to my trip',
+      toggleAdd: () => this.setState((s) => ({ added: { ...s.added, [selId]: !s.added[selId] } })),
+      tripCount: 3 + Object.values(this.state.added).filter(Boolean).length
+    };
+  }
+}
+</script>
+</body>
+</html>

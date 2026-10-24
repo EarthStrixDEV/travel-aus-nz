@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TravelAusNZ — Eat &amp; Drink</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.sc{--bg:#F6F2EA;--surface:#FBF9F4;--ink:#13213A;--ink2:#4A5468;--ink3:#8A92A3;--line:rgba(19,33,58,.14);--line2:rgba(19,33,58,.07);--copper:#9E5229;--copper-tint:rgba(158,82,41,.09);--on-copper:#FBF9F4;--ph1:#D6D8DD;--ph2:#C2C7D0;--ph3:#A7AEBB;--land:#ECE8E1;--water:#C8CFDA;--road:#FBF9F4;--shadow:0 1px 2px rgba(19,33,58,.04),0 14px 36px rgba(19,33,58,.07);font-family:'Prompt',sans-serif;font-weight:300;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+.sc.dark{--bg:#0E1729;--surface:#14203A;--ink:#F3EEE4;--ink2:#B7BDC8;--ink3:#7D8698;--line:rgba(243,238,228,.16);--line2:rgba(243,238,228,.07);--copper:#D08A5E;--copper-tint:rgba(208,138,94,.14);--on-copper:#0E1729;--ph1:#22304A;--ph2:#2A3953;--ph3:#344462;--land:#16223A;--water:#0B1325;--road:#26344F}
+.sc *{box-sizing:border-box}
+.sc h1,.sc h2,.sc h3,.sc p{margin:0}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase}
+a{color:var(--ink);text-decoration:none}a:hover{color:var(--copper)}
+.navlink{font-size:14px;font-weight:500;padding:10px 0}
+.navlink.cur{color:var(--copper)}
+.btn{font-family:inherit;font-size:14px;font-weight:500;border-radius:6px;min-height:44px;padding:0 20px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:1px solid transparent}
+.tabs{display:flex;gap:40px;border-bottom:1px solid var(--line)}
+.tabs button{font-family:inherit;font-size:18px;font-weight:500;background:none;border:0;border-bottom:2px solid transparent;color:var(--ink2);padding:16px 0;margin-bottom:-1px;cursor:pointer;transition:all .6s ease}
+.tabs button.on{color:var(--ink);border-bottom-color:var(--copper)}
+.chip{font-family:inherit;font-size:13px;min-height:36px;padding:0 13px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink2);cursor:pointer;white-space:nowrap;transition:all .5s ease}
+.chip.on{border-color:var(--copper);color:var(--copper);background:var(--copper-tint);font-weight:500}
+.card{font-family:inherit;text-align:left;background:none;border:0;padding:0;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;gap:12px;width:100%}
+.card .img{position:relative;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:var(--ph2);outline:1px solid transparent;outline-offset:3px;transition:outline-color .6s ease}
+.card.on .img{outline-color:var(--copper)}
+.save{width:40px;height:40px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;position:absolute;right:10px;top:10px}
+.save.on{color:var(--copper);border-color:var(--copper)}
+.tag{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--ink2)}
+.row{display:flex;gap:14px;padding:14px 0;border-top:1px solid var(--line2)}
+.grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+</style>
+</helmet>
+<div class="sc {{themeClass}}" style="width: 100%; min-height: 100vh;">
+
+<header style="border-bottom: 1px solid var(--line2);">
+<nav aria-label="Primary" style="max-width: 1440px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 56px); display: flex; align-items: center; gap: 32px; flex-wrap: wrap;">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px;"><svg width="24" height="24" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="13" cy="13" r="11.5"></circle><path d="M13 4.5 L15.4 13 L13 21.5 L10.6 13 Z"></path><path d="M13 4.5 L15.4 13 L10.6 13 Z" fill="currentColor"></path></svg><span style="font-size: 15px; font-weight: 600; letter-spacing: .02em;">TravelAusNZ</span></a>
+<div style="display: flex; gap: 28px; flex-wrap: wrap; flex: 1;"><a class="navlink" href="Main.dc.html">Destinations</a><a class="navlink" href="Map.dc.html">Map</a><a class="navlink" href="Transport.dc.html">Transport</a><a class="navlink cur" href="Dining.dc.html" aria-current="page">Eat &amp; Drink</a><a class="navlink" href="Gallery.dc.html">Gallery</a></div>
+<a class="btn" href="Trip.dc.html" style="border-color: var(--line); color: var(--ink);">My Trip · {{savedCount}}</a>
+</nav>
+</header>
+
+<section style="max-width: 1440px; margin: 0 auto; padding: 96px clamp(16px, 4vw, 56px) 0;">
+<p class="eyebrow" style="color: var(--copper);">Eat &amp; drink</p>
+<h1 style="font-size: clamp(40px, 5vw, 68px); font-weight: 600; line-height: 1.04; letter-spacing: -0.02em; margin-top: 16px;">Tables worth the detour.</h1>
+<p style="font-size: 17px; line-height: 1.7; color: var(--ink2); margin-top: 18px; max-width: 580px;">Visited and paid for by our editors. Each listing names its nearest stop, so dinner never depends on a car.</p>
+<div class="tabs" role="tablist" style="margin-top: 48px;">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="3"><button role="tab" aria-selected="{{t.on}}" class="{{t.cls}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for>
+</div>
+</section>
+
+<div style="position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line2);">
+<div style="max-width: 1440px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 56px); display: flex; flex-wrap: wrap; gap: 14px 32px; align-items: center;">
+<div class="grp" role="group" aria-label="City"><span class="eyebrow" style="color: var(--ink2); margin-right: 6px;">City</span><sc-for list="{{cityChips}}" as="c" hint-placeholder-count="5"><button class="chip {{c.cls}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div>
+<div class="grp" role="group" aria-label="Price"><span class="eyebrow" style="color: var(--ink2); margin-right: 6px;">Price</span><sc-for list="{{priceChips}}" as="c" hint-placeholder-count="4"><button class="chip {{c.cls}}" onClick="{{c.pick}}" style="letter-spacing: .06em;">{{c.label}}</button></sc-for></div>
+<sc-if value="{{isDrinks}}" hint-placeholder-val="{{false}}"><div class="grp" role="group" aria-label="Drink"><span class="eyebrow" style="color: var(--ink2); margin-right: 6px;">Drink</span><sc-for list="{{drinkChips}}" as="c" hint-placeholder-count="5"><button class="chip {{c.cls}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div></sc-if>
+<sc-if value="{{notDrinks}}" hint-placeholder-val="{{true}}"><div class="grp" role="group" aria-label="Atmosphere"><span class="eyebrow" style="color: var(--ink2); margin-right: 6px;">Atmosphere</span><sc-for list="{{moodChips}}" as="c" hint-placeholder-count="5"><button class="chip {{c.cls}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div></sc-if>
+<div class="grp" role="group" aria-label="Dietary"><span class="eyebrow" style="color: var(--ink2); margin-right: 6px;">Dietary</span><sc-for list="{{dietChips}}" as="c" hint-placeholder-count="3"><button class="chip {{c.cls}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div>
+<label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink2); margin-left: auto;">
+<span class="eyebrow">Cuisine</span>
+<select style="font-family: inherit; font-size: 13px; min-height: 36px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink);"><option>All cuisines</option><option>Modern Australian</option><option>Seafood</option><option>Italian</option><option>Japanese</option><option>Māori kai</option></select>
+</label>
+</div>
+</div>
+
+<section style="max-width: 1440px; margin: 0 auto; padding: 40px clamp(16px, 4vw, 56px) 140px; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start;">
+<div style="flex: 999 1 560px; min-width: 0;">
+<p style="font-size: 14px; color: var(--ink2); margin-bottom: 24px;">{{count}} {{tabLabel}}</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 40px 28px;">
+<sc-for list="{{items}}" as="v" hint-placeholder-count="6">
+<div class="card {{v.selCls}}" role="button" tabindex="0" onClick="{{v.pick}}" aria-label="Show details for {{v.name}}">
+<div class="img">
+<svg viewBox="0 0 400 300" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><circle cx="200" cy="170" r="80" style="fill: var(--ph3)"></circle><path d="M0 250 H400 V300 H0Z" style="fill: var(--ph1)"></path></svg>
+<span style="position: absolute; left: 14px; top: 12px; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; font-weight: 500;">Photo · 4:3</span>
+<button class="save {{v.saveCls}}" aria-label="Save {{v.name}}" onClick="{{v.toggle}}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg></button>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;">
+<p class="eyebrow" style="color: var(--ink2);">{{v.cuisine}}</p>
+<p style="font-size: 13px; font-weight: 500; letter-spacing: .06em;">{{v.pOn}}<span style="color: var(--ink3);">{{v.pOff}}</span></p>
+</div>
+<h3 style="font-size: 20px; font-weight: 600; margin-top: -4px;">{{v.name}}</h3>
+<p style="font-size: 14px; color: var(--ink2); margin-top: -6px;">{{v.hood}}, {{v.city}}</p>
+<div style="display: flex; gap: 6px; flex-wrap: wrap;"><sc-for list="{{v.vibe}}" as="t" hint-placeholder-count="2"><span class="tag">{{t}}</span></sc-for></div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<aside aria-label="Venue details" style="flex: 1 1 380px; max-width: 460px; position: sticky; top: 90px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden;">
+<div style="height: 220px; background: var(--ph2); position: relative;">
+<svg viewBox="0 0 400 220" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><circle cx="200" cy="120" r="64" style="fill: var(--ph3)"></circle></svg>
+<span style="position: absolute; left: 16px; top: 14px; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; font-weight: 500;">Photo · 16:9</span>
+</div>
+<div style="padding: 24px 28px 28px;">
+<p class="eyebrow" style="color: var(--copper);">{{d.cuisine}} · {{d.pOn}}{{d.pOff}}</p>
+<h2 style="font-size: 28px; font-weight: 600; margin-top: 10px; line-height: 1.15;">{{d.name}}</h2>
+<p style="font-size: 15px; line-height: 1.65; color: var(--ink2); margin-top: 10px;">{{d.desc}}</p>
+<div style="margin-top: 20px;">
+<div class="row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M5 4h14v16H5zM9 8h6M9 12h6M9 16h4"></path></svg><div><p class="eyebrow" style="color: var(--ink2);">Menu highlights</p><p style="font-size: 14px; line-height: 1.6; margin-top: 4px;">{{d.menu}}</p></div></div>
+<div class="row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M5 4h14l-7 8zM12 12v8M8 20h8"></path></svg><div><p class="eyebrow" style="color: var(--ink2);">Signature drinks</p><p style="font-size: 14px; line-height: 1.6; margin-top: 4px;">{{d.drinks}}</p></div></div>
+<div class="row"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><div><p class="eyebrow" style="color: var(--ink2);">Opening hours</p><p style="font-size: 14px; line-height: 1.6; margin-top: 4px;">{{d.hours}}</p></div></div>
+</div>
+<div style="margin-top: 8px; border-radius: 8px; overflow: hidden; position: relative; height: 150px; background: var(--land);" aria-label="Mini map">
+<svg viewBox="0 0 400 150" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><path d="M0 0 H400 V40 C300 50 200 30 0 45 Z" style="fill: var(--water)"></path><g style="stroke: var(--road); stroke-width: 7; fill: none"><path d="M80 40 V150"></path><path d="M200 40 V150"></path><path d="M320 40 V150"></path><path d="M0 100 H400"></path></g><path d="M200 100 L200 72 L262 72" style="stroke: var(--copper); stroke-width: 3; fill: none; stroke-dasharray: 2 6; stroke-linecap: round"></path><rect x="192" y="92" width="16" height="16" style="fill: var(--surface); stroke: var(--ink); stroke-width: 1.5"></rect></svg>
+<span style="position: absolute; left: 262px; top: 72px; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 6px; background: var(--copper);"></span>
+</div>
+<div class="row" style="border-top: 0; padding-bottom: 0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="6" y="3" width="12" height="13" rx="3"></rect><path d="M6 10h12M9 20l1.5-4M15 20l-1.5-4"></path></svg><div><p style="font-size: 14px; font-weight: 500;">{{d.stop}}</p><p style="font-size: 13px; color: var(--ink2);">{{d.walk}}</p></div></div>
+<div style="display: flex; gap: 10px; margin-top: 20px;">
+<button class="btn" onClick="{{d.toggle}}" style="flex: 1; background: var(--copper); color: var(--on-copper);">{{d.saveLabel}}</button>
+<a class="btn" href="Map.dc.html" style="border-color: var(--line); color: var(--ink);">On the map</a>
+</div>
+</div>
+</aside>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":1440,"height":2700}}'>
+class Component extends DCLogic {
+  state = { tab: 'r', city: 'All', price: 0, mood: null, diet: null, drink: 'All', sel: 'saltbush', saved: { saltbush: true } };
+  renderVals() {
+    const D = [
+      ['saltbush', 'r', 'Saltbush Dining Room', 'Modern Australian', 3, 'Surry Hills', 'Sydney', ['Native produce', 'Bar seats'], ['Vegetarian'], 'Native produce handled lightly, in a converted terrace with a long marble bar.', 'Wattleseed sourdough · kangaroo tartare, bush tomato · Murray cod, saltbush butter · finger-lime pavlova', 'Davidson plum spritz · Hunter Valley semillon', 'Tue–Sat 17:30–23:00', 'Central Station', '11 min walk · or L2 to Surry Hills'],
+      ['harbourline', 'r', 'Harbourline Oyster Room', 'Seafood', 3, 'The Rocks', 'Sydney', ['Waterfront', 'Book ahead'], ['Gluten-free'], 'Sydney rock oysters and a coastal wine list in a sandstone warehouse.', 'Six rock oysters, mignonette · spanner crab linguine · whole flounder, brown butter', 'Tasmanian sparkling · Clare Valley riesling', 'Tue–Sun 12:00–22:00', 'Circular Quay', '6 min walk'],
+      ['ash', 'r', 'Ash & Ember', 'Modern Australian', 4, 'CBD', 'Sydney', ['Tasting menu', 'Counter'], [], 'A wood-fired tasting menu with a counter facing the hearth.', '12-course menu, A$195 · ember-roasted marron · dry-aged duck', 'Paired wines A$140 · non-alcoholic pairing A$85', 'Wed–Sat 18:00–23:00', 'Martin Place', '3 min walk'],
+      ['kettle', 'r', 'Kettle & Kiln', 'Café', 1, 'Fitzroy', 'Melbourne', ['All-day', 'Courtyard'], ['Vegan', 'Vegetarian'], 'Breakfast worth queueing for, in an old pottery works.', 'Crumpets, honeycomb butter · miso mushrooms · ricotta hotcakes', 'Single-origin batch brew · turmeric tonic', 'Daily 7:00–15:00', 'Route 86 tram, Gertrude St', '2 min walk'],
+      ['pier', 'r', 'Pier Seventeen Oyster Room', 'Seafood', 3, 'Waterfront', 'Hobart', ['Waterfront', 'Tasmanian oysters'], ['Gluten-free'], 'Tasmanian oysters and scallop pies at the end of a working pier.', 'Bruny Island oysters · scallop pie · trevalla, pickled fennel', 'Tasmanian pinot noir · cider flight', 'Daily 11:30–21:30', 'Franklin Square bus hub', '7 min walk'],
+      ['kokako', 'r', 'Kōkako Kitchen', 'Māori kai', 2, 'Ponsonby', 'Auckland', ['Hāngī Sundays', 'Shared'], ['Gluten-free'], 'Contemporary Māori cooking built around seasonal kai.', 'Hāngī pork, kūmara · rēwena bread · kawakawa ice cream', 'Horopito gin sour · Waiheke rosé', 'Wed–Sun 17:00–22:00', 'Inner Link, Ponsonby Rd', '1 min walk'],
+      ['hollow', 'b', 'Hollow Lane', 'Cocktail bar', 2, 'CBD', 'Melbourne', ['Hidden', 'Cocktail lounge'], [], 'Unmarked door, low lamps, a short list of very good cocktails.', 'Bar snacks: anchovy toast, fries with saltbush', 'Wattleseed old fashioned · finger-lime gimlet', 'Tue–Sun 17:00–01:00', 'Flinders Street', '4 min walk'],
+      ['lantern', 'b', 'The Lantern Room', 'Rooftop bar', 3, 'CBD', 'Sydney', ['Rooftop', 'Cocktail lounge'], [], 'Twelve floors up with a narrow view to the bridge.', 'Oysters · prawn rolls · cheese plates', 'Harbour negroni · yuzu highball', 'Daily 16:00–late', 'Wynyard', '4 min walk'],
+      ['lowtide', 'b', 'Low Tide', 'Wine bar', 2, 'Potts Point', 'Sydney', ['Wine bar', 'Terrace'], ['Vegetarian'], 'Natural wine and tinned fish on a leafy corner terrace.', 'Tinned sardines · burrata, stone fruit', 'Skin-contact chenin · Adelaide Hills pét-nat', 'Daily 15:00–23:00', 'Kings Cross', '4 min walk'],
+      ['tui', 'b', 'Tūī & Fern', 'Wine bar', 2, 'Te Aro', 'Wellington', ['Wine bar', 'Small plates'], ['Vegan'], 'A small wine bar pouring Martinborough pinot by the glass.', 'Pāua fritters · smoked kahawai pâté', 'Martinborough pinot noir · Central Otago riesling', 'Tue–Sat 16:00–24:00', 'Courtenay Place bus stop', '3 min walk'],
+      ['quay', 'b', 'Quayside Social', 'Pub', 2, 'Viaduct', 'Auckland', ['Waterfront'], [], 'A harbourside pub with a long craft beer list.', 'Fish and chips · pork belly bao', 'Hazy IPA on tap · local cider', 'Daily 11:00–24:00', 'Britomart', '6 min walk'],
+      ['estate', 'd', 'Kawarau Gorge Estate', 'Wine', 3, 'Gibbston', 'Queenstown', ['Cellar door'], [], 'Cellar door tastings of Central Otago pinot, reached by e-bike.', 'Platters of local cheese', 'Reserve pinot noir · rosé', 'Daily 10:00–17:00', 'Orbus to Arrowtown', 'then 20 min by Queenstown Trail'],
+      ['brew', 'd', 'Tidewater Brewing', 'Craft beer', 2, 'Marrickville', 'Sydney', ['Brewery'], [], 'Taproom in a converted warehouse, food trucks on weekends.', 'Rotating food trucks', 'Sea-salt gose · West Coast IPA', 'Thu–Sun 12:00–22:00', 'Sydenham Station', '8 min walk'],
+      ['distil', 'd', 'Wapping Lane Distillery', 'Spirits', 2, 'Hobart', 'Hobart', ['Tasting room'], [], 'Single malt and gin tastings in a former jam factory.', 'Tasting flights only', 'Pepperberry gin · cask-strength single malt', 'Wed–Sun 12:00–18:00', 'Hobart Waterfront', '5 min walk'],
+      ['roast', 'd', 'Kettle & Kiln Roasters', 'Coffee', 1, 'Fitzroy', 'Melbourne', ['Roastery'], ['Vegan'], 'The roastery behind the café, with cuppings on Saturdays.', 'Pastries from the café', 'Flat white · filter flight', 'Daily 7:00–14:00', 'Route 86 tram', '3 min walk'],
+      ['shrub', 'd', 'Field & Shrub', 'Non-alcoholic', 1, 'Cuba St', 'Wellington', ['Zero-proof'], ['Vegan'], 'Zero-proof cocktails and house shrubs, made without compromise.', 'Small plates', 'Kawakawa tonic · feijoa shrub spritz', 'Wed–Sun 15:00–23:00', 'Wellington Station', '12 min walk']
+    ];
+    const { tab, city, price, mood, diet, drink, sel, saved } = this.state;
+    const all = D.map((x) => ({ id: x[0], tab: x[1], name: x[2], cuisine: x[3], price: x[4], hood: x[5], city: x[6], vibe: x[7], diet: x[8], desc: x[9], menu: x[10], drinks: x[11], hours: x[12], stop: x[13], walk: x[14] }));
+    const items = all.filter((v) => v.tab === tab && (city === 'All' || v.city === city) && (!price || v.price === price) && (!mood || v.vibe.includes(mood) || v.cuisine === mood) && (!diet || v.diet.includes(diet)) && (tab !== 'd' || drink === 'All' || v.cuisine === drink))
+      .map((v) => ({ ...v, pOn: '$'.repeat(v.price), pOff: '$'.repeat(4 - v.price), selCls: v.id === sel ? 'on' : '', saveCls: saved[v.id] ? 'on' : '',
+        pick: () => this.setState({ sel: v.id }),
+        toggle: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.setState((s) => ({ saved: { ...s.saved, [v.id]: !s.saved[v.id] } })); } }));
+    const dv = all.find((v) => v.id === sel) || all[0];
+    const d = { ...dv, pOn: '$'.repeat(dv.price), pOff: '', saveLabel: saved[dv.id] ? 'Saved to my trip' : 'Save to my trip', toggle: () => this.setState((s) => ({ saved: { ...s.saved, [dv.id]: !s.saved[dv.id] } })) };
+    const chips = (vals, key, labels) => vals.map((v, i) => ({ label: labels ? labels[i] : v, cls: this.state[key] === v ? 'on' : '', pick: () => this.setState({ [key]: this.state[key] === v && key !== 'city' && key !== 'drink' ? (key === 'price' ? 0 : null) : v }) }));
+    const TL = { r: 'restaurants', b: 'bars', d: 'drinks' };
+    return {
+      themeClass: this.props.dark ? 'dark' : '',
+      tabs: [['r', 'Restaurants'], ['b', 'Bars'], ['d', 'Drinks']].map(([k, label]) => ({ label, on: tab === k, cls: tab === k ? 'on' : '', pick: () => this.setState({ tab: k, mood: null }) })),
+      cityChips: chips(['All', 'Sydney', 'Melbourne', 'Hobart', 'Auckland', 'Wellington', 'Queenstown'], 'city'),
+      priceChips: chips([1, 2, 3, 4], 'price', ['$', '$$', '$$$', '$$$$']),
+      moodChips: chips(['Rooftop', 'Waterfront', 'Hidden', 'Wine bar', 'Cocktail lounge'], 'mood'),
+      dietChips: chips(['Vegetarian', 'Vegan', 'Gluten-free'], 'diet'),
+      drinkChips: chips(['All', 'Wine', 'Craft beer', 'Spirits', 'Coffee', 'Non-alcoholic'], 'drink'),
+      isDrinks: tab === 'd', notDrinks: tab !== 'd',
+      items, count: items.length, tabLabel: TL[tab], d,
+      savedCount: Object.values(saved).filter(Boolean).length + 2
+    };
+  }
+}
+</script>
+</body>
+</html>

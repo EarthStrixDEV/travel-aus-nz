@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TravelAusNZ — Public Transport</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.sc{--bg:#F6F2EA;--surface:#FBF9F4;--ink:#13213A;--ink2:#4A5468;--ink3:#8A92A3;--line:rgba(19,33,58,.14);--line2:rgba(19,33,58,.07);--copper:#9E5229;--copper-tint:rgba(158,82,41,.09);--on-copper:#FBF9F4;--ph1:#D6D8DD;--ph2:#C2C7D0;--ph3:#A7AEBB;--deep:#13213A;--shadow:0 1px 2px rgba(19,33,58,.04),0 14px 36px rgba(19,33,58,.07);font-family:'Prompt',sans-serif;font-weight:300;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+.sc.dark{--bg:#0E1729;--surface:#14203A;--ink:#F3EEE4;--ink2:#B7BDC8;--ink3:#7D8698;--line:rgba(243,238,228,.16);--line2:rgba(243,238,228,.07);--copper:#D08A5E;--copper-tint:rgba(208,138,94,.14);--on-copper:#0E1729;--ph1:#22304A;--ph2:#2A3953;--ph3:#344462;--deep:#091121}
+.sc *{box-sizing:border-box}
+.sc h1,.sc h2,.sc h3,.sc p{margin:0}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase}
+a{color:var(--ink);text-decoration:none}a:hover{color:var(--copper)}
+.navlink{font-size:14px;font-weight:500;padding:10px 0}
+.navlink.cur{color:var(--copper)}
+.btn{font-family:inherit;font-size:14px;font-weight:500;border-radius:6px;min-height:44px;padding:0 20px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:1px solid transparent;transition:all .5s ease}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;flex-wrap:wrap}
+.seg button{font-family:inherit;font-size:13px;font-weight:500;border:0;background:transparent;color:var(--ink2);min-height:38px;padding:0 16px;border-radius:999px;cursor:pointer;transition:all .6s ease}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.chip{font-family:inherit;font-size:13px;min-height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink2);display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.chip.on{border-color:var(--copper);color:var(--copper);background:var(--copper-tint);font-weight:500}
+.fld{display:flex;flex-direction:column;gap:6px;padding:14px 20px;flex:1 1 220px}
+.fld input{font-family:inherit;font-size:16px;font-weight:400;border:0;background:transparent;color:var(--ink);padding:0;outline:none;width:100%}
+.opt{font-family:inherit;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px 20px;cursor:pointer;color:var(--ink);display:flex;flex-direction:column;gap:10px;transition:border-color .6s ease,box-shadow .6s ease}
+.opt.on{border-color:var(--copper);box-shadow:inset 0 0 0 1px var(--copper)}
+.m-train{border-top:4px solid currentColor}
+.m-tram{border-top:1.5px solid currentColor;border-bottom:1.5px solid currentColor;height:6px}
+.m-bus{border-top:3px dashed currentColor}
+.m-ferry{border-top:4px dotted currentColor}
+.m-walk{border-top:2px dotted currentColor;opacity:.6}
+.v-train{border-left:4px solid currentColor}
+.v-tram{border-left:1.5px solid currentColor;border-right:1.5px solid currentColor;width:7px}
+.v-bus{border-left:3px dashed currentColor}
+.v-ferry{border-left:4px dotted currentColor}
+.v-walk{border-left:2px dotted currentColor;opacity:.6}
+.lineRow{font-family:inherit;width:100%;text-align:left;background:transparent;border:0;border-top:1px solid var(--line2);padding:26px 0;cursor:pointer;color:var(--ink);display:grid;grid-template-columns:200px minmax(0,1fr) 220px;gap:32px;align-items:center;transition:color .6s ease}
+.lineRow.on{color:var(--copper)}
+.tip{border-top:1px solid var(--line);padding-top:20px;display:flex;flex-direction:column;gap:10px}
+</style>
+</helmet>
+<div class="sc {{themeClass}}" style="width: 100%; min-height: 100vh;">
+
+<header style="border-bottom: 1px solid var(--line2);">
+<nav aria-label="Primary" style="max-width: 1440px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 56px); display: flex; align-items: center; gap: 32px; flex-wrap: wrap;">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px;"><svg width="24" height="24" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="13" cy="13" r="11.5"></circle><path d="M13 4.5 L15.4 13 L13 21.5 L10.6 13 Z"></path><path d="M13 4.5 L15.4 13 L10.6 13 Z" fill="currentColor"></path></svg><span style="font-size: 15px; font-weight: 600; letter-spacing: .02em;">TravelAusNZ</span></a>
+<div style="display: flex; gap: 28px; flex-wrap: wrap; flex: 1;"><a class="navlink" href="Main.dc.html">Destinations</a><a class="navlink" href="Map.dc.html">Map</a><a class="navlink cur" href="Transport.dc.html" aria-current="page">Transport</a><a class="navlink" href="Dining.dc.html">Eat &amp; Drink</a><a class="navlink" href="Gallery.dc.html">Gallery</a></div>
+<a class="btn" href="Trip.dc.html" style="border-color: var(--line); color: var(--ink);">My Trip · 3</a>
+</nav>
+</header>
+
+<section style="max-width: 1440px; margin: 0 auto; padding: 96px clamp(16px, 4vw, 56px) 40px;">
+<p class="eyebrow" style="color: var(--copper);">Public transport</p>
+<h1 style="font-size: clamp(40px, 5vw, 68px); font-weight: 600; line-height: 1.04; letter-spacing: -0.02em; margin-top: 16px; max-width: 900px;">Getting around, without a car.</h1>
+<p style="font-size: 17px; line-height: 1.7; color: var(--ink2); margin-top: 18px; max-width: 600px;">Trains, trams, buses and ferries within and between the cities we cover, with honest travel times, fares and how often they run.</p>
+</section>
+
+<!-- PLANNER -->
+<section aria-label="Journey planner" style="max-width: 1440px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 56px);">
+<form style="background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); display: flex; flex-wrap: wrap; align-items: stretch;">
+<label class="fld" style="border-right: 1px solid var(--line2);"><span class="eyebrow" style="color: var(--ink2);">From</span><input type="text" value="Central Station, Sydney"></label>
+<div style="display: flex; align-items: center; padding: 0 4px;"><button type="button" aria-label="Swap from and to" style="width: 44px; height: 44px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 7h12l-3-3M17 17H5l3 3"></path></svg></button></div>
+<label class="fld" style="border-right: 1px solid var(--line2);"><span class="eyebrow" style="color: var(--ink2);">To</span><input type="text" value="Echo Point, Katoomba"></label>
+<label class="fld" style="flex: 0 1 220px; border-right: 1px solid var(--line2);"><span class="eyebrow" style="color: var(--ink2);">Depart</span><input type="text" value="Sat 14 Feb, 08:00"></label>
+<div style="padding: 10px; display: flex; align-items: center;"><button type="button" class="btn" style="background: var(--copper); color: var(--on-copper); height: 56px; padding: 0 28px;">Find routes</button></div>
+</form>
+<div role="group" aria-label="Modes" style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; align-items: center;">
+<span class="eyebrow" style="color: var(--ink2); margin-right: 8px;">Modes</span>
+<sc-for list="{{modes}}" as="m" hint-placeholder-count="4"><button class="chip {{m.cls}}" aria-pressed="{{m.on}}" onClick="{{m.toggle}}"><span class="{{m.style}}" style="width: 22px;"></span>{{m.label}}</button></sc-for>
+<span style="margin-left: auto; font-size: 13px; color: var(--ink2);">Step-free routes only</span>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 32px; margin-top: 40px;">
+<div style="flex: 1 1 380px; max-width: 460px; display: flex; flex-direction: column; gap: 12px;">
+<p class="eyebrow" style="color: var(--ink2);">3 options</p>
+<sc-for list="{{options}}" as="o" hint-placeholder-count="3">
+<button class="opt {{o.cls}}" onClick="{{o.pick}}" aria-pressed="{{o.on}}">
+<div style="display: flex; justify-content: space-between; align-items: baseline; width: 100%;">
+<span style="font-size: 20px; font-weight: 600;">{{o.depart}} – {{o.arrive}}</span>
+<span style="font-size: 14px; font-weight: 500;">{{o.duration}}</span>
+</div>
+<div style="display: flex; gap: 4px; align-items: center; width: 100%;">
+<sc-for list="{{o.legs}}" as="l" hint-placeholder-count="2"><span class="{{l.h}}" style="flex: {{l.flex}}; color: var(--ink);"></span></sc-for>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--ink2); width: 100%;">
+<span>{{o.summary}}</span><span>{{o.fare}}</span>
+</div>
+</button>
+</sc-for>
+</div>
+
+<div style="flex: 2 1 520px; border: 1px solid var(--line); border-radius: 10px; padding: 32px 36px; background: var(--surface);">
+<div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid var(--line2); padding-bottom: 20px;">
+<div><p class="eyebrow" style="color: var(--copper);">Selected route</p><h2 style="font-size: 26px; font-weight: 600; margin-top: 8px;">{{sel.depart}} → {{sel.arrive}} · {{sel.duration}}</h2></div>
+<div style="text-align: right;"><p style="font-size: 15px; font-weight: 500;">{{sel.fare}}</p><p style="font-size: 13px; color: var(--ink2);">{{sel.card}}</p></div>
+</div>
+<div style="margin-top: 24px;">
+<sc-for list="{{sel.legs}}" as="l" hint-placeholder-count="3">
+<div style="display: grid; grid-template-columns: 64px 28px minmax(0, 1fr); gap: 0 16px;">
+<span style="font-size: 14px; font-weight: 500; padding-top: 1px;">{{l.t}}</span>
+<div style="display: flex; flex-direction: column; align-items: center; color: var(--copper);">
+<span style="width: 14px; height: 14px; border-radius: 999px; border: 2px solid var(--copper); background: var(--surface); flex: none;"></span>
+<span class="{{l.v}}" style="flex: 1; min-height: 64px;"></span>
+</div>
+<div style="padding-bottom: 24px;">
+<p style="font-size: 16px; font-weight: 500;">{{l.from}}</p>
+<p style="font-size: 13px; color: var(--ink2); margin-top: 6px; display: flex; gap: 8px; align-items: center;">
+<span style="border: 1px solid var(--line); border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink);">{{l.mode}}</span>
+{{l.detail}}</p>
+</div>
+</div>
+</sc-for>
+<div style="display: grid; grid-template-columns: 64px 28px minmax(0, 1fr); gap: 0 16px;">
+<span style="font-size: 14px; font-weight: 500;">{{sel.arrive}}</span>
+<div style="display: flex; justify-content: center;"><span style="width: 14px; height: 14px; border-radius: 999px; background: var(--copper);"></span></div>
+<p style="font-size: 16px; font-weight: 500;">Echo Point lookout</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ROUTE EXPLORER -->
+<section aria-label="Route explorer" style="max-width: 1440px; margin: 0 auto; padding: 140px clamp(16px, 4vw, 56px) 0;">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px;">
+<div><p class="eyebrow" style="color: var(--copper);">Route explorer</p><h2 style="font-size: clamp(30px, 3.2vw, 46px); font-weight: 600; line-height: 1.1; margin-top: 14px;">{{cityTitle}}</h2></div>
+<div class="seg" role="group" aria-label="City">
+<sc-for list="{{cities}}" as="c" hint-placeholder-count="5"><button class="{{c.cls}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for>
+</div>
+</div>
+<div style="display: flex; gap: 28px; font-size: 12px; color: var(--ink2); margin: 32px 0 8px; flex-wrap: wrap;">
+<span style="display: flex; align-items: center; gap: 8px;"><span class="m-train" style="width: 32px;"></span>Train</span>
+<span style="display: flex; align-items: center; gap: 8px;"><span class="m-tram" style="width: 32px;"></span>Tram / light rail</span>
+<span style="display: flex; align-items: center; gap: 8px;"><span class="m-bus" style="width: 32px;"></span>Bus / coach</span>
+<span style="display: flex; align-items: center; gap: 8px;"><span class="m-ferry" style="width: 32px;"></span>Ferry</span>
+<span style="display: flex; align-items: center; gap: 8px; color: var(--copper);"><span class="m-train" style="width: 32px;"></span>Selected line</span>
+</div>
+<div style="border-bottom: 1px solid var(--line2);">
+<sc-for list="{{lines}}" as="ln" hint-placeholder-count="4">
+<button class="lineRow {{ln.cls}}" onClick="{{ln.pick}}" aria-pressed="{{ln.on}}">
+<div><p class="eyebrow" style="color: var(--ink2);">{{ln.mode}}</p><p style="font-size: 18px; font-weight: 600; margin-top: 6px;">{{ln.name}}</p></div>
+<div style="position: relative; padding: 14px 0 26px;">
+<div class="{{ln.h}}" style="position: absolute; left: 6px; right: 6px; top: 20px;"></div>
+<div style="display: flex; justify-content: space-between; position: relative;">
+<sc-for list="{{ln.stops}}" as="s" hint-placeholder-count="5">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; width: 12px; overflow: visible;">
+<span style="width: 13px; height: 13px; border-radius: 999px; border: 2px solid currentColor; background: var(--bg);"></span>
+<span style="font-size: 12px; color: var(--ink2); white-space: nowrap; font-weight: 400;">{{s}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; font-size: 12px; color: var(--ink2);">
+<div><p class="eyebrow" style="font-size: 9px;">Time</p><p style="font-size: 14px; color: var(--ink); font-weight: 500; margin-top: 4px;">{{ln.time}}</p></div>
+<div><p class="eyebrow" style="font-size: 9px;">Every</p><p style="font-size: 14px; color: var(--ink); font-weight: 500; margin-top: 4px;">{{ln.freq}}</p></div>
+<div><p class="eyebrow" style="font-size: 9px;">Fare</p><p style="font-size: 14px; color: var(--ink); font-weight: 500; margin-top: 4px;">{{ln.fare}}</p></div>
+</div>
+</button>
+</sc-for>
+</div>
+</section>
+
+<!-- SCENIC -->
+<section aria-label="Scenic journeys" style="margin-top: 140px; background: var(--deep); color: #F6F2EA;">
+<div style="max-width: 1440px; margin: 0 auto; padding: 112px clamp(16px, 4vw, 56px);">
+<p class="eyebrow" style="color: #D08A5E;">Journeys as experiences</p>
+<h2 style="font-size: clamp(30px, 3.2vw, 46px); font-weight: 600; line-height: 1.1; margin-top: 14px;">Scenic rail &amp; ferry routes</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; margin-top: 48px;">
+<sc-for list="{{scenic}}" as="x" hint-placeholder-count="4">
+<article style="display: flex; flex-direction: column; gap: 14px;">
+<div style="aspect-ratio: 4 / 3; border-radius: 8px; background: #2A3953; position: relative; overflow: hidden;">
+<svg viewBox="0 0 400 300" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><path d="M0 200 L90 150 L180 190 L270 120 L400 180 V300 H0Z" style="fill: #344462"></path></svg>
+<span style="position: absolute; left: 14px; top: 12px; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: rgba(246,242,234,.7);">Photo · 4:3</span>
+</div>
+<p class="eyebrow" style="color: rgba(246,242,234,.72);">{{x.mode}} · {{x.country}}</p>
+<h3 style="font-size: 22px; font-weight: 600;">{{x.name}}</h3>
+<div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: rgba(246,242,234,.82);"><span>{{x.from}}</span><span class="{{x.h}}" style="flex: 1; color: #D08A5E;"></span><span>{{x.to}}</span></div>
+<p style="font-size: 14px; line-height: 1.6; color: rgba(246,242,234,.78);">{{x.line}}</p>
+<div style="display: flex; justify-content: space-between; border-top: 1px solid rgba(246,242,234,.14); padding-top: 12px; font-size: 13px; color: rgba(246,242,234,.82);"><span>{{x.time}} · {{x.freq}}</span><span style="color: #F6F2EA; font-weight: 500;">{{x.fare}}</span></div>
+</article>
+</sc-for>
+</div>
+</div>
+</section>
+
+<!-- TIPS -->
+<section aria-label="Practical tips" style="max-width: 1440px; margin: 0 auto; padding: 120px clamp(16px, 4vw, 56px) 140px;">
+<p class="eyebrow" style="color: var(--copper);">Practical tips</p>
+<h2 style="font-size: clamp(28px, 3vw, 40px); font-weight: 600; line-height: 1.1; margin-top: 14px;">Cards, passes &amp; access</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 44px;">
+<div class="tip">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"></rect><path d="M3 10h18"></path></svg>
+<h3 style="font-size: 18px; font-weight: 600;">Transit cards</h3>
+<p style="font-size: 14px; line-height: 1.7; color: var(--ink2);">Sydney: Opal, or tap a contactless card. Melbourne: myki. Brisbane: go card or contactless. Auckland: AT HOP or contactless. Wellington: Snapper on Metlink buses.</p>
+</div>
+<div class="tip">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M4 7h16v4a2 2 0 0 0 0 4v4H4v-4a2 2 0 0 0 0-4z"></path><path d="M10 7v12"></path></svg>
+<h3 style="font-size: 18px; font-weight: 600;">Passes &amp; caps</h3>
+<p style="font-size: 14px; line-height: 1.7; color: var(--ink2);">Daily and weekly fare caps apply on most city networks, so a day of hopping rarely costs more than one cap. Book long-distance rail and Interislander sailings ahead in summer.</p>
+</div>
+<div class="tip">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="12" cy="4.5" r="1.5"></circle><path d="M9 21l1.5-7H14l2 4M12 7v5h4M8.5 10.5a5 5 0 1 0 6.5 7"></path></svg>
+<h3 style="font-size: 18px; font-weight: 600;">Accessibility</h3>
+<p style="font-size: 14px; line-height: 1.7; color: var(--ink2);">Major city stations are largely step-free; check each operator's station guide before you go. Ferries at main wharves have ramp access, and bus drivers can deploy a ramp on request.</p>
+</div>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":1440,"height":2900}}'>
+class Component extends DCLogic {
+  state = { opt: 0, city: 'Sydney', line: 0, modes: { train: true, tram: true, bus: true, ferry: true } };
+  renderVals() {
+    const H = { train: 'm-train', tram: 'm-tram', bus: 'm-bus', ferry: 'm-ferry', walk: 'm-walk' };
+    const V = { train: 'v-train', tram: 'v-tram', bus: 'v-bus', ferry: 'v-ferry', walk: 'v-walk' };
+    const opts = [
+      { depart: '08:12', arrive: '10:24', duration: '2 h 12', fare: 'A$5–9', card: 'Opal or contactless · off-peak', summary: 'Train, then walk',
+        legs: [['08:12', 'Central', 'train', 'Blue Mountains Line · platform 4 · 1 h 58', 118], ['10:10', 'Katoomba', 'walk', '14 min along Katoomba Street', 14]] },
+      { depart: '08:12', arrive: '10:20', duration: '2 h 08', fare: 'A$7–11', card: 'Opal or contactless', summary: 'Train, then bus 686',
+        legs: [['08:12', 'Central', 'train', 'Blue Mountains Line · 1 h 58', 118], ['10:12', 'Katoomba', 'bus', 'Route 686 · every 30 min · 8 min', 8]] },
+      { depart: '08:42', arrive: '10:58', duration: '2 h 16', fare: 'A$5–9 + A$59', card: 'Hop-on pass bought on board', summary: 'Train, then Explorer bus',
+        legs: [['08:42', 'Central', 'train', 'Blue Mountains Line · 1 h 58', 118], ['10:44', 'Katoomba', 'bus', 'Hop-on Explorer · 29 stops · 14 min', 14]] }
+    ];
+    const sOpt = this.state.opt;
+    const options = opts.map((o, i) => ({ ...o, on: i === sOpt, cls: i === sOpt ? 'on' : '', pick: () => this.setState({ opt: i }),
+      legs: o.legs.map((l) => ({ h: H[l[2]], flex: l[4] })) }));
+    const so = opts[sOpt];
+    const sel = { ...so, legs: so.legs.map((l) => ({ t: l[0], from: l[1], mode: l[2], v: V[l[2]], detail: l[3] })) };
+    const M = this.state.modes;
+    const modes = [['train', 'Train'], ['tram', 'Tram'], ['bus', 'Bus'], ['ferry', 'Ferry']].map(([k, label]) => ({ label, on: M[k], cls: M[k] ? 'on' : '', style: H[k], toggle: () => this.setState((s) => ({ modes: { ...s.modes, [k]: !s.modes[k] } })) }));
+    const C = {
+      Sydney: ['Sydney, by line', [
+        ['T1 North Shore', 'train', ['Central', 'Town Hall', 'Wynyard', 'Milsons Pt', 'Chatswood'], '18 min', '4–8 min', 'A$3.20–4.80'],
+        ['L2 Randwick', 'tram', ['Circular Quay', 'Martin Pl', 'Central', 'Moore Park', 'Randwick'], '33 min', '4–8 min', 'A$3.20–4.80'],
+        ['333 Bondi', 'bus', ['Circular Quay', 'Museum', 'Bondi Jct', 'Bondi Beach'], '35 min', '5–10 min', 'A$3.20–4.80'],
+        ['F1 Manly', 'ferry', ['Circular Quay', 'Manly'], '30 min', '20–30 min', 'A$7–10']
+      ]],
+      Melbourne: ['Melbourne, by line', [
+        ['Route 96', 'tram', ['Brunswick E', 'Melbourne Mus.', 'Bourke St', 'South Melb.', 'St Kilda'], '45 min', '6–10 min', 'A$5.50 · free in CBD'],
+        ['Sandringham Line', 'train', ['Flinders St', 'Richmond', 'Windsor', 'Brighton Bch', 'Sandringham'], '32 min', '10–20 min', 'A$5.50'],
+        ['SkyBus', 'bus', ['Southern Cross', 'Airport'], '25 min', '10 min', 'A$23–25'],
+        ['Searoad Ferry', 'ferry', ['Queenscliff', 'Sorrento'], '40 min', 'Hourly', 'A$15 walk-on']
+      ]],
+      Auckland: ['Auckland, by line', [
+        ['Western Line', 'train', ['Britomart', 'Grafton', 'Mt Albert', 'New Lynn', 'Swanson'], '50 min', '10–20 min', 'NZ$2–5'],
+        ['Waiheke Ferry', 'ferry', ['Downtown', 'Devonport', 'Matiatia'], '40 min', '30–60 min', 'NZ$25–30'],
+        ['Inner Link', 'bus', ['Britomart', 'Ponsonby', 'K Rd', 'Parnell'], '45 min loop', '10–15 min', 'NZ$2–3']
+      ]],
+      Wellington: ['Wellington, by line', [
+        ['Cable Car', 'tram', ['Lambton Quay', 'Clifton', 'Talavera', 'Botanic Gdn'], '5 min', '10 min', 'NZ$6'],
+        ['Hutt Valley Line', 'train', ['Wellington', 'Petone', 'Lower Hutt', 'Upper Hutt'], '45 min', '15–30 min', 'NZ$3–8'],
+        ['East by West Ferry', 'ferry', ['Queens Wharf', 'Matiu/Somes', 'Days Bay'], '25 min', '6–10 / day', 'NZ$15–17']
+      ]],
+      Intercity: ['Between cities', [
+        ['NSW TrainLink XPT', 'train', ['Sydney', 'Goulburn', 'Albury', 'Melbourne'], '11 h', '2 / day', 'A$90–180'],
+        ['Northern Explorer', 'train', ['Auckland', 'Hamilton', 'National Park', 'Wellington'], '10 h 40', '3 / week', 'NZ$219+'],
+        ['Interislander', 'ferry', ['Wellington', 'Picton'], '3 h 30', '4–5 / day', 'NZ$75+ foot'],
+        ['InterCity coach', 'bus', ['Queenstown', 'Te Anau', 'Milford Sound'], '5 h 30', 'Daily', 'NZ$59–89']
+      ]]
+    };
+    const city = this.state.city;
+    const L = this.state.line;
+    const lines = C[city][1].filter((l) => M[l[1]]).map((l, i) => ({ name: l[0], mode: l[1], h: H[l[1]], stops: l[2], time: l[3], freq: l[4], fare: l[5], on: i === L, cls: i === L ? 'on' : '', pick: () => this.setState({ line: i }) }));
+    const cities = Object.keys(C).map((k) => ({ label: k, cls: k === city ? 'on' : '', pick: () => this.setState({ city: k, line: 0 }) }));
+    const scenic = [
+      { name: 'The Ghan', mode: 'Rail', country: 'Australia', from: 'Adelaide', to: 'Darwin', h: 'm-train', time: '3 days', freq: 'Weekly, Apr–Oct', fare: 'From A$2,869', line: 'Through the red centre with off-train excursions at Alice Springs and Katherine Gorge.' },
+      { name: 'TranzAlpine', mode: 'Rail', country: 'New Zealand', from: 'Christchurch', to: 'Greymouth', h: 'm-train', time: '4 h 50', freq: 'Daily', fare: 'From NZ$219', line: 'Across the Canterbury Plains and over Arthur’s Pass in an open-air viewing carriage.' },
+      { name: 'Interislander', mode: 'Ferry', country: 'New Zealand', from: 'Wellington', to: 'Picton', h: 'm-ferry', time: '3 h 30', freq: '4–5 sailings / day', fare: 'From NZ$75', line: 'Cook Strait and the slow glide into the Marlborough Sounds.' },
+      { name: 'Manly Ferry', mode: 'Ferry', country: 'Australia', from: 'Circular Quay', to: 'Manly', h: 'm-ferry', time: '30 min', freq: 'Every 20–30 min', fare: 'A$7–10 Opal', line: 'The best-value harbour cruise in the world, past the Opera House and out to the Heads.' }
+    ];
+    return { themeClass: this.props.dark ? 'dark' : '', options, sel, modes, lines, cities, cityTitle: C[city][0], scenic };
+  }
+}
+</script>
+</body>
+</html>

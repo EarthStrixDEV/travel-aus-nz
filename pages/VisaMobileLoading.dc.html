@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TravelAusNZ — Visa helper, loading</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F6F2EA}</style>
+</helmet>
+<div style="width: 390px; height: 1500px; overflow: hidden; background: #F6F2EA; font-family: 'Prompt', sans-serif; color: #13213A;">
+<dc-import name="Visa" helper="{{hs}}" hint-size="390px,1500px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() { return { hs: 'loading' }; }
+}
+</script>
+</body>
+</html>

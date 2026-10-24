@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TravelAusNZ — Prepare for Your Trip</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.sc{--bg:#F6F2EA;--surface:#FBF9F4;--ink:#13213A;--ink2:#4A5468;--ink3:#8A92A3;--line:rgba(19,33,58,.14);--line2:rgba(19,33,58,.07);--copper:#9E5229;--copper-tint:rgba(158,82,41,.09);--on-copper:#FBF9F4;--deep:#13213A;--ph1:#D6D8DD;--ph2:#C2C7D0;--ph3:#A7AEBB;--shadow:0 1px 2px rgba(19,33,58,.04),0 14px 36px rgba(19,33,58,.07);font-family:'Prompt',sans-serif;font-weight:300;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;transition:background .8s ease,color .8s ease}
+.sc.dark{--bg:#0E1729;--surface:#14203A;--ink:#F3EEE4;--ink2:#B7BDC8;--ink3:#7D8698;--line:rgba(243,238,228,.16);--line2:rgba(243,238,228,.07);--copper:#D08A5E;--copper-tint:rgba(208,138,94,.14);--on-copper:#0E1729;--deep:#091121;--ph1:#22304A;--ph2:#2A3953;--ph3:#344462;--shadow:0 1px 2px rgba(0,0,0,.2),0 14px 36px rgba(0,0,0,.28)}
+.sc *{box-sizing:border-box}
+.sc h1,.sc h2,.sc h3,.sc p{margin:0}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase}
+a{color:var(--ink);text-decoration:none}a:hover{color:var(--copper)}
+.navlink{font-size:14px;font-weight:500;padding:10px 0}
+.btn{font-family:inherit;font-size:14px;font-weight:500;border-radius:6px;min-height:44px;padding:0 20px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:1px solid transparent;transition:all .5s ease;text-decoration:none}
+.btn-primary{background:var(--copper);color:var(--on-copper)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--ink);color:var(--ink)}
+.icon-btn{width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{font-family:inherit;font-size:13px;font-weight:500;border:0;background:transparent;color:var(--ink2);min-height:38px;padding:0 18px;border-radius:999px;cursor:pointer;transition:background .6s ease,color .6s ease}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.h2{font-size:clamp(26px,3vw,40px);font-weight:600;line-height:1.1;letter-spacing:-0.01em;margin-top:12px}
+.check{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border:0;border-top:1px solid var(--line2);cursor:pointer;font-family:inherit;background:none;text-align:left;width:100%;color:var(--ink)}
+.box{width:22px;height:22px;border:1.5px solid var(--ink);border-radius:4px;flex:none;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .5s ease}
+.check.on .box{border-color:var(--copper);color:var(--copper)}
+.check.on .ttl{text-decoration:line-through;text-decoration-color:var(--ink3);color:var(--ink2)}
+.cell{height:30px;border-radius:3px;position:relative;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px;gap:2px}
+.cell.rec{box-shadow:inset 0 0 0 2px var(--copper)}
+.cdot{width:3px;height:3px;border-radius:999px;background:var(--ink)}
+.tab{font-family:inherit;font-size:16px;font-weight:500;background:none;border:0;border-bottom:2px solid transparent;color:var(--ink2);padding:14px 0;margin-bottom:-1px;cursor:pointer;transition:all .6s ease}
+.tab.on{color:var(--ink);border-bottom-color:var(--copper)}
+.fact{border:1px solid var(--line);border-radius:10px;padding:22px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--ink2);text-align:left;padding:0 16px 14px 0;border-bottom:1px solid var(--line)}
+.tbl td{padding:18px 16px 18px 0;border-bottom:1px solid var(--line2);font-size:14px;line-height:1.55;vertical-align:top}
+.ph{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;border:1px dashed var(--ink3);border-radius:4px;padding:1px 6px;color:var(--ink2);margin-left:6px;white-space:nowrap}
+.xlink{border:1px solid var(--line);border-radius:10px;padding:26px;display:flex;flex-direction:column;gap:10px;transition:border-color .6s ease}
+.xlink:hover{border-color:var(--ink)}
+.acc-head{display:none;font-family:inherit;width:100%;min-height:64px;justify-content:space-between;align-items:center;background:none;border:0;border-top:1px solid var(--line);color:var(--ink);font-size:18px;font-weight:600;text-align:left;cursor:pointer;padding:16px 0}
+.acc-head svg{transition:transform .7s ease}
+.acc-head.on svg{transform:rotate(45deg)}
+.fadein{animation:fi 1s ease}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.m-only{display:none}
+.foot a{color:rgba(246,242,234,.78);font-size:14px}
+.foot a:hover{color:#F6F2EA}
+@media print{header,footer,.noprint{display:none !important}}
+@media (max-width: 640px){
+.d-only{display:none !important}
+.m-only{display:block}
+.navlinks{display:none !important}
+.wrap{padding-left:16px !important;padding-right:16px !important}
+.secpad{padding-top:8px !important}
+.acc-head{display:flex}
+.acc-body{display:none}
+.acc-body.open{display:block;padding-bottom:24px}
+.groups{grid-template-columns:minmax(0,1fr) !important}
+.scrollx{overflow-x:auto;margin:0 -16px;padding:0 16px}
+.facts,.air,.xgrid{grid-template-columns:minmax(0,1fr) !important}
+.two{flex-direction:column !important}
+}
+</style>
+</helmet>
+<div class="sc {{themeClass}}" style="width: 100%; min-height: 100vh;">
+
+<!-- NAV (shared) -->
+<header style="background: var(--bg); border-bottom: 1px solid var(--line2);">
+<nav aria-label="Primary" class="wrap" style="max-width: 1440px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 56px); display: flex; align-items: center; gap: 32px;">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; flex: none;">
+<svg width="24" height="24" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="13" cy="13" r="11.5"></circle><path d="M13 4.5 L15.4 13 L13 21.5 L10.6 13 Z"></path><path d="M13 4.5 L15.4 13 L10.6 13 Z" fill="currentColor"></path></svg>
+<span style="font-size: 15px; font-weight: 600; letter-spacing: .02em;">TravelAusNZ</span>
+</a>
+<div class="navlinks" style="display: flex; gap: 28px; flex: 1;">
+<a class="navlink" href="Main.dc.html">Destinations</a><a class="navlink" href="Map.dc.html">Map</a><a class="navlink" href="Transport.dc.html">Transport</a><a class="navlink" href="Dishes.dc.html">Eat &amp; Drink</a><a class="navlink" href="Prepare.dc.html" aria-current="page" style="color: var(--copper);">Plan your trip</a><a class="navlink" href="Visa.dc.html">Visa &amp; Entry</a><a class="navlink" href="Currency.dc.html">Money</a>
+</div>
+<div style="display: flex; gap: 10px; margin-left: auto;">
+<button class="icon-btn" aria-label="Toggle dark mode" onClick="{{toggleDark}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"></path></svg></button>
+<a class="btn btn-ghost d-only" href="Trip.dc.html">My Trip · 3</a>
+<button class="icon-btn m-only" aria-label="Open menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 8h16M4 16h16"></path></svg></button>
+</div>
+</nav>
+</header>
+
+<!-- MOBILE STICKY PROGRESS -->
+<div class="m-only noprint" style="position: sticky; top: 0; z-index: 30; background: var(--bg); border-bottom: 1px solid var(--line);">
+<div style="padding: 12px 16px; display: flex; align-items: center; gap: 14px;">
+<svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="16" style="fill: none; stroke: var(--line); stroke-width: 3"></circle><circle cx="20" cy="20" r="16" pathLength="100" transform="rotate(-90 20 20)" style="fill: none; stroke: var(--copper); stroke-width: 3; stroke-linecap: round; stroke-dasharray: {{pct}} 100; transition: stroke-dasharray 1.2s ease"></circle></svg>
+<div style="flex: 1;"><p style="font-size: 15px; font-weight: 600;">{{done}} of {{total}} ready</p><p style="font-size: 12px; color: var(--ink2);">{{nextUp}}</p></div>
+<span style="font-size: 18px; font-weight: 500;">{{pct}}%</span>
+</div>
+</div>
+
+<!-- HEADER -->
+<section class="wrap" style="max-width: 1440px; margin: 0 auto; padding: clamp(48px, 7vw, 96px) clamp(16px, 4vw, 56px) 0;">
+<div style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between; align-items: flex-end;">
+<div style="max-width: 720px;">
+<p class="eyebrow" style="color: var(--copper);">Plan · Before you go</p>
+<h1 style="font-size: clamp(38px, 5.2vw, 72px); font-weight: 600; line-height: 1.04; letter-spacing: -0.02em; margin-top: 18px;">Everything ready, nothing rushed.</h1>
+<p style="font-size: 17px; line-height: 1.7; color: var(--ink2); margin-top: 20px; max-width: 560px;">A short, ordered list of what to sort before you fly, with the seasons, the packing and the small local facts that make arrival easy.</p>
+<div class="seg" role="group" aria-label="Country" style="margin-top: 28px;"><sc-for list="{{countries}}" as="c" hint-placeholder-count="3"><button class="{{c.cls}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="min-height: 44px; padding: 0 22px; font-size: 14px;">{{c.label}}</button></sc-for></div>
+</div>
+<div class="d-only" style="display: flex; align-items: center; gap: 28px; padding: 28px 32px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); box-shadow: var(--shadow);">
+<div style="position: relative; width: 132px; height: 132px;">
+<svg width="132" height="132" viewBox="0 0 132 132" role="img" aria-label="{{pct}} percent of checklist done"><circle cx="66" cy="66" r="58" style="fill: none; stroke: var(--line); stroke-width: 4"></circle><circle cx="66" cy="66" r="58" pathLength="100" transform="rotate(-90 66 66)" style="fill: none; stroke: var(--copper); stroke-width: 4; stroke-linecap: round; stroke-dasharray: {{pct}} 100; transition: stroke-dasharray 1.4s ease"></circle></svg>
+<div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;"><span style="font-size: 34px; font-weight: 500; letter-spacing: -0.02em;">{{pct}}%</span><span style="font-size: 11px; color: var(--ink2); letter-spacing: .14em; text-transform: uppercase;">ready</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px; max-width: 220px;">
+<p style="font-size: 18px; font-weight: 600;">{{done}} of {{total}} done</p>
+<p style="font-size: 13px; line-height: 1.6; color: var(--ink2);">Next: {{nextUp}}</p>
+<p style="font-size: 12px; color: var(--ink2); display: flex; gap: 6px; align-items: center; margin-top: 4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>Saved on this device only</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- CHECKLIST -->
+<section aria-label="Personal checklist" class="wrap" style="max-width: 1440px; margin: 0 auto; padding: clamp(48px, 7vw, 96px) clamp(16px, 4vw, 56px) 0;">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid var(--line); padding-bottom: 20px;">
+<div><p class="eyebrow" style="color: var(--copper);">Personal checklist</p><h2 class="h2">Four moments, in order</h2></div>
+<div class="noprint" style="display: flex; gap: 10px;">
+<button class="btn btn-ghost" onClick="{{resetChecks}}">Reset</button>
+<button class="btn btn-primary" onClick="{{printPage}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M7 14h10v7H7z"></path></svg>Save as PDF</button>
+</div>
+</div>
+<div class="groups" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; margin-top: 28px;">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="4">
+<div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 10px;"><p style="font-size: 16px; font-weight: 600;">{{g.title}}</p><span style="font-size: 12px; color: var(--ink2);">{{g.done}}/{{g.count}}</span></div>
+<sc-for list="{{g.items}}" as="i" hint-placeholder-count="4">
+<button class="check {{i.cls}}" role="checkbox" aria-checked="{{i.on}}" onClick="{{i.toggle}}">
+<span class="box"><sc-if value="{{i.on}}" hint-placeholder-val="{{false}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></sc-if></span>
+<span style="display: flex; flex-direction: column; gap: 3px;"><span class="ttl" style="font-size: 15px; font-weight: 500;">{{i.title}}</span><span style="font-size: 13px; line-height: 1.55; color: var(--ink2);">{{i.note}}</span></span>
+</button>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</section>
+
+<!-- BEST TIME -->
+<section aria-label="Best time to go" class="wrap secpad" style="max-width: 1440px; margin: 0 auto; padding: 120px clamp(16px, 4vw, 56px) 0;">
+<button class="acc-head {{acc.season.cls}}" aria-expanded="{{acc.season.on}}" onClick="{{acc.season.toggle}}">Best time to go<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+<div class="acc-body {{acc.season.cls}}">
+<div class="d-only"><p class="eyebrow" style="color: var(--copper);">Best time to go</p><h2 class="h2">Seasons, the other way round</h2></div>
+<p style="font-size: 15px; line-height: 1.7; color: var(--ink2); margin-top: 16px; max-width: 680px;">Australia and New Zealand are in the Southern Hemisphere, so the seasons are reversed: December is midsummer and July is midwinter.</p>
+<div class="scrollx" style="margin-top: 28px;">
+<div style="min-width: 900px;">
+<div style="display: grid; grid-template-columns: 200px repeat(12, minmax(0, 1fr)); gap: 4px; align-items: center;">
+<span></span>
+<sc-for list="{{months}}" as="m" hint-placeholder-count="12"><span style="font-size: 12px; color: var(--ink2); text-align: center; font-weight: 500;">{{m}}</span></sc-for>
+<span style="font-size: 13px; font-weight: 500;">Southern seasons</span>
+<sc-for list="{{southSeasons}}" as="s" hint-placeholder-count="12"><span style="height: 30px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); background: {{s.bg}};">{{s.label}}</span></sc-for>
+<span style="font-size: 13px; color: var(--ink2);">For comparison: Northern</span>
+<sc-for list="{{northSeasons}}" as="s" hint-placeholder-count="12"><span style="height: 22px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); border: 1px solid var(--line2);">{{s.label}}</span></sc-for>
+</div>
+<div style="display: grid; grid-template-columns: 200px repeat(12, minmax(0, 1fr)); gap: 4px; align-items: center; margin-top: 28px; row-gap: 10px;">
+<sc-for list="{{regions}}" as="r" hint-placeholder-count="7">
+<span style="font-size: 14px; font-weight: 500;">{{r.name}}<span style="display: block; font-size: 11px; font-weight: 400; color: var(--ink2);">{{r.best}}</span></span>
+<sc-for list="{{r.cells}}" as="c" hint-placeholder-count="12">
+<span class="cell {{c.rec}}" title="{{c.title}}" style="background: {{c.bg}};"><sc-for list="{{c.dots}}" as="d" hint-placeholder-count="2"><span class="cdot"></span></sc-for></span>
+</sc-for>
+</sc-for>
+</div>
+<div style="display: flex; gap: 28px; flex-wrap: wrap; margin-top: 20px; font-size: 12px; color: var(--ink2); align-items: center;">
+<span style="display: flex; gap: 8px; align-items: center;"><span style="display: flex; gap: 2px;"><span style="width: 14px; height: 14px; border-radius: 2px; background: var(--line2);"></span><span style="width: 14px; height: 14px; border-radius: 2px; background: var(--line);"></span><span style="width: 14px; height: 14px; border-radius: 2px; background: var(--ph3);"></span></span>Weather comfort, low to high</span>
+<span style="display: flex; gap: 8px; align-items: center;"><span style="display: flex; gap: 2px;"><span class="cdot"></span><span class="cdot"></span><span class="cdot"></span></span>Crowds</span>
+<span style="display: flex; gap: 8px; align-items: center;"><span style="width: 14px; height: 14px; border-radius: 2px; box-shadow: inset 0 0 0 2px var(--copper);"></span>Recommended window</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- PACKING -->
+<section aria-label="Packing guide" class="wrap secpad" style="max-width: 1440px; margin: 0 auto; padding: 120px clamp(16px, 4vw, 56px) 0;">
+<button class="acc-head {{acc.pack.cls}}" aria-expanded="{{acc.pack.on}}" onClick="{{acc.pack.toggle}}">Packing guide<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+<div class="acc-body {{acc.pack.cls}}">
+<div class="d-only"><p class="eyebrow" style="color: var(--copper);">Packing guide</p><h2 class="h2">Pack in layers</h2></div>
+<div role="tablist" aria-label="Season" style="display: flex; gap: 32px; border-bottom: 1px solid var(--line); margin-top: 24px; overflow-x: auto;">
+<sc-for list="{{seasonTabs}}" as="t" hint-placeholder-count="4"><button role="tab" class="tab {{t.cls}}" aria-selected="{{t.on}}" onClick="{{t.pick}}">{{t.label}}<span style="font-size: 12px; color: var(--ink2); font-weight: 400; margin-left: 8px;">{{t.months}}</span></button></sc-for>
+</div>
+<div class="two fadein" style="display: flex; gap: 48px; margin-top: 28px; align-items: flex-start;">
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 18px;">
+<p style="font-size: 17px; line-height: 1.7;">{{pack.logic}}</p>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px;">
+<sc-for list="{{pack.tips}}" as="t" hint-placeholder-count="4"><div style="border-top: 1px solid var(--line2); padding-top: 12px;"><p class="eyebrow" style="font-size: 10px; color: var(--ink2);">{{t.k}}</p><p style="font-size: 14px; line-height: 1.55; margin-top: 4px;">{{t.v}}</p></div></sc-for>
+</div>
+</div>
+<div style="flex: 1 1 0; min-width: 0;">
+<div style="display: flex; justify-content: space-between; padding-bottom: 8px;"><p style="font-size: 16px; font-weight: 600;">{{pack.title}} list</p><span style="font-size: 12px; color: var(--ink2);">{{pack.done}}/{{pack.count}} packed</span></div>
+<sc-for list="{{pack.items}}" as="i" hint-placeholder-count="8">
+<button class="check {{i.cls}}" role="checkbox" aria-checked="{{i.on}}" onClick="{{i.toggle}}" style="padding: 12px 0;"><span class="box"><sc-if value="{{i.on}}" hint-placeholder-val="{{false}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></sc-if></span><span class="ttl" style="font-size: 15px;">{{i.title}}</span></button>
+</sc-for>
+</div>
+</div>
+</div>
+</section>
+
+<!-- KNOW BEFORE YOU GO -->
+<section aria-label="Know before you go" class="wrap secpad" style="max-width: 1440px; margin: 0 auto; padding: 120px clamp(16px, 4vw, 56px) 0;">
+<button class="acc-head {{acc.know.cls}}" aria-expanded="{{acc.know.on}}" onClick="{{acc.know.toggle}}">Know before you go<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+<div class="acc-body {{acc.know.cls}}">
+<div class="d-only"><p class="eyebrow" style="color: var(--copper);">Know before you go</p><h2 class="h2">Nine small facts</h2></div>
+<div class="facts" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 28px;">
+<sc-for list="{{facts}}" as="f" hint-placeholder-count="9">
+<div class="fact"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="{{f.icon}}"></path></svg><p style="font-size: 16px; font-weight: 600;">{{f.title}}</p><p style="font-size: 14px; line-height: 1.6; color: var(--ink2);">{{f.text}}</p></div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<!-- CONNECTIVITY + HEALTH -->
+<section aria-label="Connectivity and health" class="wrap secpad" style="max-width: 1440px; margin: 0 auto; padding: 120px clamp(16px, 4vw, 56px) 0;">
+<button class="acc-head {{acc.conn.cls}}" aria-expanded="{{acc.conn.on}}" onClick="{{acc.conn.toggle}}">Connectivity &amp; health<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+<div class="acc-body {{acc.conn.cls}}">
+<div class="two" style="display: flex; gap: 48px; align-items: flex-start;">
+<div style="flex: 2 1 0; min-width: 0;">
+<div class="d-only"><p class="eyebrow" style="color: var(--copper);">Connectivity</p><h2 class="h2">Staying connected</h2></div>
+<div class="scrollx" style="margin-top: 24px;">
+<table class="tbl" style="min-width: 640px;">
+<thead><tr><th scope="col">Option</th><th scope="col">Setup</th><th scope="col">Typical cost</th><th scope="col">Best for</th><th scope="col">Watch out</th></tr></thead>
+<tbody>
+<sc-for list="{{conn}}" as="c" hint-placeholder-count="3"><tr><td style="font-weight: 600; font-size: 15px;">{{c.name}}</td><td>{{c.setup}}</td><td>{{c.cost}}<span class="ph">Placeholder</span></td><td>{{c.best}}</td><td style="color: var(--ink2);">{{c.watch}}</td></tr></sc-for>
+</tbody>
+</table>
+</div>
+<div style="display: flex; gap: 14px; margin-top: 20px; padding: 16px 18px; border: 1px solid var(--line2); border-radius: 8px;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" style="flex: none; margin-top: 2px;"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M12 19.5v.5"></path></svg>
+<p style="font-size: 14px; line-height: 1.65; color: var(--ink2);">Free Wi-Fi is common in cities, cafés and on many trains. Coverage drops sharply in the Outback, Fiordland and on alpine roads: download maps and tickets before you leave town.</p>
+</div>
+</div>
+<div style="flex: 1 1 0; min-width: 0;">
+<p class="eyebrow" style="color: var(--copper);">Health &amp; insurance</p>
+<div style="margin-top: 20px; border: 1px solid var(--line); border-radius: 10px; padding: 26px; display: flex; flex-direction: column; gap: 16px; background: var(--surface);">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"></path><path d="M12 9v6M9 12h6"></path></svg>
+<div style="border-top: 1px solid var(--line2); padding-top: 14px;"><p style="font-size: 15px; font-weight: 600;">Travel insurance with medical cover</p><p style="font-size: 14px; line-height: 1.6; color: var(--ink2); margin-top: 4px;">Healthcare is excellent but costly for visitors. Check cover for hiking, skiing and water activities.</p></div>
+<div style="border-top: 1px solid var(--line2); padding-top: 14px;"><p style="font-size: 15px; font-weight: 600;">Bring prescriptions with documentation</p><p style="font-size: 14px; line-height: 1.6; color: var(--ink2); margin-top: 4px;">Carry medicines in original packaging with a doctor's letter or prescription.</p></div>
+<div style="border-top: 1px solid var(--line2); padding-top: 14px;"><p style="font-size: 15px; font-weight: 600;">Check official medicine rules</p><p style="font-size: 14px; line-height: 1.6; color: var(--ink2); margin-top: 4px;">Some medicines are restricted. Confirm quantities and rules with each country's official guidance before you pack.</p></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- AIRPORT -->
+<section aria-label="Getting around from the airport" class="wrap secpad" style="max-width: 1440px; margin: 0 auto; padding: 120px clamp(16px, 4vw, 56px) 0;">
+<button class="acc-head {{acc.air.cls}}" aria-expanded="{{acc.air.on}}" onClick="{{acc.air.toggle}}">From the airport<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+<div class="acc-body {{acc.air.cls}}">
+<div class="d-only" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;"><div><p class="eyebrow" style="color: var(--copper);">Getting around</p><h2 class="h2">From the airport, without a car</h2></div><a class="btn btn-ghost" href="Transport.dc.html">All public transport →</a></div>
+<div class="air" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 28px;">
+<sc-for list="{{airports}}" as="a" hint-placeholder-count="4">
+<a href="Transport.dc.html" style="border: 1px solid var(--line); border-radius: 10px; padding: 22px; display: flex; flex-direction: column; gap: 4px; background: var(--surface);">
+<p class="eyebrow" style="color: var(--ink2); font-size: 10px;">{{a.code}} · {{a.country}}</p>
+<p style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">{{a.city}}</p>
+<sc-for list="{{a.opts}}" as="o" hint-placeholder-count="2">
+<div style="display: flex; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line2); align-items: center;">
+<span style="width: 26px; display: flex; justify-content: center;"><span style="width: 22px; {{o.line}}"></span></span>
+<div style="flex: 1;"><p style="font-size: 14px; font-weight: 500;">{{o.name}}</p><p style="font-size: 12px; color: var(--ink2);">{{o.time}} · {{o.fare}}</p></div>
+</div>
+</sc-for>
+<span style="font-size: 13px; font-weight: 500; color: var(--copper); margin-top: 8px;">Route details →</span>
+</a>
+</sc-for>
+</div>
+</div>
+</section>
+
+<!-- CROSS LINKS -->
+<section aria-label="Keep planning" class="wrap secpad" style="max-width: 1440px; margin: 0 auto; padding: 120px clamp(16px, 4vw, 56px) 0;">
+<p class="eyebrow" style="color: var(--copper); margin: 24px 0;">Keep planning</p>
+<div class="xgrid" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px;">
+<a class="xlink" href="Visa.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"></rect><circle cx="12" cy="10" r="3"></circle><path d="M8.5 17h7"></path></svg><p style="font-size: 18px; font-weight: 600;">Visa &amp; Entry</p><p style="font-size: 13px; color: var(--ink2); line-height: 1.55;">What permission you may need.</p></a>
+<a class="xlink" href="Currency.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M4 8h16M16 4l4 4-4 4M20 16H4M8 12l-4 4 4 4"></path></svg><p style="font-size: 18px; font-weight: 600;">Currency converter</p><p style="font-size: 13px; color: var(--ink2); line-height: 1.55;">AUD and NZD in your currency.</p></a>
+<a class="xlink" href="Dishes.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M7 3v18M5 3v5a2 2 0 0 0 4 0V3M17 21V3c-2 1-3.5 3-3.5 7v3H17"></path></svg><p style="font-size: 18px; font-weight: 600;">Signature dishes</p><p style="font-size: 13px; color: var(--ink2); line-height: 1.55;">What to eat, and where.</p></a>
+<a class="xlink" href="Trip.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg><p style="font-size: 18px; font-weight: 600;">My Trip</p><p style="font-size: 13px; color: var(--ink2); line-height: 1.55;">Your day-by-day plan.</p></a>
+</div>
+</section>
+
+<!-- FOOTER (shared) -->
+<footer class="foot" style="margin-top: 140px; background: var(--deep); color: #F6F2EA;">
+<div class="wrap" style="max-width: 1440px; margin: 0 auto; padding: 72px clamp(16px, 4vw, 56px) 48px; display: flex; flex-wrap: wrap; gap: 48px; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid rgba(246,242,234,.14);">
+<div style="max-width: 520px;"><p class="eyebrow" style="color: #D08A5E; margin-bottom: 14px;">The TravelAusNZ Dispatch</p><h2 style="font-size: 28px; font-weight: 600; line-height: 1.2;">One letter a month. New openings, quiet seasons, routes worth taking.</h2></div>
+<form style="flex: 1 1 320px; max-width: 520px; display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap;">
+<label style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 6px;"><span class="eyebrow" style="color: rgba(246,242,234,.72);">Email address</span><input type="email" placeholder="you@example.com" style="font-family: inherit; font-size: 15px; height: 48px; border: 0; border-bottom: 1px solid rgba(246,242,234,.35); background: transparent; color: #F6F2EA; outline: none;"></label>
+<button type="button" class="btn" style="background: #D08A5E; color: #0E1729;">Subscribe</button>
+</form>
+</div>
+<div class="wrap" style="max-width: 1440px; margin: 0 auto; padding: 40px clamp(16px, 4vw, 56px); display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between;">
+<div style="display: flex; gap: 28px; flex-wrap: wrap;"><a href="Prepare.dc.html">Plan your trip</a><a href="Visa.dc.html">Visa &amp; entry</a><a href="Currency.dc.html">Money</a><a href="Transport.dc.html">Transport</a><a href="Dishes.dc.html">Signature dishes</a></div>
+<div style="max-width: 560px; display: flex; flex-direction: column; gap: 10px;">
+<p style="font-size: 13px; color: rgba(246,242,234,.85); line-height: 1.7;">Rules, prices and timetables can change. Confirm with official sources before you book or travel.</p>
+<p style="font-size: 12px; color: rgba(246,242,234,.6); line-height: 1.7;">© 2026 TravelAusNZ. We acknowledge the Traditional Custodians of the lands and waters across Australia, and Māori as tangata whenua of Aotearoa New Zealand.</p>
+</div>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":1440,"height":7000}}'>
+class Component extends DCLogic {
+  state = { country: 'both', checks: { permit: true, passport: true, insurance: true, flights: true, stay: true }, packed: {}, season: 'Summer', acc: {}, dark: null };
+  componentDidMount() {
+    try { const raw = window.localStorage.getItem('sc-prepare-v1'); if (raw) { const s = JSON.parse(raw); this.setState({ checks: s.checks || this.state.checks, packed: s.packed || {} }); } } catch (e) {}
+  }
+  persist(next) { try { window.localStorage.setItem('sc-prepare-v1', JSON.stringify({ checks: next.checks, packed: next.packed })); } catch (e) {} }
+  renderVals() {
+    const S = this.state;
+    const dark = S.dark ?? this.props.dark ?? false;
+    const upd = (patch) => this.setState((s) => { const n = { ...s, ...patch(s) }; this.persist(n); return patch(s); });
+    const G = [
+      ['3 months before', [['permit', 'Entry permission', 'Check what you need on Visa & Entry, then apply on the official site.'], ['passport', 'Passport', 'Confirm validity covers your whole trip.'], ['insurance', 'Travel insurance', 'Include medical cover and your activities.'], ['flights', 'Flights', 'Book long-haul and key internal flights.']]],
+      ['1 month before', [['stay', 'Accommodation', 'Confirm every night, including the first.'], ['transit', 'Public transport passes', 'Note which card each city uses.'], ['money', 'Currency and cards', 'Check foreign fees; tell your bank.'], ['esim', 'eSIM', 'Buy and install; activate on arrival.']]],
+      ['1 week before', [['pack', 'Packing', 'Use the season list below.'], ['maps', 'Offline maps', 'Download regions with weak coverage.'], ['contacts', 'Emergency contacts', 'Save 000 / 111 and share your plan.']]],
+      ['Day of departure', [['docs', 'Documents in carry-on', 'Passport, approvals, insurance, bookings.'], ['charge', 'Charge and adapter', 'Type I adapter in your carry-on.'], ['declare', 'Arrival declaration', 'Complete it as instructed. Declare food and outdoor gear.']]]
+    ];
+    const allIds = G.flatMap((g) => g[1].map((i) => i[0]));
+    const total = allIds.length;
+    const done = allIds.filter((id) => S.checks[id]).length;
+    const pct = Math.round(done / total * 100);
+    const firstOpen = G.flatMap((g) => g[1]).find((i) => !S.checks[i[0]]);
+    const groups = G.map(([title, items]) => ({ title, count: items.length, done: items.filter((i) => S.checks[i[0]]).length,
+      items: items.map(([id, t, note]) => ({ title: t, note, on: !!S.checks[id], cls: S.checks[id] ? 'on' : '', toggle: () => upd((s) => ({ checks: { ...s.checks, [id]: !s.checks[id] } })) })) }));
+
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const sOf = (i) => (i === 11 || i <= 1 ? 'Summer' : i <= 4 ? 'Autumn' : i <= 7 ? 'Winter' : 'Spring');
+    const nOf = { Summer: 'Winter', Autumn: 'Spring', Winter: 'Summer', Spring: 'Autumn' };
+    const SBG = { Summer: 'var(--line)', Autumn: 'var(--line2)', Winter: 'transparent', Spring: 'var(--line2)' };
+    const southSeasons = months.map((_, i) => ({ label: [0, 3, 6, 9].includes(i) ? '' : (i % 3 === 1 ? sOf(i) : ''), bg: SBG[sOf(i)] }));
+    southSeasons.forEach((s, i) => { s.label = i === 0 ? 'Summer' : i === 3 ? 'Autumn' : i === 6 ? 'Winter' : i === 9 ? 'Spring' : ''; });
+    const northSeasons = months.map((_, i) => ({ label: i === 0 ? 'Winter' : i === 3 ? 'Spring' : i === 6 ? 'Summer' : i === 9 ? 'Autumn' : '' }));
+    // comfort 1-3, crowds 0-3, recommended months (0-indexed)
+    const R = [
+      ['au', 'Sydney', 'Sep–Nov, Mar–May', [3,3,3,3,2,1,1,1,2,3,3,3], [3,2,2,2,1,1,2,1,1,2,2,3], [2,3,4,8,9,10]],
+      ['au', 'Melbourne', 'Mar–Apr, Nov', [3,3,3,2,1,1,1,1,2,2,3,3], [3,2,2,1,1,1,1,1,1,2,2,3], [2,3,10]],
+      ['au', 'Tropical North Queensland', 'Jun–Oct (dry)', [1,1,1,2,3,3,3,3,3,2,2,1], [1,1,1,1,2,3,3,3,3,2,1,2], [5,6,7,8,9]],
+      ['au', 'Tasmania', 'Dec–Mar', [3,3,2,2,1,1,1,1,1,2,2,3], [3,3,2,1,1,0,1,0,0,1,1,2], [0,1,2,11]],
+      ['nz', 'Queenstown', 'Dec–Mar, Jul–Aug', [3,3,3,2,1,2,2,2,1,2,2,3], [3,2,2,1,1,2,3,3,1,1,2,3], [0,1,2,6,7,11]],
+      ['nz', 'Fiordland', 'Nov–Apr', [3,3,3,2,1,1,1,1,1,2,2,3], [3,3,2,1,0,0,0,0,0,1,2,3], [0,1,2,3,10,11]],
+      ['nz', 'Auckland', 'Nov–Apr', [3,3,3,2,2,1,1,1,2,2,3,3], [3,2,2,1,1,1,1,1,1,1,2,3], [0,1,2,3,10,11]]
+    ];
+    const CB = ['transparent', 'var(--line2)', 'var(--line)', 'var(--ph3)'];
+    const regions = R.filter((r) => S.country === 'both' || r[0] === S.country).map(([c, name, best, comfort, crowd, rec]) => ({ name, best,
+      cells: months.map((m, i) => ({ bg: CB[comfort[i]], rec: rec.includes(i) ? 'rec' : '', dots: Array.from({ length: crowd[i] }, (_, k) => k), title: name + ', ' + m + (rec.includes(i) ? ' · recommended' : '') })) }));
+
+    const P = {
+      Summer: { months: 'Dec–Feb', logic: 'Light, breathable layers for warm days, plus one warm layer for cool evenings and alpine areas. The sun is the main thing to plan for.',
+        tips: [['Layers', 'Linen or cotton shirts, one light knit.'], ['Sun', 'SPF 50+, wide-brim hat, UV sunglasses.'], ['Rain', 'Packable rain shell for the tropics and Fiordland.'], ['Dining', 'One smart-casual outfit for good restaurants.']],
+        items: ['Breathable shirts and shorts', 'Light knit or fleece', 'Swimwear and quick-dry towel', 'SPF 50+ sunscreen', 'Wide-brim hat', 'Packable rain jacket', 'Walking shoes or trail runners', 'Smart-casual outfit'] },
+      Autumn: { months: 'Mar–May', logic: 'Mild days and crisp nights. Bring a mid-weight jacket and plan to add or remove layers through the day.',
+        tips: [['Layers', 'Tee, long sleeve, light down or fleece.'], ['Sun', 'UV is still strong: keep the sunscreen.'], ['Rain', 'Waterproof shell for the South Island.'], ['Dining', 'Smart knitwear works almost everywhere.']],
+        items: ['Long-sleeve layers', 'Light down jacket', 'Waterproof shell', 'Comfortable jeans or chinos', 'Walking shoes', 'Sunscreen', 'Scarf', 'Smart-casual outfit'] },
+      Winter: { months: 'Jun–Aug', logic: 'Mild in Sydney and the tropical north, properly cold in Tasmania and the Southern Alps. Pack for the coldest place on your route.',
+        tips: [['Layers', 'Thermal base, fleece mid-layer, warm outer.'], ['Sun', 'Snow glare is intense: sunglasses and SPF.'], ['Rain', 'Waterproof jacket and water-resistant shoes.'], ['Hiking', 'Gloves and beanie for alpine walks.']],
+        items: ['Thermal base layers', 'Fleece mid-layer', 'Insulated jacket', 'Beanie and gloves', 'Waterproof boots', 'Sunglasses', 'Lip balm and moisturiser', 'Smart-casual outfit'] },
+      Spring: { months: 'Sep–Nov', logic: 'Changeable: four seasons in a day is common, especially in Melbourne and New Zealand. Layers and a good shell matter most.',
+        tips: [['Layers', 'Breathable base, warm mid-layer.'], ['Sun', 'UV rises fast from September.'], ['Rain', 'Shell and a compact umbrella.'], ['Hiking', 'Waterproof walking shoes for wet tracks.']],
+        items: ['Breathable base layers', 'Warm mid-layer', 'Waterproof shell', 'Compact umbrella', 'Waterproof walking shoes', 'Sunscreen and hat', 'Swimwear for warm days', 'Smart-casual outfit'] }
+    };
+    const cur = P[S.season];
+    const packItems = cur.items.map((t) => { const k = S.season + ':' + t; return { title: t, on: !!S.packed[k], cls: S.packed[k] ? 'on' : '', toggle: () => upd((s) => ({ packed: { ...s.packed, [k]: !s.packed[k] } })) }; });
+    const pack = { title: S.season, logic: cur.logic, tips: cur.tips.map(([k, v]) => ({ k, v })), items: packItems, count: packItems.length, done: packItems.filter((i) => i.on).length };
+
+    const facts = [
+      ['Electricity', '230V, Type I plug. Many visitors need an adapter.', 'M9 2v6M15 2v6M6 8h12v4a6 6 0 0 1-12 0zM12 18v4'],
+      ['Driving on the left', 'Both countries drive on the left. Take care at roundabouts.', 'M4 20L10 4M20 20L14 4M12 6v2M12 11v2M12 16v2'],
+      ['Strict biosecurity', 'Declare food, plants, and soil-contaminated or outdoor gear. On-the-spot fines apply.', 'M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6zM9 12l2 2 4-4'],
+      ['Strong UV', 'Use sun protection even on cloudy days, especially in summer.', 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5'],
+      ['Time zones', 'Several zones, and not every state uses daylight saving. Check before connecting flights.', 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2'],
+      ['Tipping', 'Not expected. Rounding up for great service is welcome.', 'M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z'],
+      ['Emergency numbers', '000 in Australia, 111 in New Zealand. Free from any phone.', 'M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z'],
+      ['Distances are large', 'Sydney to Perth is about 4,000 km. Plan internal flights or overnight rail.', 'M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4'],
+      ['Wildlife and water', 'Swim between the flags. Respect marine stinger seasons and keep distance from wildlife.', 'M3 17c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0 3-1 4.5 0M12 4l3 6H9z']
+    ].map(([title, text, icon]) => ({ title, text, icon }));
+
+    const conn = [
+      { name: 'eSIM', setup: 'Install before you fly, activate on landing', cost: 'A$15–40 / 10–20 GB', best: 'Phones that support eSIM', watch: 'Check your phone is unlocked' },
+      { name: 'Local SIM', setup: 'Buy at the airport or a supermarket', cost: 'A$/NZ$20–50 / month', best: 'Longer stays, local number', watch: 'Passport ID may be needed' },
+      { name: 'Roaming', setup: 'Nothing to do, turn on at home', cost: 'Varies; often daily fees', best: 'Very short trips', watch: 'Costs add up fast' }
+    ];
+    const T = 'border-top: 4px solid currentColor;', B = 'border-top: 3px dashed currentColor;', F = 'border-top: 4px dotted currentColor;';
+    const airports = [
+      { code: 'SYD', city: 'Sydney', c: 'au', country: 'Australia', opts: [{ name: 'Airport Link train to Central', time: '13 min', fare: 'A$20–23', line: T }, { name: 'Bus 420 to Burwood', time: '40 min', fare: 'A$4–6', line: B }] },
+      { code: 'MEL', city: 'Melbourne', c: 'au', country: 'Australia', opts: [{ name: 'SkyBus to Southern Cross', time: '25 min', fare: 'A$23–25', line: B }, { name: 'Bus 901 to Broadmeadows', time: '20 min, then train', fare: 'A$6–7', line: B }] },
+      { code: 'AKL', city: 'Auckland', c: 'nz', country: 'New Zealand', opts: [{ name: 'AirportLink bus to Puhinui', time: '10 min', fare: 'NZ$3–5', line: B }, { name: 'Train to Britomart', time: '30 min', fare: 'included', line: T }] },
+      { code: 'ZQN', city: 'Queenstown', c: 'nz', country: 'New Zealand', opts: [{ name: 'Orbus Route 1 to town', time: '20 min', fare: 'NZ$2–4', line: B }, { name: 'Water taxi (seasonal)', time: '15 min', fare: 'NZ$35–45', line: F }] }
+    ].filter((a) => S.country === 'both' || a.c === S.country);
+
+    const accKeys = ['season', 'pack', 'know', 'conn', 'air'];
+    const acc = {};
+    accKeys.forEach((k) => { const on = !!S.acc[k]; acc[k] = { on, cls: on ? 'open on' : '', toggle: () => this.setState((s) => ({ acc: { ...s.acc, [k]: !s.acc[k] } })) }; });
+
+    return {
+      themeClass: dark ? 'dark' : '', toggleDark: () => this.setState({ dark: !dark }),
+      countries: [['au', 'Australia'], ['nz', 'New Zealand'], ['both', 'Both']].map(([k, label]) => ({ label, on: S.country === k, cls: S.country === k ? 'on' : '', pick: () => this.setState({ country: k }) })),
+      pct, done, total, nextUp: firstOpen ? firstOpen[1] : 'All set. Have a good trip.',
+      groups, resetChecks: () => upd(() => ({ checks: {}, packed: {} })), printPage: () => { try { window.print(); } catch (e) {} },
+      months, southSeasons, northSeasons, regions,
+      seasonTabs: Object.keys(P).map((k) => ({ label: k, months: P[k].months, on: S.season === k, cls: S.season === k ? 'on' : '', pick: () => this.setState({ season: k }) })),
+      pack, facts, conn, airports, acc
+    };
+  }
+}
+</script>
+</body>
+</html>

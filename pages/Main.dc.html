@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TravelAusNZ — Home</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.sc{--bg:#F6F2EA;--surface:#FBF9F4;--ink:#13213A;--ink2:#4A5468;--ink3:#8A92A3;--line:rgba(19,33,58,.14);--line2:rgba(19,33,58,.07);--copper:#9E5229;--copper-tint:rgba(158,82,41,.09);--on-copper:#FBF9F4;--ph1:#D6D8DD;--ph2:#C2C7D0;--ph3:#A7AEBB;--deep:#13213A;--on-deep:#F6F2EA;--shadow:0 1px 2px rgba(19,33,58,.04),0 14px 36px rgba(19,33,58,.07);font-family:'Prompt',sans-serif;font-weight:300;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;transition:background .8s ease,color .8s ease}
+.sc.dark{--bg:#0E1729;--surface:#14203A;--ink:#F3EEE4;--ink2:#B7BDC8;--ink3:#7D8698;--line:rgba(243,238,228,.16);--line2:rgba(243,238,228,.07);--copper:#D08A5E;--copper-tint:rgba(208,138,94,.14);--on-copper:#0E1729;--ph1:#22304A;--ph2:#2A3953;--ph3:#344462;--deep:#091121;--on-deep:#F3EEE4;--shadow:0 1px 2px rgba(0,0,0,.2),0 14px 36px rgba(0,0,0,.28)}
+.sc *{box-sizing:border-box}
+.sc h1,.sc h2,.sc h3,.sc h4,.sc p{margin:0}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase}
+.btn{font-family:inherit;font-size:14px;font-weight:500;border-radius:6px;min-height:44px;padding:0 22px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:1px solid transparent;text-decoration:none;transition:background .5s ease,color .5s ease,border-color .5s ease,filter .5s ease}
+.btn-primary{background:var(--copper);color:var(--on-copper)}
+.btn-primary:hover{filter:brightness(1.07);color:var(--on-copper)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--ink);color:var(--ink)}
+.icon-btn{width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .5s ease}
+.icon-btn:hover{border-color:var(--ink)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{font-family:inherit;font-size:13px;font-weight:500;border:0;background:transparent;color:var(--ink2);min-height:36px;padding:0 16px;border-radius:999px;cursor:pointer;transition:background .6s ease,color .6s ease}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.ph{position:relative;overflow:hidden;background:var(--ph2)}
+.ph-in{position:absolute;inset:0;transition:transform 1.8s cubic-bezier(.2,.6,.2,1)}
+.card:hover .ph-in{transform:scale(1.035)}
+.lbl{position:absolute;left:16px;top:14px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--ink)}
+.fade{transition:opacity 2.2s ease}
+.navlink{font-size:14px;font-weight:500;color:var(--ink);padding:10px 0}
+.navlink:hover{color:var(--copper)}
+a{color:var(--ink);text-decoration:none}a:hover{color:var(--copper)}
+.tag{font-size:12px;font-weight:400;border:1px solid var(--line);border-radius:999px;padding:4px 10px;color:var(--ink2)}
+.save{width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all .5s ease}
+.save.on{color:var(--copper);border-color:var(--copper)}
+.field input{font-family:inherit;font-size:15px;font-weight:400;border:0;background:transparent;color:var(--ink);padding:0;width:100%;outline:none}
+.field input::placeholder{color:var(--ink2)}
+.dot{width:28px;height:2px;background:rgba(246,242,234,.35);border:0;padding:0;cursor:pointer;transition:background 1s ease}
+.dot.on{background:#F6F2EA}
+.news input{font-family:inherit;font-size:15px;height:48px;border:0;border-bottom:1px solid rgba(246,242,234,.35);background:transparent;color:var(--on-deep);flex:1 1 240px;outline:none}
+.news input::placeholder{color:rgba(246,242,234,.7)}
+.foot a{color:rgba(246,242,234,.78);font-size:14px}
+.foot a:hover{color:#F6F2EA}
+</style>
+</helmet>
+<div class="sc {{themeClass}}" style="width: 100%; min-height: 100vh;">
+
+<!-- NAV -->
+<header style="position: sticky; top: 0; z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line2);">
+<nav aria-label="Primary" style="max-width: 1440px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 56px); display: flex; align-items: center; gap: 32px; flex-wrap: wrap;">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px;">
+<svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="13" cy="13" r="11.5"></circle><path d="M13 4.5 L15.4 13 L13 21.5 L10.6 13 Z"></path><path d="M13 4.5 L15.4 13 L10.6 13 Z" fill="currentColor"></path></svg>
+<span style="font-size: 16px; font-weight: 600; letter-spacing: .02em;">TravelAusNZ</span>
+</a>
+<div style="display: flex; gap: 28px; flex-wrap: wrap; flex: 1 1 auto;">
+<a class="navlink" href="Main.dc.html">Destinations</a>
+<a class="navlink" href="Map.dc.html">Map</a>
+<a class="navlink" href="Transport.dc.html">Transport</a>
+<a class="navlink" href="Dining.dc.html">Eat &amp; Drink</a>
+<a class="navlink" href="Gallery.dc.html">Gallery</a>
+</div>
+<div class="seg" role="group" aria-label="Country">
+<button class="{{auCls}}" onClick="{{pickAU}}">Australia</button>
+<button class="{{nzCls}}" onClick="{{pickNZ}}">New Zealand</button>
+</div>
+<button class="icon-btn" aria-label="Search">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+</button>
+<button class="icon-btn" aria-label="Toggle dark mode" onClick="{{toggleDark}}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"></path></svg>
+</button>
+<a class="btn btn-ghost" href="Trip.dc.html">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg>
+My Trip · {{savedCount}}
+</a>
+</nav>
+</header>
+
+<!-- HERO -->
+<section aria-label="Featured destination" style="position: relative; height: 800px; overflow: hidden; background: #1B2945;">
+<sc-for list="{{slides}}" as="s" hint-placeholder-count="4">
+<div class="fade" style="position: absolute; inset: 0; opacity: {{s.opacity}};">
+<svg viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true">
+<rect width="1440" height="800" style="fill: {{s.sky}}"></rect>
+<path d="{{s.far}}" style="fill: {{s.toneFar}}"></path>
+<path d="{{s.near}}" style="fill: {{s.toneNear}}"></path>
+<path d="M0 640 Q360 620 720 636 T1440 628 V800 H0Z" style="fill: {{s.water}}"></path>
+</svg>
+</div>
+</sc-for>
+<div aria-hidden="true" style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,18,34,0) 35%, rgba(10,18,34,.55) 100%);"></div>
+<span style="position: absolute; left: clamp(16px, 4vw, 56px); top: 28px; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; font-weight: 500; color: rgba(246,242,234,.7);">Photograph placeholder · 16:9 · {{heroPlace}}</span>
+
+<div style="position: absolute; inset: auto 0 0 0; padding: 0 clamp(16px, 4vw, 56px) 48px; max-width: 1440px; margin: 0 auto; color: #F6F2EA;">
+<p class="eyebrow" style="color: rgba(246,242,234,.82); margin-bottom: 20px;">Australia &amp; New Zealand · Edited, not aggregated</p>
+<h1 style="font-size: clamp(44px, 6vw, 84px); line-height: 1.02; font-weight: 600; letter-spacing: -0.02em; max-width: 900px;">The far south,<br>considered.</h1>
+<p style="font-size: 18px; line-height: 1.6; font-weight: 300; max-width: 520px; margin-top: 20px; color: rgba(246,242,234,.88);">Places worth the long flight, routes that don't need a car, and tables worth booking ahead.</p>
+
+<form role="search" style="margin-top: 40px; background: var(--surface); color: var(--ink); border-radius: 10px; box-shadow: var(--shadow); display: flex; flex-wrap: wrap; align-items: stretch; max-width: 1040px;">
+<label class="field" style="flex: 1 1 260px; padding: 16px 24px; display: flex; flex-direction: column; gap: 6px; border-right: 1px solid var(--line2);">
+<span class="eyebrow" style="color: var(--ink2);">Where</span>
+<input type="text" value="{{whereDefault}}">
+</label>
+<label class="field" style="flex: 1 1 220px; padding: 16px 24px; display: flex; flex-direction: column; gap: 6px; border-right: 1px solid var(--line2);">
+<span class="eyebrow" style="color: var(--ink2);">When</span>
+<input type="text" value="12 – 26 Feb 2027">
+</label>
+<label class="field" style="flex: 1 1 240px; padding: 16px 24px; display: flex; flex-direction: column; gap: 6px;">
+<span class="eyebrow" style="color: var(--ink2);">Interests</span>
+<input type="text" value="Coastal walks, wine, rail">
+</label>
+<div style="padding: 10px; display: flex; align-items: center;">
+<button class="btn btn-primary" type="button" style="height: 56px; padding: 0 28px;">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+Search
+</button>
+</div>
+</form>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 32px; gap: 16px; flex-wrap: wrap;">
+<p style="font-size: 13px; font-weight: 400; color: rgba(246,242,234,.85);"><span style="font-weight: 500;">{{slideNum}} / 04</span> — {{heroPlace}}</p>
+<div style="display: flex; gap: 8px;">
+<sc-for list="{{slides}}" as="s" hint-placeholder-count="4">
+<button class="dot {{s.dotCls}}" aria-label="Show slide {{s.n}}" onClick="{{s.go}}"></button>
+</sc-for>
+</div>
+</div>
+</div>
+</section>
+
+<!-- COUNTRY INTRO -->
+<section style="max-width: 1440px; margin: 0 auto; padding: 120px clamp(16px, 4vw, 56px) 56px; display: flex; flex-wrap: wrap; gap: 48px; justify-content: space-between; align-items: flex-end;">
+<div style="max-width: 640px;">
+<p class="eyebrow" style="color: var(--copper); margin-bottom: 18px;">Featured regions</p>
+<h2 style="font-size: clamp(32px, 3.6vw, 52px); line-height: 1.08; font-weight: 600; letter-spacing: -0.015em;">{{countryHeadline}}</h2>
+<p style="font-size: 17px; line-height: 1.7; color: var(--ink2); margin-top: 20px; max-width: 540px;">{{countryLede}}</p>
+</div>
+<div class="seg" role="group" aria-label="Choose country">
+<button class="{{auCls}}" onClick="{{pickAU}}" style="min-height: 44px; padding: 0 22px; font-size: 14px;">Australia</button>
+<button class="{{nzCls}}" onClick="{{pickNZ}}" style="min-height: 44px; padding: 0 22px; font-size: 14px;">New Zealand</button>
+</div>
+</section>
+
+<!-- REGIONS -->
+<section aria-label="Regions" style="max-width: 1440px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 56px); display: flex; flex-wrap: wrap; gap: 24px;">
+<a class="card" href="Gallery.dc.html" style="flex: 1 1 520px; display: flex; flex-direction: column; gap: 20px;">
+<div class="ph" style="height: 720px; border-radius: 8px;">
+<div class="ph-in" style="background: var(--ph3);">
+<svg viewBox="0 0 400 600" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><path d="M0 380 L80 290 L150 340 L240 220 L320 320 L400 270 V600 H0Z" style="fill: var(--ph2)"></path><path d="M0 470 Q120 440 220 462 T400 450 V600 H0Z" style="fill: var(--ph1)"></path></svg>
+</div>
+<span class="lbl">Photo · 4:5 · {{big.photo}}</span>
+</div>
+<div style="display: flex; justify-content: space-between; gap: 24px; align-items: flex-start;">
+<div>
+<p class="eyebrow" style="color: var(--ink2);">{{big.state}}</p>
+<h3 style="font-size: 36px; font-weight: 600; letter-spacing: -0.01em; margin-top: 8px;">{{big.name}}</h3>
+<p style="font-size: 16px; line-height: 1.65; color: var(--ink2); margin-top: 10px; max-width: 460px;">{{big.line}}</p>
+</div>
+<span class="tag" style="white-space: nowrap;">Best {{big.best}}</span>
+</div>
+</a>
+
+<div style="flex: 1 1 520px; display: flex; flex-direction: column; gap: 24px;">
+<a class="card" href="Gallery.dc.html" style="display: flex; flex-direction: column; gap: 16px;">
+<div class="ph" style="height: 340px; border-radius: 8px;">
+<div class="ph-in" style="background: var(--ph2);">
+<svg viewBox="0 0 400 300" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><path d="M0 200 L60 160 L130 190 L210 120 L290 180 L400 140 V300 H0Z" style="fill: var(--ph3)"></path><path d="M0 245 Q100 228 200 240 T400 236 V300 H0Z" style="fill: var(--ph1)"></path></svg>
+</div>
+<span class="lbl">Photo · 3:2 · {{wide.photo}}</span>
+</div>
+<div style="display: flex; justify-content: space-between; gap: 16px; align-items: baseline;">
+<div>
+<p class="eyebrow" style="color: var(--ink2);">{{wide.state}}</p>
+<h3 style="font-size: 26px; font-weight: 600; margin-top: 6px;">{{wide.name}}</h3>
+<p style="font-size: 15px; line-height: 1.6; color: var(--ink2); margin-top: 6px;">{{wide.line}}</p>
+</div>
+<span class="tag" style="white-space: nowrap;">Best {{wide.best}}</span>
+</div>
+</a>
+<div style="display: flex; flex-wrap: wrap; gap: 24px;">
+<sc-for list="{{small}}" as="r" hint-placeholder-count="2">
+<a class="card" href="Gallery.dc.html" style="flex: 1 1 240px; display: flex; flex-direction: column; gap: 14px;">
+<div class="ph" style="height: 260px; border-radius: 8px;">
+<div class="ph-in" style="background: var(--ph2);">
+<svg viewBox="0 0 300 260" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><path d="M0 170 L70 120 L140 160 L210 100 L300 150 V260 H0Z" style="fill: var(--ph3)"></path></svg>
+</div>
+<span class="lbl">Photo · {{r.photo}}</span>
+</div>
+<div>
+<p class="eyebrow" style="color: var(--ink2);">{{r.state}}</p>
+<h3 style="font-size: 22px; font-weight: 600; margin-top: 6px;">{{r.name}}</h3>
+<p style="font-size: 14px; line-height: 1.6; color: var(--ink2); margin-top: 6px;">{{r.line}}</p>
+</div>
+</a>
+</sc-for>
+</div>
+</div>
+</section>
+
+<!-- JOURNEYS -->
+<section aria-label="Curated journeys" style="max-width: 1440px; margin: 0 auto; padding: 160px clamp(16px, 4vw, 56px) 0;">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 28px;">
+<div>
+<p class="eyebrow" style="color: var(--copper); margin-bottom: 16px;">Curated journeys</p>
+<h2 style="font-size: clamp(30px, 3.2vw, 46px); font-weight: 600; letter-spacing: -0.015em; line-height: 1.1;">Itineraries that move at the right speed</h2>
+</div>
+<a class="btn btn-ghost" href="Transport.dc.html">All journeys
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; margin-top: 40px;">
+<sc-for list="{{journeys}}" as="j" hint-placeholder-count="3">
+<a class="card" href="Transport.dc.html" style="display: flex; flex-direction: column; gap: 22px;">
+<div class="ph" style="aspect-ratio: 4 / 3; border-radius: 8px;">
+<div class="ph-in" style="background: var(--ph2);">
+<svg viewBox="0 0 400 300" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><path d="M0 210 L90 170 L170 200 L260 140 L400 190 V300 H0Z" style="fill: var(--ph3)"></path><path d="M0 250 L400 232" style="stroke: var(--ph1); stroke-width: 3; fill: none"></path></svg>
+</div>
+<span class="lbl">Photo · 4:3 · {{j.photo}}</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px;">
+<p class="eyebrow" style="color: var(--ink2);">{{j.country}} · {{j.modes}}</p>
+<h3 style="font-size: 24px; font-weight: 600; line-height: 1.25;">{{j.title}}</h3>
+<p style="font-size: 15px; line-height: 1.65; color: var(--ink2);">{{j.line}}</p>
+</div>
+<div style="display: flex; align-items: center; gap: 0; padding: 6px 0;">
+<sc-for list="{{j.stops}}" as="st" hint-placeholder-count="4">
+<div style="display: flex; align-items: center; flex: 1 1 0; min-width: 0;">
+<span style="width: 9px; height: 9px; border-radius: 999px; border: 1.5px solid var(--ink); background: var(--bg); flex: none;"></span>
+<span style="height: 1px; background: var(--ink); flex: 1 1 auto; opacity: {{st.lineOp}};"></span>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--ink2); margin-top: -14px;">
+<span>{{j.from}}</span><span>{{j.to}}</span>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line2); padding-top: 16px;">
+<span style="font-size: 14px; color: var(--ink2);">From <span style="color: var(--ink); font-weight: 500;">{{j.price}}</span> pp</span>
+<span style="font-size: 14px; font-weight: 500; color: var(--copper);">View journey →</span>
+</div>
+</a>
+</sc-for>
+</div>
+</section>
+
+<!-- CAR-FREE BAND -->
+<section aria-label="Car-free travel" style="margin-top: 160px; background: var(--deep); color: var(--on-deep);">
+<div style="max-width: 1440px; margin: 0 auto; padding: 120px clamp(16px, 4vw, 56px); display: flex; flex-wrap: wrap; gap: 64px; align-items: center;">
+<div style="flex: 1 1 420px; max-width: 520px;">
+<p class="eyebrow" style="color: #D08A5E; margin-bottom: 18px;">Public transport, first class</p>
+<h2 style="font-size: clamp(32px, 3.4vw, 48px); font-weight: 600; line-height: 1.1; letter-spacing: -0.015em;">Car-free, by design.</h2>
+<p style="font-size: 17px; line-height: 1.7; margin-top: 22px; color: rgba(246,242,234,.82);">Every place we feature lists its nearest stop. Every journey shows the train, tram, bus or ferry that gets you there, with fares, frequency and the transit card you'll need.</p>
+<div style="display: flex; gap: 12px; margin-top: 36px; flex-wrap: wrap;">
+<a class="btn btn-primary" href="Transport.dc.html" style="background: #D08A5E; color: #0E1729;">Plan a route</a>
+<a class="btn" href="Map.dc.html" style="border-color: rgba(246,242,234,.3); color: #F6F2EA;">Open the map</a>
+</div>
+</div>
+<div style="flex: 1 1 560px; border: 1px solid rgba(246,242,234,.16); border-radius: 10px; padding: 36px;">
+<div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px;">
+<p style="font-size: 18px; font-weight: 500;">Melbourne → Sorrento, without a car</p>
+<p style="font-size: 13px; color: rgba(246,242,234,.72);">2 h 35 min · A$18–24</p>
+</div>
+<div style="position: relative; height: 150px; margin-top: 28px;">
+<div style="position: absolute; left: 0; right: 0; top: 36px; display: flex;">
+<span style="flex: 46; height: 0; border-top: 3px solid #D08A5E;"></span>
+<span style="flex: 22; height: 0; border-top: 3px dashed #D08A5E;"></span>
+<span style="flex: 32; height: 0; border-top: 3px dotted #D08A5E;"></span>
+</div>
+<div style="position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: space-between;">
+<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px;">
+<span style="font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: rgba(246,242,234,.72);">Train</span>
+<span style="width: 14px; height: 14px; border-radius: 999px; background: #0A1222; border: 2px solid #D08A5E;"></span>
+<span style="font-size: 14px; font-weight: 500; margin-top: 8px;">Southern Cross</span>
+<span style="font-size: 12px; color: rgba(246,242,234,.72);">V/Line · 1 h 05</span>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-left: -10%;">
+<span style="font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: rgba(246,242,234,.72);">Bus</span>
+<span style="width: 14px; height: 14px; border-radius: 999px; background: #0A1222; border: 2px solid #D08A5E;"></span>
+<span style="font-size: 14px; font-weight: 500; margin-top: 8px;">Geelong</span>
+<span style="font-size: 12px; color: rgba(246,242,234,.72);">Route 75 · 40 min</span>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+<span style="font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: rgba(246,242,234,.72);">Ferry</span>
+<span style="width: 14px; height: 14px; border-radius: 999px; background: #0A1222; border: 2px solid #D08A5E;"></span>
+<span style="font-size: 14px; font-weight: 500; margin-top: 8px;">Queenscliff</span>
+<span style="font-size: 12px; color: rgba(246,242,234,.72);">Hourly · 40 min</span>
+</div>
+<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
+<span style="font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: transparent;">·</span>
+<span style="width: 14px; height: 14px; border-radius: 999px; background: #D08A5E;"></span>
+<span style="font-size: 14px; font-weight: 500; margin-top: 8px;">Sorrento</span>
+<span style="font-size: 12px; color: rgba(246,242,234,.72);">Arrive 11:40</span>
+</div>
+</div>
+</div>
+<div style="display: flex; gap: 28px; border-top: 1px solid rgba(246,242,234,.14); padding-top: 18px; margin-top: 8px; font-size: 12px; color: rgba(246,242,234,.78); flex-wrap: wrap;">
+<span style="display: flex; align-items: center; gap: 8px;"><span style="width: 28px; border-top: 2px solid currentColor;"></span>Rail</span>
+<span style="display: flex; align-items: center; gap: 8px;"><span style="width: 28px; border-top: 2px dashed currentColor;"></span>Bus / coach</span>
+<span style="display: flex; align-items: center; gap: 8px;"><span style="width: 28px; border-top: 2px dotted currentColor;"></span>Ferry</span>
+<span style="margin-left: auto;">Pay with myki · Ferry ticket separate</span>
+</div>
+</div>
+</div>
+</section>
+
+<!-- EAT & DRINK -->
+<section aria-label="Where to eat and drink now" style="max-width: 1440px; margin: 0 auto; padding: 160px clamp(16px, 4vw, 56px) 0;">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 28px;">
+<div>
+<p class="eyebrow" style="color: var(--copper); margin-bottom: 16px;">October edit</p>
+<h2 style="font-size: clamp(30px, 3.2vw, 46px); font-weight: 600; letter-spacing: -0.015em; line-height: 1.1;">Where to eat &amp; drink now</h2>
+</div>
+<a class="btn btn-ghost" href="Dining.dc.html">The full catalogue
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 32px; margin-top: 40px;">
+<sc-for list="{{venues}}" as="v" hint-placeholder-count="4">
+<article class="card" style="display: flex; flex-direction: column; gap: 16px;">
+<div class="ph" style="aspect-ratio: 4 / 5; border-radius: 8px;">
+<div class="ph-in" style="background: var(--ph2);">
+<svg viewBox="0 0 300 375" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><circle cx="150" cy="210" r="70" style="fill: var(--ph3)"></circle><path d="M0 300 H300 V375 H0Z" style="fill: var(--ph1)"></path></svg>
+</div>
+<span class="lbl">Photo · 4:5</span>
+<button class="save {{v.saveCls}}" aria-label="Save {{v.name}}" onClick="{{v.toggle}}" style="position: absolute; right: 12px; top: 12px;">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg>
+</button>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;">
+<p class="eyebrow" style="color: var(--ink2);">{{v.kind}}</p>
+<p style="font-size: 13px; font-weight: 500; letter-spacing: .06em;">{{v.priceOn}}<span style="color: var(--ink3);">{{v.priceOff}}</span></p>
+</div>
+<h3 style="font-size: 21px; font-weight: 600; margin-top: -6px;">{{v.name}}</h3>
+<p style="font-size: 14px; color: var(--ink2); margin-top: -8px;">{{v.where}}</p>
+<div style="display: flex; gap: 6px; flex-wrap: wrap;">
+<sc-for list="{{v.tags}}" as="t" hint-placeholder-count="2"><span class="tag">{{t}}</span></sc-for>
+</div>
+</article>
+</sc-for>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer class="foot" style="margin-top: 160px; background: var(--deep); color: var(--on-deep);">
+<div class="news" style="max-width: 1440px; margin: 0 auto; padding: 96px clamp(16px, 4vw, 56px) 72px; display: flex; flex-wrap: wrap; gap: 48px; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid rgba(246,242,234,.14);">
+<div style="max-width: 520px;">
+<p class="eyebrow" style="color: #D08A5E; margin-bottom: 16px;">The TravelAusNZ Dispatch</p>
+<h2 style="font-size: 36px; font-weight: 600; line-height: 1.15;">One letter a month. New openings, quiet seasons, routes worth taking.</h2>
+</div>
+<form style="flex: 1 1 420px; max-width: 560px; display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap;">
+<label style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 6px;">
+<span class="eyebrow" style="color: rgba(246,242,234,.72);">Email address</span>
+<input type="email" placeholder="you@example.com">
+</label>
+<button type="button" class="btn" style="background: #D08A5E; color: #0E1729;">Subscribe</button>
+</form>
+</div>
+<div style="max-width: 1440px; margin: 0 auto; padding: 56px clamp(16px, 4vw, 56px); display: flex; flex-wrap: wrap; gap: 48px;">
+<div style="flex: 2 1 320px; display: flex; flex-direction: column; gap: 14px;">
+<span style="font-size: 15px; font-weight: 600; letter-spacing: .02em;">TravelAusNZ</span>
+<p style="font-size: 13px; line-height: 1.7; color: rgba(246,242,234,.72); max-width: 420px;">We acknowledge the Traditional Custodians of the lands and waters across Australia, and Māori as tangata whenua of Aotearoa New Zealand.</p>
+</div>
+<div style="flex: 1 1 160px; display: flex; flex-direction: column; gap: 12px;">
+<p class="eyebrow" style="color: rgba(246,242,234,.72);">Explore</p>
+<a href="Map.dc.html">Interactive map</a><a href="Gallery.dc.html">Photo gallery</a><a href="Dining.dc.html">Eat &amp; drink</a>
+</div>
+<div style="flex: 1 1 160px; display: flex; flex-direction: column; gap: 12px;">
+<p class="eyebrow" style="color: rgba(246,242,234,.72);">Plan</p>
+<a href="Transport.dc.html">Transport routes</a><a href="Trip.dc.html">My trip</a><a href="Transport.dc.html">Passes &amp; cards</a>
+</div>
+<div style="flex: 1 1 160px; display: flex; flex-direction: column; gap: 12px;">
+<p class="eyebrow" style="color: rgba(246,242,234,.72);">Company</p>
+<a href="Main.dc.html">About</a><a href="Main.dc.html">Editorial standards</a><a href="Main.dc.html">Contact</a>
+</div>
+</div>
+<div style="max-width: 1440px; margin: 0 auto; padding: 20px clamp(16px, 4vw, 56px) 32px; font-size: 12px; color: rgba(246,242,234,.6); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+<span>© 2026 TravelAusNZ</span><span>Prices in AUD / NZD, indicative</span>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"country":{"editor":"enum","options":["au","nz"],"default":"au"},"$preview":{"width":1440,"height":4300}}'>
+class Component extends DCLogic {
+  state = { country: null, slide: 0, dark: null, saved: { hollow: true } };
+  componentDidMount() {
+    this.timer = setInterval(() => this.setState((s) => ({ slide: (s.slide + 1) % 4 })), 7000);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  renderVals() {
+    const country = this.state.country ?? this.props.country ?? 'au';
+    const dark = this.state.dark ?? this.props.dark ?? false;
+    const slideData = [
+      { place: 'Milford Sound, Fiordland', sky: '#24344F', toneFar: '#33466A', toneNear: '#16233B', water: '#1D2C47',
+        far: 'M0 520 L160 300 L300 420 L470 180 L640 400 L820 230 L1000 420 L1180 260 L1440 460 V800 H0Z',
+        near: 'M0 600 L220 470 L420 560 L640 430 L860 580 L1080 470 L1300 560 L1440 520 V800 H0Z' },
+      { place: 'Sydney Harbour at first light', sky: '#2C3B57', toneFar: '#3A4B6C', toneNear: '#1A2740', water: '#22314C',
+        far: 'M0 560 L300 548 L420 500 L470 548 L900 540 L960 470 L1010 470 L1060 540 L1440 552 V800 H0Z',
+        near: 'M0 620 L1440 610 V800 H0Z' },
+      { place: 'Cradle Mountain, Tasmania', sky: '#283852', toneFar: '#384A69', toneNear: '#18253D', water: '#202F49',
+        far: 'M0 540 L260 460 L520 340 L600 260 L660 330 L760 250 L900 420 L1160 480 L1440 470 V800 H0Z',
+        near: 'M0 610 L300 560 L700 600 L1000 560 L1440 600 V800 H0Z' },
+      { place: 'Lake Wakatipu, Queenstown', sky: '#22314B', toneFar: '#344668', toneNear: '#172339', water: '#1E2D47',
+        far: 'M0 480 L200 360 L380 450 L560 300 L760 440 L980 320 L1200 430 L1440 380 V800 H0Z',
+        near: 'M0 590 L360 540 L720 590 L1100 550 L1440 580 V800 H0Z' }
+    ];
+    const slide = this.state.slide;
+    const slides = slideData.map((s, i) => ({ ...s, n: i + 1, opacity: i === slide ? 1 : 0, dotCls: i === slide ? 'on' : '',
+      go: () => this.setState({ slide: i }) }));
+    const regions = {
+      au: [
+        { name: 'Sydney', state: 'New South Wales', photo: 'Harbour from Cremorne Point', best: 'Sep–Nov', line: 'A harbour city best seen from the water: ferries to Manly and Watsons Bay, coastal walks, and a dining scene spread across walkable neighbourhoods.' },
+        { name: 'Tasmania', state: 'Island state', photo: 'Wineglass Bay', best: 'Dec–Mar', line: 'Hobart\'s waterfront, MONA by ferry, and wilderness a coach ride away.' },
+        { name: 'Melbourne', state: 'Victoria', photo: '4:5 · Laneway at dusk', line: 'Laneways, trams and the country\'s best coffee.' },
+        { name: 'Great Barrier Reef', state: 'Queensland', photo: '4:5 · Outer reef from above', line: 'Reach the reef by fast catamaran from Cairns or Port Douglas.' }
+      ],
+      nz: [
+        { name: 'Fiordland', state: 'Southland', photo: 'Milford Sound, low cloud', best: 'Nov–Apr', line: 'Glacier-carved fiords reached by coach from Queenstown or Te Anau, then explored by cruise or kayak.' },
+        { name: 'Queenstown', state: 'Otago', photo: 'Lake Wakatipu', best: 'Dec–Mar', line: 'Alpine lakes, Central Otago pinot, and the Orbus network into town.' },
+        { name: 'Wellington', state: 'Capital', photo: '4:5 · Oriental Bay', line: 'A compact harbour capital made for walking.' },
+        { name: 'Auckland', state: 'Tāmaki Makaurau', photo: '4:5 · Ferry to Waiheke', line: 'Harbour ferries to islands, vineyards and black-sand beaches.' }
+      ]
+    };
+    const r = regions[country];
+    const copy = {
+      au: { h: 'Australia, region by region', l: 'From the harbour in Sydney to the wild edges of Tasmania, our editors pick a handful of places and get to know them properly.' },
+      nz: { h: 'New Zealand, end to end', l: 'Fiords, alpine lakes and two harbour cities. Most of it is reachable by rail, ferry and a well-chosen coach.' }
+    };
+    const journeys = [
+      { title: '10 days, coast to coast by rail', country: 'Australia', modes: 'Rail', photo: 'Indian Pacific, Nullarbor', price: 'A$6,480', from: 'Sydney', to: 'Perth',
+        line: 'Three nights on the Indian Pacific with stops in Broken Hill and Adelaide, then four days in Fremantle.', stops: [1, 2, 3, 4] },
+      { title: '12 days, the length of Aotearoa', country: 'New Zealand', modes: 'Rail · Ferry', photo: 'TranzAlpine, Arthur’s Pass', price: 'NZ$5,920', from: 'Auckland', to: 'Greymouth',
+        line: 'Northern Explorer to Wellington, the Interislander to Picton, Coastal Pacific to Christchurch, then over the Alps.', stops: [1, 2, 3, 4, 5] },
+      { title: '7 days, Melbourne and the wine valleys', country: 'Australia', modes: 'Tram · Rail · Ferry', photo: 'Yarra Valley vines', price: 'A$3,240', from: 'Melbourne', to: 'Sorrento',
+        line: 'City laneways by tram, the Yarra Valley by day, and the bay crossing from Queenscliff to the Mornington Peninsula.', stops: [1, 2, 3] }
+    ].map((j) => ({ ...j, stops: j.stops.map((s, i) => ({ lineOp: i === j.stops.length - 1 ? 0 : 1 })) }));
+    const saved = this.state.saved;
+    const venues = [
+      { id: 'saltbush', name: 'Saltbush Dining Room', kind: 'Modern Australian', where: 'Surry Hills, Sydney', price: 3, tags: ['Tasting menu', 'Native produce'] },
+      { id: 'hollow', name: 'Hollow Lane', kind: 'Cocktail bar', where: 'Melbourne CBD', price: 2, tags: ['Hidden', 'Late'] },
+      { id: 'pier', name: 'Pier Seventeen Oyster Room', kind: 'Seafood', where: 'Waterfront, Hobart', price: 3, tags: ['Waterfront', 'Tasmanian oysters'] },
+      { id: 'tui', name: 'Tūī & Fern', kind: 'Wine bar', where: 'Te Aro, Wellington', price: 2, tags: ['Natural wine', 'Small plates'] }
+    ].map((v) => ({ ...v, priceOn: '$'.repeat(v.price), priceOff: '$'.repeat(4 - v.price), saveCls: saved[v.id] ? 'on' : '',
+      toggle: () => this.setState((s) => ({ saved: { ...s.saved, [v.id]: !s.saved[v.id] } })) }));
+    const savedCount = Object.values(saved).filter(Boolean).length + 2;
+    return {
+      themeClass: dark ? 'dark' : '',
+      toggleDark: () => this.setState({ dark: !dark }),
+      auCls: country === 'au' ? 'on' : '', nzCls: country === 'nz' ? 'on' : '',
+      pickAU: () => this.setState({ country: 'au' }), pickNZ: () => this.setState({ country: 'nz' }),
+      slides, heroPlace: slideData[slide].place, slideNum: '0' + (slide + 1),
+      whereDefault: country === 'au' ? 'Sydney, Tasmania' : 'Queenstown, Fiordland',
+      countryHeadline: copy[country].h, countryLede: copy[country].l,
+      big: r[0], wide: r[1], small: [r[2], r[3]],
+      journeys, venues, savedCount
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TravelAusNZ — Signature Dishes, mobile dark</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#0E1729}</style>
+</helmet>
+<div style="width: 390px; background: #0E1729; font-family: 'Prompt', sans-serif; color: #F3EEE4;">
+<dc-import name="Dishes" dark="{{dark}}" open="{{open}}" sheet="{{sheet}}" hint-size="390px,7200px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":7200}}'>
+class Component extends DCLogic {
+  renderVals() { return { dark: true, open: '', sheet: false }; }
+}
+</script>
+</body>
+</html>

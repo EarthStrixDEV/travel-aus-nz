@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TravelAusNZ — Signature Dishes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.sc{--bg:#F6F2EA;--surface:#FBF9F4;--ink:#13213A;--ink2:#4A5468;--ink3:#8A92A3;--line:rgba(19,33,58,.14);--line2:rgba(19,33,58,.07);--copper:#9E5229;--copper-tint:rgba(158,82,41,.09);--on-copper:#FBF9F4;--ph1:#D6D8DD;--ph2:#C2C7D0;--ph3:#A7AEBB;--deep:#13213A;--land:#ECE8E1;--water:#C8CFDA;--road:#FBF9F4;--scrim:rgba(14,23,41,.55);--shadow:0 1px 2px rgba(19,33,58,.04),0 14px 36px rgba(19,33,58,.07);--shadow-lg:0 24px 80px rgba(14,23,41,.22);font-family:'Prompt',sans-serif;font-weight:300;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;transition:background .8s ease,color .8s ease}
+.sc.dark{--bg:#0E1729;--surface:#14203A;--ink:#F3EEE4;--ink2:#B7BDC8;--ink3:#7D8698;--line:rgba(243,238,228,.16);--line2:rgba(243,238,228,.07);--copper:#D08A5E;--copper-tint:rgba(208,138,94,.14);--on-copper:#0E1729;--ph1:#22304A;--ph2:#2A3953;--ph3:#344462;--deep:#091121;--land:#16223A;--water:#0B1325;--road:#26344F;--scrim:rgba(4,8,18,.7);--shadow:0 1px 2px rgba(0,0,0,.2),0 14px 36px rgba(0,0,0,.28);--shadow-lg:0 24px 80px rgba(0,0,0,.5)}
+.sc *{box-sizing:border-box}
+.sc h1,.sc h2,.sc h3,.sc h4,.sc p{margin:0}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase}
+a{color:var(--ink);text-decoration:none}a:hover{color:var(--copper)}
+.navlink{font-size:14px;font-weight:500;padding:10px 0}
+.navlink.cur{color:var(--copper)}
+.btn{font-family:inherit;font-size:14px;font-weight:500;border-radius:6px;min-height:44px;padding:0 20px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:1px solid transparent;transition:all .5s ease}
+.btn-primary{background:var(--copper);color:var(--on-copper)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
+.icon-btn{width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .5s ease}
+.icon-btn:hover{border-color:var(--ink)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{font-family:inherit;font-size:13px;font-weight:500;border:0;background:transparent;color:var(--ink2);min-height:38px;padding:0 18px;border-radius:999px;cursor:pointer;transition:background .6s ease,color .6s ease}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.chip{font-family:inherit;font-size:13px;font-weight:400;min-height:36px;padding:0 13px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink2);cursor:pointer;transition:all .5s ease;white-space:nowrap}
+.chip:hover{border-color:var(--ink);color:var(--ink)}
+.chip.on{border-color:var(--copper);color:var(--copper);background:var(--copper-tint);font-weight:500}
+.grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:4px 10px;color:var(--ink2);white-space:nowrap}
+.card{display:flex;flex-direction:column;gap:14px;cursor:pointer;background:none;border:0;padding:0;text-align:left;font-family:inherit;color:var(--ink);width:100%}
+.card .img{position:relative;overflow:hidden;border-radius:8px;background:var(--ph2)}
+.card .in{position:absolute;inset:0;transition:transform 1.8s cubic-bezier(.2,.6,.2,1)}
+.card:hover .in{transform:scale(1.035)}
+.card:focus-visible{outline:2px solid var(--copper);outline-offset:4px;border-radius:8px}
+.save{width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;position:absolute;right:12px;top:12px;transition:all .5s ease;z-index:2}
+.save.on{color:var(--copper);border-color:var(--copper)}
+.lbl{position:absolute;left:16px;top:14px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--ink)}
+.wide{grid-column:span 2}
+.rail{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;scrollbar-width:thin}
+.rail .card{flex:0 0 260px;scroll-snap-align:start}
+.row{display:flex;gap:14px;padding:16px 0;border-top:1px solid var(--line2)}
+.pair{border:1px solid var(--line2);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.fadein{animation:fi 1s ease}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.rise{animation:rise .9s cubic-bezier(.2,.6,.2,1)}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.m-only{display:none}
+.foot a{color:rgba(246,242,234,.78);font-size:14px}
+.foot a:hover{color:#F6F2EA}
+@media (max-width: 640px){
+.d-only{display:none !important}
+.m-only{display:block}
+.navlinks{display:none !important}
+.wrap{padding-left:16px !important;padding-right:16px !important}
+.grid{grid-template-columns:minmax(0,1fr) !important;gap:40px !important}
+.wide{grid-column:auto}
+.grid .img{aspect-ratio:4/5 !important}
+.must{flex-direction:column !important}
+.must .img{height:460px !important}
+.rail .card{flex:0 0 240px}
+.modal{inset:0 !important;padding:0 !important;align-items:stretch !important}
+.panel{border-radius:0 !important;max-height:none !important;height:100% !important;flex-direction:column !important}
+.panel .pimg{position:relative !important;top:auto !important;height:340px !important;flex:none !important;width:100% !important}
+.pairs{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+}
+</style>
+</helmet>
+<div class="sc {{themeClass}}" style="width: 100%; min-height: 100vh; position: relative;">
+
+<!-- NAV (shared) -->
+<header style="background: var(--bg); border-bottom: 1px solid var(--line2);">
+<nav aria-label="Primary" class="wrap" style="max-width: 1440px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 56px); display: flex; align-items: center; gap: 32px;">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; flex: none;">
+<svg width="24" height="24" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="13" cy="13" r="11.5"></circle><path d="M13 4.5 L15.4 13 L13 21.5 L10.6 13 Z"></path><path d="M13 4.5 L15.4 13 L10.6 13 Z" fill="currentColor"></path></svg>
+<span style="font-size: 15px; font-weight: 600; letter-spacing: .02em;">TravelAusNZ</span>
+</a>
+<div class="navlinks" style="display: flex; gap: 28px; flex: 1;">
+<a class="navlink" href="Main.dc.html">Destinations</a><a class="navlink" href="Map.dc.html">Map</a><a class="navlink" href="Transport.dc.html">Transport</a><a class="navlink cur" href="Dishes.dc.html" aria-current="page">Eat &amp; Drink</a><a class="navlink" href="Gallery.dc.html">Gallery</a><a class="navlink" href="Currency.dc.html">Money</a>
+</div>
+<div style="display: flex; gap: 10px; margin-left: auto;">
+<button class="icon-btn" aria-label="Toggle dark mode" onClick="{{toggleDark}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"></path></svg></button>
+<a class="btn btn-ghost d-only" href="Trip.dc.html">My Trip · {{savedCount}}</a>
+<button class="icon-btn m-only" aria-label="Open menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 8h16M4 16h16"></path></svg></button>
+</div>
+</nav>
+</header>
+
+<!-- HEADER -->
+<section class="wrap" style="max-width: 1440px; margin: 0 auto; padding: 96px clamp(16px, 4vw, 56px) 48px; display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between; align-items: flex-end;">
+<div style="max-width: 760px;">
+<p class="eyebrow" style="color: var(--copper);">Eat &amp; drink · Signature dishes</p>
+<h1 style="font-size: clamp(40px, 5.6vw, 76px); font-weight: 600; line-height: 1.02; letter-spacing: -0.02em; margin-top: 18px;">Eat the place, not the menu.</h1>
+<p style="font-size: 17px; line-height: 1.7; color: var(--ink2); margin-top: 20px; max-width: 580px;">The dishes that define Australia and New Zealand, what they taste like, and where locals actually go to eat them. Start with the plate, then find the table.</p>
+</div>
+<div class="seg" role="group" aria-label="Country">
+<sc-for list="{{countries}}" as="c" hint-placeholder-count="3"><button class="{{c.cls}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="min-height: 44px; padding: 0 22px; font-size: 14px;">{{c.label}}</button></sc-for>
+</div>
+</section>
+
+<!-- FILTER BAR desktop (sticky) -->
+<div class="d-only" style="position: sticky; top: 0; z-index: 20; background: var(--bg); border-top: 1px solid var(--line2); border-bottom: 1px solid var(--line2);">
+<div class="wrap" style="max-width: 1440px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 56px); display: flex; flex-direction: column; gap: 12px;">
+<div style="display: flex; flex-wrap: wrap; gap: 12px 36px; align-items: center;">
+<div class="grp" role="group" aria-label="Region"><span class="eyebrow" style="color: var(--ink2); margin-right: 6px; width: 72px;">Region</span><sc-for list="{{regionChips}}" as="c" hint-placeholder-count="10"><button class="chip {{c.cls}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px 36px; align-items: center;">
+<div class="grp" role="group" aria-label="Dish type"><span class="eyebrow" style="color: var(--ink2); margin-right: 6px; width: 72px;">Type</span><sc-for list="{{typeChips}}" as="c" hint-placeholder-count="8"><button class="chip {{c.cls}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div>
+<div class="grp" role="group" aria-label="Price"><span class="eyebrow" style="color: var(--ink2); margin-right: 6px;">Price</span><sc-for list="{{priceChips}}" as="c" hint-placeholder-count="4"><button class="chip {{c.cls}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="letter-spacing: .06em;">{{c.label}}</button></sc-for></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px 36px; align-items: center; justify-content: space-between;">
+<div class="grp" role="group" aria-label="Dietary"><span class="eyebrow" style="color: var(--ink2); margin-right: 6px; width: 72px;">Dietary</span><sc-for list="{{dietChips}}" as="c" hint-placeholder-count="6"><button class="chip {{c.cls}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div>
+<div style="display: flex; gap: 16px; align-items: center;"><span style="font-size: 13px; color: var(--ink2);">{{count}} dishes</span><sc-if value="{{anyFilter}}" hint-placeholder-val="{{false}}"><button onClick="{{reset}}" style="font-family: inherit; font-size: 13px; font-weight: 500; color: var(--copper); background: none; border: 0; cursor: pointer; min-height: 36px;">Clear all</button></sc-if></div>
+</div>
+</div>
+</div>
+
+<!-- FILTER BAR mobile (sticky trigger) -->
+<div class="m-only" style="position: sticky; top: 0; z-index: 20; background: var(--bg); border-top: 1px solid var(--line2); border-bottom: 1px solid var(--line2);">
+<div style="padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+<button class="btn btn-ghost" onClick="{{openSheet}}" style="min-height: 44px;">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"></path></svg>
+Filters<sc-if value="{{anyFilter}}" hint-placeholder-val="{{false}}"><span style="font-size: 11px; font-weight: 600; min-width: 20px; height: 20px; border-radius: 999px; background: var(--copper); color: var(--on-copper); display: inline-flex; align-items: center; justify-content: center; padding: 0 6px;">{{filterCount}}</span></sc-if>
+</button>
+<span style="font-size: 13px; color: var(--ink2);">{{count}} dishes</span>
+</div>
+</div>
+
+<!-- DISH GRID -->
+<section aria-label="Dishes" class="wrap" style="max-width: 1440px; margin: 0 auto; padding: 48px clamp(16px, 4vw, 56px) 0;">
+
+<sc-if value="{{hasMust}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px;"><p class="eyebrow" style="color: var(--copper);">Must try</p><span style="font-size: 13px; color: var(--ink2);">If you eat only three things</span></div>
+<div class="must" style="display: flex; gap: 24px; margin-bottom: 72px;">
+<sc-for list="{{must}}" as="d" hint-placeholder-count="3">
+<div class="card rise" role="button" tabindex="0" onClick="{{d.open}}" aria-label="Open {{d.name}}" style="flex: {{d.flex}}; min-width: 0;">
+<div class="img" style="height: 560px;">
+<div class="in" style="background: var(--ph2);">
+<svg viewBox="0 0 400 560" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><circle cx="200" cy="300" r="150" style="fill: var(--ph1)"></circle><circle cx="200" cy="300" r="104" style="fill: var(--ph3)"></circle></svg>
+</div>
+<span class="lbl">Food photo · {{d.name}}</span>
+<button class="save {{d.saveCls}}" aria-label="Save {{d.name}}" aria-pressed="{{d.saved}}" onClick="{{d.toggle}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg></button>
+</div>
+<div style="display: flex; gap: 8px; flex-wrap: wrap;"><span class="tag">{{d.countryLabel}}</span><span class="tag">{{d.region}}</span></div>
+<h3 style="font-size: clamp(24px, 2.4vw, 34px); font-weight: 600; letter-spacing: -0.01em; line-height: 1.15;">{{d.name}}</h3>
+<p style="font-size: 15px; line-height: 1.6; color: var(--ink2); max-width: 560px;">{{d.line}}</p>
+<p style="font-size: 14px; font-weight: 500;">{{d.priceText}} <span style="color: var(--ink3); font-weight: 400; letter-spacing: .06em; margin-left: 6px;">{{d.pOn}}<span style="opacity: .45;">{{d.pOff}}</span></span></p>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px; border-top: 1px solid var(--line); padding-top: 28px;"><p class="eyebrow" style="color: var(--ink2);">All dishes</p><span style="font-size: 13px; color: var(--ink2);">Sorted by our editors</span></div>
+<div class="grid" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 48px 24px;">
+<sc-for list="{{rest}}" as="d" hint-placeholder-count="12">
+<div class="card fadein {{d.wideCls}}" role="button" tabindex="0" onClick="{{d.open}}" aria-label="Open {{d.name}}">
+<div class="img" style="aspect-ratio: {{d.ratio}};">
+<div class="in" style="background: var(--ph2);">
+<svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><circle cx="200" cy="260" r="130" style="fill: var(--ph1)"></circle><circle cx="200" cy="260" r="88" style="fill: var(--ph3)"></circle></svg>
+</div>
+<span class="lbl">Food photo · {{d.ratioLabel}}</span>
+<button class="save {{d.saveCls}}" aria-label="Save {{d.name}}" aria-pressed="{{d.saved}}" onClick="{{d.toggle}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg></button>
+</div>
+<div style="display: flex; gap: 6px; flex-wrap: wrap;"><span class="tag">{{d.countryLabel}}</span><span class="tag">{{d.region}}</span></div>
+<h3 style="font-size: 21px; font-weight: 600; line-height: 1.25;">{{d.name}}</h3>
+<p style="font-size: 14px; line-height: 1.6; color: var(--ink2); margin-top: -4px;">{{d.line}}</p>
+<p style="font-size: 13px; font-weight: 500; border-top: 1px solid var(--line2); padding-top: 12px;">{{d.priceText}} <span style="color: var(--ink3); font-weight: 400; letter-spacing: .06em; margin-left: 6px;">{{d.pOn}}<span style="opacity: .45;">{{d.pOff}}</span></span></p>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{empty}}" hint-placeholder-val="{{false}}">
+<div style="padding: 80px 0; text-align: center;">
+<p style="font-size: 20px; font-weight: 500;">No dishes match every filter.</p>
+<p style="font-size: 14px; color: var(--ink2); margin-top: 8px;">Try removing a dietary filter or switching region.</p>
+<button class="btn btn-ghost" onClick="{{reset}}" style="margin-top: 20px;">Clear filters</button>
+</div>
+</sc-if>
+</section>
+
+<!-- COLLECTIONS -->
+<section aria-label="Curated collections" class="wrap" style="max-width: 1440px; margin: 0 auto; padding: 140px clamp(16px, 4vw, 56px) 0;">
+<p class="eyebrow" style="color: var(--copper);">Collections</p>
+<h2 style="font-size: clamp(30px, 3.2vw, 46px); font-weight: 600; line-height: 1.1; letter-spacing: -0.015em; margin-top: 14px;">Ways to eat your way through</h2>
+<div style="display: flex; flex-direction: column; gap: 64px; margin-top: 48px;">
+<sc-for list="{{collections}}" as="col" hint-placeholder-count="5">
+<div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--line); padding-bottom: 16px; margin-bottom: 24px; gap: 16px;">
+<div><h3 style="font-size: 22px; font-weight: 600;">{{col.title}}</h3><p style="font-size: 14px; color: var(--ink2); margin-top: 4px;">{{col.sub}}</p></div>
+<span style="font-size: 13px; color: var(--ink2); white-space: nowrap;">{{col.count}} dishes</span>
+</div>
+<div class="rail">
+<sc-for list="{{col.items}}" as="d" hint-placeholder-count="5">
+<div class="card" role="button" tabindex="0" onClick="{{d.open}}" aria-label="Open {{d.name}}">
+<div class="img" style="aspect-ratio: 4 / 3;">
+<div class="in" style="background: var(--ph2);"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><circle cx="200" cy="160" r="100" style="fill: var(--ph1)"></circle><circle cx="200" cy="160" r="66" style="fill: var(--ph3)"></circle></svg></div>
+</div>
+<div><p class="eyebrow" style="color: var(--ink2); font-size: 10px;">{{d.countryLabel}} · {{d.region}}</p><p style="font-size: 16px; font-weight: 500; margin-top: 6px;">{{d.name}}</p><p style="font-size: 13px; color: var(--ink2); margin-top: 2px;">{{d.priceText}}</p></div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<!-- FOOTER (shared) -->
+<footer class="foot" style="margin-top: 160px; background: var(--deep); color: #F6F2EA;">
+<div class="wrap" style="max-width: 1440px; margin: 0 auto; padding: 72px clamp(16px, 4vw, 56px) 48px; display: flex; flex-wrap: wrap; gap: 48px; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid rgba(246,242,234,.14);">
+<div style="max-width: 520px;"><p class="eyebrow" style="color: #D08A5E; margin-bottom: 14px;">The TravelAusNZ Dispatch</p><h2 style="font-size: 28px; font-weight: 600; line-height: 1.2;">One letter a month. New openings, quiet seasons, routes worth taking.</h2></div>
+<form style="flex: 1 1 320px; max-width: 520px; display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap;">
+<label style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 6px;"><span class="eyebrow" style="color: rgba(246,242,234,.72);">Email address</span><input type="email" placeholder="you@example.com" style="font-family: inherit; font-size: 15px; height: 48px; border: 0; border-bottom: 1px solid rgba(246,242,234,.35); background: transparent; color: #F6F2EA; outline: none;"></label>
+<button type="button" class="btn" style="background: #D08A5E; color: #0E1729;">Subscribe</button>
+</form>
+</div>
+<div class="wrap" style="max-width: 1440px; margin: 0 auto; padding: 40px clamp(16px, 4vw, 56px); display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between;">
+<div style="display: flex; gap: 28px; flex-wrap: wrap;"><a href="Map.dc.html">Map</a><a href="Transport.dc.html">Transport</a><a href="Dishes.dc.html">Signature dishes</a><a href="Dining.dc.html">Restaurants &amp; bars</a><a href="Currency.dc.html">Money</a></div>
+<p style="font-size: 12px; color: rgba(246,242,234,.6); max-width: 520px; line-height: 1.7;">© 2026 TravelAusNZ. We acknowledge the Traditional Custodians of the lands and waters across Australia, and Māori as tangata whenua of Aotearoa New Zealand.</p>
+</div>
+</footer>
+
+<!-- MOBILE FILTER BOTTOM SHEET -->
+<sc-if value="{{sheetOpen}}" hint-placeholder-val="{{false}}">
+<div class="fadein" style="position: fixed; inset: 0; z-index: 60;">
+<div onClick="{{closeSheet}}" style="position: absolute; inset: 0; background: var(--scrim);"></div>
+<div role="dialog" aria-modal="true" aria-label="Filters" class="rise" style="position: absolute; left: 0; right: 0; bottom: 0; max-height: 86vh; background: var(--bg); border-radius: 18px 18px 0 0; box-shadow: var(--shadow-lg); display: flex; flex-direction: column;">
+<div style="padding: 10px 20px 0;"><div aria-hidden="true" style="width: 40px; height: 4px; border-radius: 999px; background: var(--line); margin: 0 auto 14px;"></div>
+<div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid var(--line2);"><h2 style="font-size: 20px; font-weight: 600;">Filters</h2><button onClick="{{reset}}" style="font-family: inherit; font-size: 13px; font-weight: 500; color: var(--copper); background: none; border: 0; cursor: pointer; min-height: 44px;">Clear all</button></div></div>
+<div style="overflow-y: auto; padding: 8px 20px 20px; display: flex; flex-direction: column; gap: 22px;">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 12px;"><span class="eyebrow" style="color: var(--ink2);">Country</span><div class="seg" role="group" aria-label="Country" style="align-self: flex-start;"><sc-for list="{{countries}}" as="c" hint-placeholder-count="3"><button class="{{c.cls}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div></div>
+<div style="display: flex; flex-direction: column; gap: 10px;"><span class="eyebrow" style="color: var(--ink2);">Region</span><div class="grp"><sc-for list="{{regionChips}}" as="c" hint-placeholder-count="10"><button class="chip {{c.cls}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div></div>
+<div style="display: flex; flex-direction: column; gap: 10px;"><span class="eyebrow" style="color: var(--ink2);">Dish type</span><div class="grp"><sc-for list="{{typeChips}}" as="c" hint-placeholder-count="8"><button class="chip {{c.cls}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div></div>
+<div style="display: flex; flex-direction: column; gap: 10px;"><span class="eyebrow" style="color: var(--ink2);">Dietary</span><div class="grp"><sc-for list="{{dietChips}}" as="c" hint-placeholder-count="6"><button class="chip {{c.cls}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div></div>
+<div style="display: flex; flex-direction: column; gap: 10px;"><span class="eyebrow" style="color: var(--ink2);">Price</span><div class="grp"><sc-for list="{{priceChips}}" as="c" hint-placeholder-count="4"><button class="chip {{c.cls}}" onClick="{{c.pick}}" style="letter-spacing: .06em;">{{c.label}}</button></sc-for></div></div>
+</div>
+<div style="padding: 14px 20px 20px; border-top: 1px solid var(--line2);"><button class="btn btn-primary" onClick="{{closeSheet}}" style="width: 100%; min-height: 52px;">Show {{count}} dishes</button></div>
+</div>
+</div>
+</sc-if>
+
+<!-- DISH DETAIL MODAL -->
+<sc-if value="{{detailOpen}}" hint-placeholder-val="{{false}}">
+<div class="modal fadein" role="dialog" aria-modal="true" aria-label="{{dd.name}}" style="position: fixed; inset: 0; z-index: 70; display: flex; align-items: center; justify-content: center; padding: 32px;">
+<div onClick="{{close}}" style="position: absolute; inset: 0; background: var(--scrim);"></div>
+<div class="panel rise" style="position: relative; width: 100%; max-width: 1200px; max-height: calc(100vh - 64px); background: var(--bg); border-radius: 12px; box-shadow: var(--shadow-lg); overflow-y: auto; display: flex; align-items: flex-start;">
+<div class="pimg" style="flex: 0 0 46%; position: sticky; top: 0; height: calc(100vh - 64px); max-height: 900px; background: var(--ph2); overflow: hidden;">
+<svg viewBox="0 0 500 700" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><circle cx="250" cy="360" r="190" style="fill: var(--ph1)"></circle><circle cx="250" cy="360" r="130" style="fill: var(--ph3)"></circle></svg>
+<span class="lbl">Food photo · 4:5 · {{dd.name}}</span>
+<button class="icon-btn m-only" aria-label="Close" onClick="{{close}}" style="position: absolute; right: 14px; top: 14px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+<div style="flex: 1; min-width: 0; padding: clamp(24px, 3vw, 48px); display: flex; flex-direction: column; gap: 0;">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
+<div style="display: flex; gap: 8px; flex-wrap: wrap;"><span class="tag">{{dd.countryLabel}}</span><span class="tag">{{dd.region}}</span><sc-for list="{{dd.typeTags}}" as="t" hint-placeholder-count="1"><span class="tag">{{t}}</span></sc-for></div>
+<button class="icon-btn d-only" aria-label="Close" onClick="{{close}}" style="flex: none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+<h2 style="font-size: clamp(34px, 3.6vw, 52px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.05; margin-top: 18px;">{{dd.name}}</h2>
+<p style="font-size: 15px; font-weight: 500; margin-top: 12px;">{{dd.priceText}} <span style="color: var(--ink3); font-weight: 400; letter-spacing: .06em; margin-left: 6px;">{{dd.pOn}}<span style="opacity: .45;">{{dd.pOff}}</span></span></p>
+<p style="font-size: 17px; line-height: 1.75; color: var(--ink2); margin-top: 20px;">{{dd.story}}</p>
+<sc-if value="{{dd.hasNote}}" hint-placeholder-val="{{false}}">
+<div style="margin-top: 20px; padding: 16px 20px; border: 1px solid var(--line); border-radius: 8px; background: var(--copper-tint);"><p class="eyebrow" style="color: var(--copper); font-size: 10px;">A friendly dispute</p><p style="font-size: 14px; line-height: 1.65; margin-top: 6px;">{{dd.note}}</p></div>
+</sc-if>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 28px;">
+<div><p class="eyebrow" style="color: var(--ink2);">What it tastes like</p><p style="font-size: 15px; line-height: 1.65; margin-top: 8px;">{{dd.taste}}</p></div>
+<div><p class="eyebrow" style="color: var(--ink2);">How it's served</p><p style="font-size: 15px; line-height: 1.65; margin-top: 8px;">{{dd.served}}</p></div>
+</div>
+<div class="row" style="margin-top: 24px;">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" style="flex: none; margin-top: 2px;"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16v.5"></path></svg>
+<div style="flex: 1;"><p class="eyebrow" style="color: var(--ink2);">Dietary &amp; allergy notes</p><p style="font-size: 14px; line-height: 1.6; margin-top: 6px;">{{dd.allergy}}</p>
+<div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px;"><sc-for list="{{dd.dietTags}}" as="t" hint-placeholder-count="2"><span class="tag" style="text-transform: none; letter-spacing: 0; font-size: 12px; font-weight: 400;">{{t}}</span></sc-for></div></div>
+</div>
+
+<p class="eyebrow" style="color: var(--ink2); margin-top: 28px;">Best paired with</p>
+<div class="pairs" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 12px;">
+<sc-for list="{{dd.pairs}}" as="p" hint-placeholder-count="4">
+<div class="pair"><span class="eyebrow" style="font-size: 10px; color: var(--ink2);">{{p.k}}</span><span style="font-size: 14px; font-weight: 500; line-height: 1.4;">{{p.v}}</span></div>
+</sc-for>
+</div>
+
+<p class="eyebrow" style="color: var(--ink2); margin-top: 36px;">Where to try it</p>
+<div style="display: flex; flex-wrap: wrap; gap: 24px; margin-top: 12px; align-items: stretch;">
+<div style="flex: 1 1 300px;">
+<sc-for list="{{dd.venues}}" as="v" hint-placeholder-count="3">
+<div class="row" style="align-items: center;">
+<span style="width: 26px; height: 26px; border-radius: 999px; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex: none; {{v.badge}}">{{v.n}}</span>
+<div style="flex: 1; min-width: 0;"><p style="font-size: 15px; font-weight: 500;">{{v.name}}</p><p style="font-size: 13px; color: var(--ink2);">{{v.hood}} · <span style="letter-spacing: .06em;">{{v.price}}</span></p>
+<p style="font-size: 12px; color: var(--ink2); margin-top: 4px; display: flex; gap: 6px; align-items: center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="6" y="3" width="12" height="13" rx="3"></rect><path d="M6 10h12M9 20l1.5-4M15 20l-1.5-4"></path></svg>{{v.stop}}</p></div>
+</div>
+</sc-for>
+</div>
+<div aria-label="Mini map of venues" role="img" style="flex: 1 1 240px; min-height: 220px; border-radius: 8px; overflow: hidden; position: relative; background: var(--land); border: 1px solid var(--line2);">
+<svg viewBox="0 0 300 220" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><path d="M0 0 H300 V54 C220 70 140 40 0 62 Z" style="fill: var(--water)"></path><g style="stroke: var(--road); stroke-width: 7; fill: none; stroke-linecap: round"><path d="M60 60 V220"></path><path d="M160 50 V220"></path><path d="M250 56 V220"></path><path d="M0 130 H300"></path><path d="M0 190 H300"></path></g><path d="M160 190 L160 130 L96 130 L96 104" style="stroke: var(--copper); stroke-width: 3; fill: none; stroke-dasharray: 2 6; stroke-linecap: round"></path><rect x="152" y="182" width="16" height="16" style="fill: var(--surface); stroke: var(--ink); stroke-width: 1.5"></rect></svg>
+<span style="position: absolute; left: 32%; top: 47%; transform: translate(-50%, -50%); width: 26px; height: 26px; border-radius: 999px; background: var(--copper); color: var(--on-copper); font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; border: 2px solid var(--surface);">1</span>
+<span style="position: absolute; left: 70%; top: 72%; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 999px; background: var(--ink); color: var(--bg); font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center;">2</span>
+<span style="position: absolute; left: 86%; top: 40%; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 999px; background: var(--ink); color: var(--bg); font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center;">3</span>
+</div>
+</div>
+
+<div style="display: flex; gap: 10px; margin-top: 32px; position: sticky; bottom: 0; background: var(--bg); padding: 16px 0 4px; border-top: 1px solid var(--line2);">
+<button class="btn btn-primary" onClick="{{dd.toggle}}" style="flex: 1; min-height: 52px;">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg>
+{{dd.addLabel}}</button>
+<a class="btn btn-ghost" href="Map.dc.html" style="min-height: 52px;">Open map</a>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"open":{"editor":"enum","options":["","pie","parma","lamington","barra","rock","bugs","vegemite","anzac","roo","flatwhite","fishchips","pav","hangi","paua","bluff","mussels","whitebait","lamb","kumara","hokey","savvy","lp","manuka"],"default":""},"sheet":{"editor":"boolean","default":false},"$preview":{"width":1440,"height":6400}}'>
+class Component extends DCLogic {
+  state = { country: 'all', region: 'All', type: 'All', diet: [], price: 0, saved: { rock: true, hangi: true }, open: null, sheet: null, dark: null };
+  renderVals() {
+    const S = this.state;
+    const dark = S.dark ?? this.props.dark ?? false;
+    const DIET = { veg: 'Vegetarian', vegan: 'Vegan', gf: 'Gluten-free', halal: 'Halal-friendly', nopork: 'No pork', noshell: 'No shellfish' };
+    const V = {
+      Sydney: [['Harbourline Oyster Room', 'The Rocks', 'Circular Quay · 6 min walk'], ['Saltbush Dining Room', 'Surry Hills', 'Central · 11 min walk'], ['Northbeach Canteen', 'Bondi Beach', 'Bus 333 · Bondi Beach']],
+      Melbourne: [['The Laneway Pantry', 'CBD', 'Flinders Street · 4 min walk'], ['Brunswick Arms Hotel', 'Brunswick', 'Tram 19 · Sydney Rd'], ['Kettle & Kiln', 'Fitzroy', 'Tram 86 · Gertrude St']],
+      Queensland: [['Riverbank Fish Co.', 'South Brisbane', 'South Brisbane station · 5 min'], ['Spit Road Seafood', 'Mooloolaba', 'Bus 600 · Mooloolaba Esplanade'], ['Tradewinds Kitchen', 'Cairns Esplanade', 'Cairns City bus hub · 3 min']],
+      Tasmania: [['Derwent Punt', 'Constitution Dock, Hobart', 'Franklin Square hub · 6 min'], ['Pier Seventeen Oyster Room', 'Hobart Waterfront', 'Franklin Square hub · 7 min'], ['Salamanca Larder', 'Battery Point', 'Bus 401 · Hampden Rd']],
+      'Northern Territory': [['Waterfront Barra House', 'Darwin Waterfront', 'Darwin interchange · 8 min'], ['Mindil Grill', 'Mindil Beach', 'Bus 4 · Mindil'], ['Top End Table', 'Parap', 'Bus 4 · Parap']],
+      Auckland: [['Kōkako Kitchen', 'Ponsonby', 'Inner Link · Ponsonby Rd'], ['Viaduct Fish Hall', 'Wynyard Quarter', 'Britomart · 10 min walk'], ['Grey Lynn Dairy', 'Grey Lynn', 'Bus 18 · Great North Rd']],
+      Wellington: [['Tūī & Fern', 'Te Aro', 'Courtenay Place · 3 min'], ['Cuba Street Creamery', 'Cuba Street', 'Wellington Station · 12 min'], ['Oriental Parade Kiosk', 'Oriental Bay', 'Bus 14 · Oriental Pde']],
+      Rotorua: [['Ohinemutu Kai House', 'Ohinemutu', 'Rotorua bus hub · 9 min'], ['Lakefront Hāngī Pit', 'Lakefront', 'Bus 1 · Lake Rd'], ['Tutanekai Fare', 'Tutanekai Street', 'Rotorua bus hub · 4 min']],
+      'South Island': [['Bluff Wharf Kitchen', 'Bluff, Southland', 'InterCity · Invercargill'], ['Havelock Mussel House', 'Havelock, Marlborough', 'InterCity · Havelock'], ['Arrowtown Larder', 'Arrowtown', 'Orbus 4 · Arrowtown']]
+    };
+    // id, name, country, region, types, diet, price, priceText, line, story, taste, served, allergy, [wine, beer, coffee, na], must, note
+    const D = [
+      ['rock', 'Sydney rock oysters', 'au', 'Sydney', ['Seafood', 'Classics'], ['gf', 'nopork', 'halal'], 3, 'A$4.50–6 each', 'Small, creamy and briny, grown in the estuaries of the NSW coast.', 'Farmed in the river estuaries of New South Wales for more than a century, these native oysters are smaller and richer than the Pacific kind. Locals eat them by the half-dozen, freshly shucked.', 'Creamy, mineral and gently sweet with a long, metallic finish.', 'Natural on ice with lemon, or with a sharp shallot mignonette.', 'Shellfish. Naturally gluten-free. Eat only where shucked to order.', ['Hunter Valley semillon', 'Pale ale', 'Not with coffee', 'Sparkling water, lemon'], true],
+      ['pav', 'Pavlova', 'both', 'Sydney', ['Sweets', 'Classics'], ['veg', 'gf', 'nopork', 'noshell', 'halal'], 2, 'A$14–19 · NZ$15–20', 'A crisp meringue shell, soft centre, cream and summer fruit.', 'Named for the ballerina Anna Pavlova after her 1920s tour, it is served at nearly every summer gathering on both sides of the Tasman.', 'Crackly outside, marshmallow inside, cut through by tart passionfruit.', 'In thick wedges with whipped cream, passionfruit, berries or kiwifruit.', 'Contains egg and dairy. Naturally gluten-free.', ['Late-harvest riesling', 'Raspberry sour', 'Long black', 'Iced lemon tea'], true, 'Both countries claim it. Food historians lean towards New Zealand; Australians lean towards not discussing it. Order one in each and decide for yourself.'],
+      ['hangi', 'Hāngī', 'nz', 'Rotorua', ['Classics', 'Meat', 'Native ingredients'], ['gf', 'noshell'], 2, 'NZ$35–48', 'Meat and vegetables slow-cooked in an earth oven over hot stones.', 'The traditional Māori method of cooking for a gathering: food is wrapped, lowered onto heated stones in a pit and covered with earth for hours. Rotorua is the best place to share one.', 'Smoky, earthy and tender, with a gentle steamed sweetness.', 'Lamb, pork, chicken, kūmara, pumpkin and stuffing, shared family style.', 'Usually includes pork; ask for a pork-free plate. Stuffing contains gluten.', ['Hawke’s Bay syrah', 'Amber ale', 'Flat white after', 'Kawakawa tea'], true],
+      ['pie', 'Meat pie', 'au', 'Melbourne', ['Classics', 'Street & casual'], ['nopork', 'noshell'], 1, 'A$6–9', 'Minced beef and gravy in flaky pastry, eaten in the hand.', 'The unofficial food of the football ground and the road trip. Every town bakery has a version, and the best are worth a detour.', 'Rich, peppery gravy and buttery, crisp pastry.', 'With tomato sauce on top, often at a bakery counter or the footy.', 'Contains gluten and dairy. Beef; check for halal bakeries.', ['Barossa shiraz', 'Lager', 'Flat white', 'Ginger beer'], false],
+      ['parma', 'Chicken parmigiana', 'au', 'Melbourne', ['Classics', 'Meat'], ['noshell'], 2, 'A$26–34', 'Crumbed chicken, tomato sauce and melted cheese: the pub classic.', 'An Italian-Australian invention that became the default pub dinner. Melbourne pubs run weekly “parma nights”.', 'Crunchy, cheesy and savoury, with a sweet tomato layer.', 'With chips and salad, often on the same plate.', 'Contains gluten and dairy. Some versions add ham.', ['Yarra Valley pinot noir', 'Pot of pale ale', '—', 'Lemon, lime and bitters'], false],
+      ['lamington', 'Lamington', 'au', 'Queensland', ['Sweets', 'Classics'], ['veg', 'nopork', 'noshell', 'halal'], 1, 'A$4–7', 'Sponge cake dipped in chocolate and rolled in coconut.', 'Said to be named after a Queensland governor around 1900, it is the cake of school fundraisers and country bakeries.', 'Light, soft sponge with a thin chocolate shell and toasted coconut.', 'Plain or split with jam and cream, with a cup of tea.', 'Contains gluten, egg and dairy.', ['Tawny fortified', 'Coffee stout', 'Flat white', 'English breakfast tea'], false],
+      ['barra', 'Barramundi', 'au', 'Northern Territory', ['Seafood'], ['gf', 'nopork', 'noshell', 'halal'], 3, 'A$38–52', 'Firm, sweet white fish from the rivers of the tropical north.', 'Its name comes from an Aboriginal language of Queensland. Wild-caught Top End barra is prized, often cooked over coals.', 'Clean, buttery and mildly sweet with crisp skin.', 'Pan-fried skin-side down with lemon myrtle butter and greens.', 'Fish. Naturally gluten-free when grilled.', ['Margaret River chardonnay', 'Tropical lager', '—', 'Lemongrass soda'], false],
+      ['bugs', 'Moreton Bay bugs', 'au', 'Queensland', ['Seafood'], ['gf', 'nopork'], 3, 'A$45–70', 'A flat-headed slipper lobster with sweet, lobster-like tails.', 'Despite the name, a much-loved crustacean from Queensland waters, and a fixture of summer seafood platters.', 'Sweet and delicate, somewhere between prawn and lobster.', 'Split and grilled with garlic butter, or chilled on a platter.', 'Shellfish. Naturally gluten-free.', ['Riesling', 'Pilsner', '—', 'Soda with lime'], false],
+      ['vegemite', 'Vegemite on toast', 'au', 'Melbourne', ['Classics', 'Street & casual'], ['veg', 'vegan', 'nopork', 'noshell', 'halal'], 1, 'A$6–10', 'A thin scrape of yeast extract on buttered toast.', 'Created in Melbourne in 1922 from brewer’s yeast, it is breakfast for most Australians. The key word is thin.', 'Intensely salty and savoury, softened by butter.', 'On hot buttered toast, sometimes with avocado or cheese.', 'Contains gluten. Vegan with dairy-free spread.', ['—', '—', 'Flat white', 'Orange juice'], false],
+      ['anzac', 'Anzac biscuits', 'au', 'Sydney', ['Sweets', 'Classics'], ['veg', 'nopork', 'noshell', 'halal'], 1, 'A$3–5', 'Oat, coconut and golden syrup biscuits with a chewy centre.', 'Linked to the Anzac troops of the First World War, they are baked across both countries around Anzac Day in April.', 'Buttery, caramel-sweet and chewy or crisp, depending on the baker.', 'By the bag from a bakery, or with tea.', 'Contains gluten and dairy. Egg-free.', ['Fortified muscat', '—', 'Long black', 'Black tea'], false],
+      ['roo', 'Kangaroo fillet', 'au', 'Sydney', ['Meat', 'Native ingredients'], ['gf', 'nopork', 'noshell'], 3, 'A$38–48', 'Lean, deep-red game meat, best served rare.', 'Wild-harvested and very low in fat, kangaroo has moved from novelty to modern Australian menus, often paired with native spices.', 'Rich and gamey, close to venison, tender when kept rare.', 'Seared rare with pepperberry, beetroot and saltbush.', 'Naturally gluten-free. Ask for it rare to medium-rare.', ['McLaren Vale shiraz', 'Dark ale', '—', 'Davidson plum soda'], false],
+      ['flatwhite', 'Flat white', 'au', 'Melbourne', ['Drinks'], ['veg', 'gf', 'nopork', 'noshell', 'halal'], 1, 'A$5–6', 'A double shot under a thin, velvety layer of milk.', 'Both Sydney and Wellington claim to have invented it in the 1980s. Melbourne perfected the café culture around it.', 'Strong and smooth, more coffee than milk.', 'In a ceramic cup, around 160–200 ml. Oat and soy widely available.', 'Contains dairy unless plant milk is requested.', ['—', '—', 'A second one', 'Batch brew'], false],
+      ['fishchips', 'Fish and chips', 'au', 'Tasmania', ['Seafood', 'Street & casual'], ['nopork', 'noshell', 'halal'], 2, 'A$18–26', 'Battered flathead and thick chips, ideally eaten by the water.', 'Hobart’s floating fish punts at Constitution Dock have served it straight off the water for decades.', 'Light, crisp batter and flaky, sweet white fish.', 'Wrapped in paper with lemon and tartare sauce.', 'Contains gluten. Ask about shared fryers.', ['Tasmanian sparkling', 'Pale ale', '—', 'Lemon squash'], false],
+      ['paua', 'Pāua', 'nz', 'South Island', ['Seafood', 'Native ingredients'], ['nopork'], 3, 'NZ$28–45', 'New Zealand abalone, minced into fritters or sliced and seared.', 'Gathered by divers along the coast and treasured in Māori cuisine, pāua is strictly regulated, which keeps it special.', 'Rich, savoury and slightly chewy with a sea-salt depth.', 'As fritters with lemon, or thinly sliced and flash-seared.', 'Shellfish (mollusc). Fritters contain gluten and egg.', ['Marlborough pinot gris', 'Pilsner', '—', 'Lemon and lime soda'], false],
+      ['bluff', 'Bluff oysters', 'nz', 'South Island', ['Seafood'], ['gf', 'nopork', 'halal'], 3, 'NZ$5–7 each', 'Plump wild oysters from Foveaux Strait, in season March to August.', 'Dredged from the cold waters off Bluff, they are so anticipated that the season’s opening makes the national news.', 'Big, buttery and briny with a sweet finish.', 'Natural with lemon, or lightly battered.', 'Shellfish. Natural oysters are gluten-free.', ['Central Otago riesling', 'Southland lager', '—', 'Sparkling water'], false],
+      ['mussels', 'Green-lipped mussels', 'nz', 'South Island', ['Seafood'], ['gf', 'nopork'], 2, 'NZ$24–34', 'Large native mussels from the Marlborough Sounds.', 'Found only in New Zealand, they are farmed on ropes in clean sounds water. Havelock calls itself the green-shell mussel capital.', 'Meaty, sweet and briny.', 'Steamed in white wine and garlic, with bread for the broth.', 'Shellfish. Gluten-free without the bread.', ['Marlborough sauvignon blanc', 'Wheat beer', '—', 'Ginger beer'], false],
+      ['whitebait', 'Whitebait fritters', 'nz', 'South Island', ['Seafood', 'Street & casual'], ['nopork', 'noshell', 'halal'], 2, 'NZ$18–28', 'Tiny translucent fish bound with egg into a light fritter.', 'A West Coast spring ritual: whitebaiters stand on riverbanks with nets from September to November.', 'Delicate, eggy and sweet with a hint of the sea.', 'Between buttered white bread with lemon.', 'Contains egg; usually gluten in the bread.', ['Nelson chardonnay', 'Pale ale', '—', 'Lemonade'], false],
+      ['lamb', 'Roast lamb', 'nz', 'South Island', ['Classics', 'Meat'], ['gf', 'nopork', 'noshell', 'halal'], 3, 'NZ$38–52', 'Canterbury lamb, slow-roasted with rosemary and garlic.', 'Sheep shaped the country’s economy, and the Sunday roast is still a family ritual.', 'Sweet, tender and herby with crisp, salty fat.', 'With roast kūmara, peas and gravy or mint sauce.', 'Halal lamb is common; ask the kitchen. Gravy may contain gluten.', ['Central Otago pinot noir', 'Brown ale', '—', 'Apple and feijoa juice'], false],
+      ['kumara', 'Kūmara', 'nz', 'Auckland', ['Native ingredients', 'Classics'], ['veg', 'vegan', 'gf', 'nopork', 'noshell', 'halal'], 1, 'NZ$9–15', 'The sweet potato carried to Aotearoa by Polynesian voyagers.', 'Kūmara arrived with the first Polynesian settlers and remains a staple of both hāngī and modern menus.', 'Sweet, nutty and creamy.', 'As fries with aioli, roasted, or in the hāngī.', 'Vegan and gluten-free as roasted; aioli contains egg.', ['Hawke’s Bay chardonnay', 'Golden ale', '—', 'L&P'], false],
+      ['hokey', 'Hokey pokey ice cream', 'nz', 'Wellington', ['Sweets'], ['veg', 'gf', 'nopork', 'noshell', 'halal'], 1, 'NZ$6–9', 'Vanilla ice cream studded with crunchy honeycomb toffee.', 'New Zealand’s favourite flavour since the 1940s, sold at every dairy and beach kiosk.', 'Creamy vanilla with crunchy, caramelised pockets.', 'In a generous cone, best eaten walking along the waterfront.', 'Contains dairy. Check cones for gluten.', ['—', '—', 'Affogato', 'Milkshake'], false],
+      ['savvy', 'Marlborough sauvignon blanc', 'nz', 'South Island', ['Drinks'], ['gf', 'nopork', 'noshell'], 2, 'NZ$14–18 a glass', 'The zesty white wine that put New Zealand on the world map.', 'Long sunny days and cool nights in Marlborough give the grape intense aromatics. Cellar doors line the valleys near Blenheim.', 'Passionfruit, lime and fresh-cut grass with bright acidity.', 'Well chilled, ideally with seafood or goat’s cheese.', 'Contains sulphites. Some wines are not vegan.', ['—', '—', '—', 'Non-alcoholic sauvignon'], false],
+      ['lp', 'L&P', 'nz', 'Auckland', ['Drinks'], ['veg', 'vegan', 'gf', 'nopork', 'noshell', 'halal'], 1, 'NZ$3–5', 'A lemon soft drink originally made with mineral water from Paeroa.', 'First made in the Waikato town of Paeroa, it is a nostalgic New Zealand classic.', 'Sweet, lemony and lightly fizzy.', 'Ice-cold from the bottle, often with fish and chips.', 'Vegan and gluten-free. High in sugar.', ['—', '—', '—', 'On its own'], false],
+      ['manuka', 'Mānuka honey', 'nz', 'Auckland', ['Native ingredients', 'Sweets'], ['veg', 'gf', 'nopork', 'noshell', 'halal'], 2, 'NZ$25–90 a jar', 'Dark, thick honey from the flowers of the native mānuka tree.', 'Produced from a native tea tree that flowers for only a few weeks each year, it is graded by strength and prized worldwide.', 'Earthy, herbal and less sweet than most honey.', 'On toast, in tea, or drizzled over cheese.', 'Not suitable for infants under 12 months. Vegetarian, not vegan.', ['Sweet riesling', '—', 'Long black', 'Lemon and mānuka tea'], false]
+    ];
+    const coffee = [['magic', 'Magic', 'au', 'Melbourne', 'A$5–6'], ['longblack', 'Long black', 'nz', 'Wellington', 'NZ$4.50–5.50'], ['piccolo', 'Piccolo latte', 'au', 'Sydney', 'A$4.50–5.50']];
+    const CL = { au: 'Australia', nz: 'New Zealand', both: 'Australia & NZ' };
+    const all = D.map((x) => ({ id: x[0], name: x[1], country: x[2], region: x[3], types: x[4], diet: x[5], price: x[6], priceText: x[7], line: x[8], story: x[9], taste: x[10], served: x[11], allergy: x[12], pairsRaw: x[13], must: x[14], note: x[15] || '' }));
+    const open = (id) => () => this.setState({ open: id });
+    const toggle = (id) => (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.setState((s) => ({ saved: { ...s.saved, [id]: !s.saved[id] } })); };
+    const deco = (d) => ({ ...d, countryLabel: CL[d.country], pOn: '$'.repeat(d.price), pOff: '$'.repeat(4 - d.price), saved: !!S.saved[d.id], saveCls: S.saved[d.id] ? 'on' : '', open: open(d.id), toggle: toggle(d.id) });
+    const match = (d) => (S.country === 'all' || d.country === S.country || d.country === 'both') && (S.region === 'All' || d.region === S.region) && (S.type === 'All' || d.types.includes(S.type)) && S.diet.every((k) => d.diet.includes(k)) && (!S.price || d.price === S.price);
+    const list = all.filter(match).map(deco);
+    const mustList = list.filter((d) => d.must).map((d, i) => ({ ...d, flex: i === 0 ? '2 1 0' : '1 1 0' }));
+    const rest = list.filter((d) => !d.must).map((d, i) => { const wide = i % 7 === 3; return { ...d, wideCls: wide ? 'wide' : '', ratio: wide ? '16 / 10' : '4 / 5', ratioLabel: wide ? '16:10' : '4:5' }; });
+    const regions = ['All', 'Sydney', 'Melbourne', 'Queensland', 'Tasmania', 'Northern Territory', 'Auckland', 'Wellington', 'Rotorua', 'South Island'];
+    const chipsOne = (vals, key, labels) => vals.map((v, i) => ({ label: labels ? labels[i] : v, on: S[key] === v, cls: S[key] === v ? 'on' : '', pick: () => this.setState({ [key]: S[key] === v && v !== 'All' ? (key === 'price' ? 0 : 'All') : v }) }));
+    const byIds = (ids) => ids.map((id) => all.find((d) => d.id === id)).filter(Boolean).map(deco);
+    const coffeeItems = coffee.map(([id, name, c, region, priceText]) => ({ id, name, region, priceText, countryLabel: CL[c], open: open('flatwhite') }));
+    const collections = [
+      ['Australian classics', 'The plates every Australian grew up with', byIds(['pie', 'parma', 'vegemite', 'lamington', 'anzac', 'fishchips'])],
+      ['From the Pacific and the sea', 'Cold-water shellfish and tropical fish', byIds(['rock', 'bluff', 'mussels', 'bugs', 'barra', 'paua', 'whitebait'])],
+      ['Sweet things', 'Meringue, honeycomb and coconut', byIds(['pav', 'lamington', 'hokey', 'anzac', 'manuka'])],
+      ['Indigenous and native ingredients', 'Foods with deep roots in Aboriginal and Māori culture', byIds(['hangi', 'roo', 'kumara', 'paua', 'manuka'])],
+      ['Coffee culture', 'Order like a local, from Melbourne to Wellington', byIds(['flatwhite']).concat(coffeeItems)]
+    ].map(([title, sub, items]) => ({ title, sub, items, count: items.length }));
+    const openId = S.open ?? (this.props.open || null);
+    const sheetOpen = S.sheet ?? this.props.sheet ?? false;
+    const dRaw = all.find((d) => d.id === openId);
+    let dd = {};
+    if (dRaw) {
+      const d = deco(dRaw);
+      const vset = V[d.region] || V.Sydney;
+      dd = { ...d, hasNote: !!d.note, typeTags: d.types.slice(0, 1),
+        dietTags: d.diet.map((k) => DIET[k]),
+        pairs: ['Wine', 'Beer', 'Coffee', 'Non-alcoholic'].map((k, i) => ({ k, v: d.pairsRaw[i] })),
+        venues: vset.map((v, i) => ({ n: i + 1, name: v[0], hood: v[1], stop: v[2], price: '$'.repeat(Math.min(4, Math.max(1, d.price + (i === 1 ? 1 : 0) - (i === 2 ? 1 : 0)))), badge: i === 0 ? 'background: var(--copper); color: var(--on-copper);' : 'background: var(--ink); color: var(--bg);' })),
+        addLabel: S.saved[d.id] ? 'Added to my trip' : 'Add to my trip' };
+    }
+    const filterCount = (S.region !== 'All' ? 1 : 0) + (S.type !== 'All' ? 1 : 0) + S.diet.length + (S.price ? 1 : 0) + (S.country !== 'all' ? 1 : 0);
+    return {
+      themeClass: dark ? 'dark' : '', toggleDark: () => this.setState({ dark: !dark }),
+      countries: [['all', 'All'], ['au', 'Australia'], ['nz', 'New Zealand']].map(([k, label]) => ({ label, on: S.country === k, cls: S.country === k ? 'on' : '', pick: () => this.setState({ country: k }) })),
+      regionChips: chipsOne(regions, 'region'),
+      typeChips: chipsOne(['All', 'Classics', 'Seafood', 'Meat', 'Sweets', 'Street & casual', 'Native ingredients', 'Drinks'], 'type'),
+      priceChips: chipsOne([1, 2, 3, 4], 'price', ['$', '$$', '$$$', '$$$$']),
+      dietChips: Object.keys(DIET).map((k) => ({ label: DIET[k], on: S.diet.includes(k), cls: S.diet.includes(k) ? 'on' : '', pick: () => this.setState((s) => ({ diet: s.diet.includes(k) ? s.diet.filter((x) => x !== k) : s.diet.concat([k]) })) })),
+      must: mustList, hasMust: mustList.length > 0, rest, count: list.length, empty: list.length === 0,
+      anyFilter: filterCount > 0, filterCount,
+      reset: () => this.setState({ country: 'all', region: 'All', type: 'All', diet: [], price: 0 }),
+      collections,
+      savedCount: Object.values(S.saved).filter(Boolean).length + 1,
+      sheetOpen, openSheet: () => this.setState({ sheet: true }), closeSheet: () => this.setState({ sheet: false }),
+      detailOpen: !!dRaw, dd, close: () => this.setState({ open: '' })
+    };
+  }
+}
+</script>
+</body>
+</html>
