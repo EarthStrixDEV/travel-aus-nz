@@ -4,6 +4,7 @@ import { VisaView } from '@/components/visa/visa-view'
 import { routing } from '@/i18n/routing'
 import { getEntryPageData } from '@/lib/content/entry'
 import type { Locale } from '@/lib/i18n/t'
+import { pageMetadata } from '@/lib/seo/metadata'
 
 // Static (ISR): rules, permission types, documents and FAQ are rendered into the HTML. Editors and the
 // link-check cron bust the `entry` tag; the hourly revalidate is the fallback.
@@ -14,8 +15,9 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const t = await getTranslations({ locale: (await params).locale, namespace: 'visa' })
-  return { title: t('metaTitle'), description: t('metaDescription') }
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'visa' })
+  return pageMetadata(locale, '/visa', { title: t('metaTitle'), description: t('metaDescription') })
 }
 
 export default async function VisaPage({ params }: { params: Promise<{ locale: string }> }) {

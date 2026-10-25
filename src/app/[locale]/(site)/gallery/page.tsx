@@ -7,6 +7,7 @@ import type { T } from '@/components/gallery/labels'
 import { routing } from '@/i18n/routing'
 import { getGallery } from '@/lib/content/gallery'
 import type { Locale } from '@/lib/i18n/t'
+import { pageMetadata } from '@/lib/seo/metadata'
 
 // Static (ISR): the photo list is cached under the `gallery` tag; filters are applied on the client from the
 // URL query, so the page itself never re-renders per filter.
@@ -15,8 +16,9 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const t = await getTranslations({ locale: (await params).locale, namespace: 'gallery' })
-  return { title: t('metaTitle'), description: t('metaDescription') }
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'gallery' })
+  return pageMetadata(locale, '/gallery', { title: t('metaTitle'), description: t('metaDescription') })
 }
 
 export default async function GalleryPage({ params }: { params: Promise<{ locale: string }> }) {

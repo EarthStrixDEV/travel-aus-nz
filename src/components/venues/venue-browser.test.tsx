@@ -143,6 +143,23 @@ describe('VenueBrowser', () => {
     expect(trigger).toHaveFocus()
   })
 
+  it('opens the drawer for ?venue=<slug> on load, including a venue on the other tab', () => {
+    state.search = 'venue=saltbush'
+    view()
+    expect(screen.getByRole('dialog', { name: 'SALTBUSH' })).toBeInTheDocument()
+
+    cleanup()
+    state.search = 'venue=hollow'
+    view()
+    expect(screen.getByRole('dialog', { name: 'HOLLOW' })).toBeInTheDocument()
+  })
+
+  it('ignores an unknown ?venue slug', () => {
+    state.search = 'venue=nope'
+    view()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
   it('Save toggles the shared saved state from the card and from the drawer', () => {
     state.saved = new Set(['id-saltbush'])
     view()

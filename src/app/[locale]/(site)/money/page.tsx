@@ -4,6 +4,7 @@ import { MoneyView } from '@/components/money/money-view'
 import { routing } from '@/i18n/routing'
 import { getMoneyPageData } from '@/lib/fx/page-data'
 import type { Locale } from '@/lib/i18n/t'
+import { pageMetadata } from '@/lib/seo/metadata'
 
 // Static (ISR): the rate snapshot, reference prices and default trend are rendered into the HTML. The cron
 // busts the `fx` tag after every ingest; the hourly revalidate is the fallback if a cron run is missed.
@@ -14,8 +15,9 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const t = await getTranslations({ locale: (await params).locale, namespace: 'money' })
-  return { title: t('metaTitle'), description: t('metaDescription') }
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'money' })
+  return pageMetadata(locale, '/money', { title: t('metaTitle'), description: t('metaDescription') })
 }
 
 const TIP_KEYS = ['card', 'cash', 'tipping', 'fees', 'atm', 'gst'] as const

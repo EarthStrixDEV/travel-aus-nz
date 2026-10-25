@@ -51,7 +51,11 @@ export function VenueBrowser({ venues }: { venues: Venue[] }) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const tabRefs = useRef<Record<VenueKind, HTMLButtonElement | null>>({ restaurant: null, bar: null })
-  const [openSlug, setOpenSlug] = useState<string | null>(null)
+  // `?venue=<slug>` (sitemap + JSON-LD URLs) opens that venue's drawer once, on load; an unknown slug is ignored.
+  const [openSlug, setOpenSlug] = useState<string | null>(() => {
+    const s = searchParams.get('venue')
+    return s && venues.some((v) => v.slug === s) ? s : null
+  })
 
   const query = searchParams.toString()
   const filter = useMemo(() => parseVenueFilter(new URLSearchParams(query)), [query])

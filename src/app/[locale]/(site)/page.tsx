@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { CarFreeWidget } from '@/components/home/car-free-widget'
 import { DiningEdit } from '@/components/home/dining-edit'
@@ -8,10 +9,17 @@ import { SearchBar } from '@/components/home/search-bar'
 import { routing } from '@/i18n/routing'
 import { getHome, getInterestTags } from '@/lib/content/home'
 import type { Locale } from '@/lib/i18n/t'
+import { pageMetadata } from '@/lib/seo/metadata'
 
 // Fully static (SSG); content refreshes via the `home` cache tag.
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'home' })
+  return pageMetadata(locale, '', { title: t('metaTitle'), description: t('metaDescription') })
 }
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {

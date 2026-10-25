@@ -51,6 +51,8 @@
     "prices": "Prices in AUD / NZD, indicative"
   },
   "home": {
+    "metaTitle": "Australia & New Zealand travel guide",
+    "metaDescription": "Edited guides to places worth the long flight, routes that do not need a car, and tables worth booking ahead in Australia and New Zealand.",
     "hero": {
       "carousel": "Featured destinations",
       "section": "Featured destination",
