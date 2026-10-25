@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build the shared platform every TravelAusNZ page sits on — project scaffold, full Supabase schema with RLS and audit, auth, th/en i18n, API conventions, a role-guarded admin shell, and observability.
+**Goal:** Build the shared platform every TravelAusNZ page sits on — project scaffold, full Supabase schema with RLS and audit, auth, th/en i18n, the design-system site shell (tokens, theme, header/footer/tab bar), API conventions, a role-guarded admin shell, and observability.
 
 **Architecture:** Next.js 15 App Router app with locale-prefixed routes (`/th`, `/en`) talking to Supabase (Postgres/Auth/Storage). Schema lives in ordered SQL migrations tested with pgTAP; TypeScript helpers in `src/lib/*` own cross-cutting rules (i18n fallback, API errors, pagination, rate limit, role checks) so page plans only compose them.
 
-**Tech Stack:** Next.js 15, TypeScript, Tailwind, next-intl, @supabase/ssr + supabase-js, Supabase CLI linked to a hosted **dev** project (no Docker), pgTAP, Zod, @upstash/ratelimit + @upstash/redis, Vitest, @sentry/nextjs, posthog-js, @vercel/analytics.
+**Tech Stack:** Next.js 15, TypeScript, Tailwind, next-intl, @supabase/ssr + supabase-js, Supabase CLI linked to a hosted **dev** project (no Docker), pgTAP, Zod, @upstash/ratelimit + @upstash/redis, Vitest (+ jsdom, @testing-library/react for components), `next/font` (Prompt), @sentry/nextjs, posthog-js, @vercel/analytics.
 
 **Spec:** `TravelAusNZ— Module & System Design.md` (project root). Sections 2 (shared modules) and 8 (schema) are implemented here.
 
@@ -29,6 +29,20 @@
 - Schema DDL is copied verbatim from spec §8.1–8.7 except the deviations below.
 - Earth's decision for later plans (not built here): FX provider sits behind an `FxProvider` interface defaulting to exchangerate.host; map tiles default to MapTiler via an env-configured style URL.
 
+**Front-end (design source: `design/pages/*.dc.html` — reference only, never imported at runtime; `System.dc.html` = tokens, `Main.dc.html` = desktop header/footer, `HomeMobile.dc.html` = mobile header + bottom tab bar):**
+
+- Light tokens, verbatim from `Main.dc.html` `.sc`: `--bg #F6F2EA`, `--surface #FBF9F4`, `--ink #13213A`, `--ink2 #4A5468`, `--ink3 #8A92A3`, `--line rgba(19,33,58,.14)`, `--line2 rgba(19,33,58,.07)`, `--copper #9E5229`, `--copper-tint rgba(158,82,41,.09)`, `--on-copper #FBF9F4`, `--ph1 #D6D8DD`, `--ph2 #C2C7D0`, `--ph3 #A7AEBB`, `--deep #13213A`, `--on-deep #F6F2EA`, `--shadow 0 1px 2px rgba(19,33,58,.04),0 14px 36px rgba(19,33,58,.07)`.
+- Dark tokens, verbatim from `.sc.dark`: `--bg #0E1729`, `--surface #14203A`, `--ink #F3EEE4`, `--ink2 #B7BDC8`, `--ink3 #7D8698`, `--line rgba(243,238,228,.16)`, `--line2 rgba(243,238,228,.07)`, `--copper #D08A5E`, `--copper-tint rgba(208,138,94,.14)`, `--on-copper #0E1729`, `--ph1 #22304A`, `--ph2 #2A3953`, `--ph3 #344462`, `--deep #091121`, `--on-deep #F3EEE4`, `--shadow 0 1px 2px rgba(0,0,0,.2),0 14px 36px rgba(0,0,0,.28)`.
+- One typeface: Prompt (Google Fonts via `next/font`), weights 300/400/500/600, subsets `latin` + `thai`; body weight 300, `-webkit-font-smoothing: antialiased`. Eyebrow label: 11px, weight 500, `letter-spacing: .22em`, uppercase.
+- Radius: 4 tag · 6 button · 8–10 card; `999px` pills/icon buttons. Buttons: min-height 44px, padding `0 22px`, 14px weight 500. Icon button: 44×44 round, 1px `--line` border. Page gutter `clamp(16px, 4vw, 56px)`, content max-width 1440px.
+- Icons: 1.4px stroke line icons, single colour (`currentColor`), no fills; copy SVG paths from the artboards.
+- Motion: state changes 0.5–0.6s ease, nothing bounces; all transitions disabled under `prefers-reduced-motion: reduce`. Every interactive element gets a visible `:focus-visible` ring (2px `--copper`, 2px offset) — WCAG 2.2 AA from the spec.
+- Theme (Earth's decision): default follows `prefers-color-scheme`; the header toggle switches light/dark and stores the choice in cookie `theme` (`light` | `dark`, 1 year, `path=/`, `SameSite=Lax`); the server renders the cookie's class on `<html>` so there is no flash.
+- Primary nav (Earth's decision — spec pages only, design labels): Destinations `/` · Map `/map` · Eat & Drink `/dishes` · Money `/currency` · Visa & Entry `/visa` · Plan your trip `/prepare`, plus a ghost "My Trip" button → `/prepare`. Mobile bottom tab bar (from `HomeMobile`): Discover `/` · Map `/map` · Eat `/dishes` · Money `/currency` · Trip `/prepare`; Visa & Entry is reached via the mobile menu. Routes other than `/` and `/login` are built by later page plans and 404 until then.
+- Footer (Earth's decision): no newsletter form. Contents: wordmark, the land acknowledgement from `Main.dc.html`, link columns Explore (Map, Eat & Drink) and Plan (Money, Visa & Entry, Plan your trip), bottom row `© 2026 TravelAusNZ` and "Prices in AUD / NZD, indicative". No links to pages that no plan builds (the design's "Company" column is dropped).
+- Out of this plan: header search button and AU/NZ country segment (page-level, come with Home/search plans).
+- All user-visible strings come from `messages/{th,en}.json`.
+
 ## Deviations from spec (security/consistency — confirm in review)
 
 1. **`profiles` policy:** spec's `profile_self ... for all` lets a user `update profiles set role = 'admin'` on their own row. Replace with select + update policies and column-level grants so `role` is not user-writable.
@@ -40,8 +54,8 @@
 
 1. A signed-in user updating their own `profiles.role` → must be rejected (permission denied). Test: Task 4.
 2. A bar open Fri 18:00–02:00 checked Saturday 01:30 local, during AU daylight saving, and a Perth place at the same UTC instant → `is_open_now` uses each city's local time and the after-midnight rule. Test: Task 3.
-3. Auth callback `?next=https://evil.com` or `//evil.com` → redirect stays on-site (falls back to `/`). Test: Task 6.
-4. A tampered or garbage `cursor` / out-of-range `limit` → 400 `VALIDATION`, never 500. Test: Task 7.
+3. Auth callback `?next=https://evil.com` or `//evil.com` → redirect stays on-site (falls back to `/`). Test: Task 7.
+4. A tampered or garbage `cursor` / out-of-range `limit` → 400 `VALIDATION`, never 500. Test: Task 8.
 5. `t()` given `null`, a missing `th` key, or an empty-string `th` → returns `en`, then `''`; never `undefined`. Test: Task 1.
 
 ---
@@ -219,7 +233,7 @@ Impersonate with `set local role authenticated; set local request.jwt.claims = '
 - Create: `src/lib/supabase/database.types.ts` (generated), `src/lib/supabase/server.ts`, `src/lib/supabase/browser.ts`, `src/lib/supabase/service.ts`, `src/lib/supabase/middleware.ts`
 - Create: `src/i18n/routing.ts`, `src/i18n/request.ts`, `messages/th.json`, `messages/en.json`
 - Create: `src/middleware.ts`
-- Move: `src/app/layout.tsx`, `src/app/page.tsx` → `src/app/[locale]/layout.tsx`, `src/app/[locale]/page.tsx` (placeholder home showing `t('common.siteName')`)
+- Move: `src/app/layout.tsx`, `src/app/page.tsx` → `src/app/[locale]/layout.tsx`, `src/app/[locale]/(site)/page.tsx` (placeholder home showing `t('common.siteName')`; the `(site)` route group gets its layout in Task 6)
 - Modify: `next.config.ts` (next-intl plugin), `package.json` (`"db:types"` script)
 - Test: `src/i18n/messages.test.ts`
 
@@ -228,7 +242,7 @@ Impersonate with `set local role authenticated; set local request.jwt.claims = '
 - Produces: `createClient(): Promise<SupabaseClient<Database>>` in `server.ts` (cookie-bound, for RSC/route handlers/server actions); `createClient(): SupabaseClient<Database>` in `browser.ts`; `createServiceClient(): SupabaseClient<Database>` in `service.ts` (starts with `import 'server-only'`, uses `SUPABASE_SERVICE_ROLE_KEY`).
 - Produces: `updateSession(request: NextRequest, response: NextResponse): Promise<NextResponse>` — refreshes the auth cookie onto the given response.
 - Produces: `routing = defineRouting({ locales, defaultLocale, localePrefix: 'always' })`; `src/middleware.ts` runs next-intl middleware, then `updateSession` on its response; matcher excludes `api`, `auth`, `_next`, files with extensions.
-- Produces message keys used later: `common.siteName`, `auth.*` (Task 6), `admin.*` (Task 8).
+- Produces message keys used later: `common.siteName`, `nav.*`/`footer.*`/`theme.*` (Task 6), `auth.*` (Task 7), `admin.*` (Task 9).
 
 - [ ] **Step 1: Write failing test** — `messages.test.ts`: flattened key set of `messages/th.json` equals that of `messages/en.json`; both contain `common.siteName`.
 
@@ -246,10 +260,61 @@ Run: `npm test` → PASS. `npm run dev`, then `curl -sI http://localhost:3000/` 
 
 ---
 
-### Task 6: Auth — login, callback, current profile, role guard
+### Task 6: Design tokens, theme, UI primitives, site shell
 
 **Files:**
-- Create: `src/app/[locale]/login/page.tsx`, `src/app/[locale]/login/login-form.tsx` (client)
+- Modify: `src/app/globals.css` (tokens + Tailwind v4 `@theme inline` mapping + base styles), `src/app/[locale]/layout.tsx` (Prompt font, `<html>` theme class from cookie), messages files (`nav.*`, `footer.*`, `theme.*`, `menu.*`, `locale.*`)
+- Create: `src/lib/theme.ts`, `src/i18n/navigation.ts`
+- Create: `src/components/ui/button.tsx`, `src/components/ui/text-field.tsx`
+- Create: `src/components/site/nav-items.ts`, `src/components/site/logo.tsx`, `src/components/site/site-header.tsx`, `src/components/site/mobile-menu.tsx` (client), `src/components/site/mobile-tab-bar.tsx` (client), `src/components/site/site-footer.tsx`, `src/components/site/theme-toggle.tsx` (client), `src/components/site/locale-switch.tsx`
+- Create: `src/app/[locale]/(site)/layout.tsx` (header + main + footer + tab bar)
+- Test: `src/lib/theme.test.ts`, `src/components/site/nav-items.test.ts`, `src/components/ui/text-field.test.tsx`
+
+**Interfaces:**
+- Consumes: `routing` (Task 5), `Locale` (Task 1), token values in Global Constraints.
+- Produces CSS: light tokens on `:root`; dark tokens on `:root.dark` and inside `@media (prefers-color-scheme: dark) { :root:not(.light) { … } }`. Tailwind colour utilities named after the tokens (`bg-bg`, `bg-surface`, `text-ink`, `text-ink-2`, `text-ink-3`, `border-line`, `border-line-2`, `bg-copper`, `bg-copper-tint`, `text-on-copper`, `bg-deep`, `text-on-deep`, `bg-ph-1..3`), `shadow-soft`, `font-sans` = Prompt; `@utility eyebrow`; global `:focus-visible` ring and reduced-motion rule.
+- Produces: `THEME_COOKIE = 'theme'`; `type ThemePref = 'light' | 'dark' | 'system'`; `parseThemeCookie(value: string | undefined): ThemePref`; `themeClass(pref: ThemePref): '' | 'light' | 'dark'` — in `src/lib/theme.ts`.
+- Produces: `{ Link, usePathname, redirect, getPathname } = createNavigation(routing)` in `src/i18n/navigation.ts` (locale-aware; later tasks import `Link`/`redirect` from here).
+- Produces: `type NavKey = 'destinations' | 'map' | 'dishes' | 'currency' | 'visa' | 'prepare'`; `navItems: { key: NavKey; href: string }[]` in the Global Constraints order; `type TabKey = 'discover' | 'map' | 'eat' | 'money' | 'trip'`; `tabItems: { key: TabKey; href: string }[]` — the five mobile tabs in Global Constraints order (labels from `nav.tab.*`); `isActive(pathname: string, href: string): boolean` where `pathname` is locale-stripped (`/` active only for exactly `/`; `/map` active for `/map` and `/map/...`, not `/mapx`).
+- Produces: `Button` (`variant: 'primary' | 'ghost'`, renders `<button>`) and `buttonClass(variant): string` for styling a `Link`; `IconButton` (`label: string` → `aria-label`); `TextField({ label, name, type?, defaultValue?, error?, required? })` — eyebrow `<label htmlFor>`, input 15px weight 400, `aria-invalid` + `aria-describedby` pointing at the error text when `error` is set.
+- Site header (≥ `lg`): logo + wordmark → `/`, `navItems` links (`aria-current="page"` when `isActive`), `LocaleSwitch` (TH | EN, keeps current path), `ThemeToggle`, ghost "My Trip" → `/prepare`; sticky, `--bg` background, `--line2` bottom border, as `Main.dc.html`. Below `lg`: logo + menu `IconButton` opening `MobileMenu` — a native `<dialog>` (focus moves in, Esc closes, focus returns) listing all `navItems` plus locale switch and theme toggle. `MobileTabBar` (below `lg` only): sticky bottom, 5 tabs with the `HomeMobile` icons, active tab `aria-current`.
+- `ThemeToggle`: reads the resolved theme (`html` class, else `matchMedia('(prefers-color-scheme: dark)')`), flips it, writes the cookie per Global Constraints, sets `html` class; `aria-label` from `theme.toggle`, icon from `Main.dc.html`.
+- Root layout: `cookies()` → `themeClass(parseThemeCookie(...))` on `<html className>`; `lang={locale}`; Prompt `className` on `<body>` with `bg-bg text-ink`.
+
+- [ ] **Step 1: Write failing tests**
+
+```ts
+// theme.test.ts
+it.each([['dark','dark'],['light','light'],[undefined,'system'],['blue','system']])('parseThemeCookie(%s)', (v, out) => expect(parseThemeCookie(v)).toBe(out))
+it('themeClass', () => { expect(themeClass('system')).toBe(''); expect(themeClass('dark')).toBe('dark') })
+
+// nav-items.test.ts
+it('nav hrefs', () => expect(navItems.map(i => i.href)).toEqual(['/', '/map', '/dishes', '/currency', '/visa', '/prepare']))
+it('tab hrefs', () => expect(tabItems.map(i => i.href)).toEqual(['/', '/map', '/dishes', '/currency', '/prepare']))
+it.each([['/', '/', true], ['/map', '/', false], ['/map', '/map', true], ['/map/sydney', '/map', true], ['/mapx', '/map', false]])
+  ('isActive(%s, %s)', (p, h, out) => expect(isActive(p, h)).toBe(out))
+```
+`text-field.test.tsx` (`// @vitest-environment jsdom`, @testing-library/react): label click focuses the input (`getByLabelText`); with `error="Required"` the input has `aria-invalid="true"` and `aria-describedby` resolving to the element containing "Required"; without `error`, neither attribute is present.
+
+- [ ] **Step 2: Run `npm test` — expect FAIL**
+
+- [ ] **Step 3: Implement** — `npm i -D jsdom @testing-library/react @testing-library/jest-dom`; then tokens/CSS, `theme.ts`, `navigation.ts`, primitives, shell components, `(site)/layout.tsx`, messages (th + en, identical key sets) per Interfaces.
+
+- [ ] **Step 4: Verify**
+
+`npm test` → PASS (messages key-parity test included); `npm run build` succeeds. With `npm run dev`, compare against the artboards:
+- `/th` at 1440px vs `Main.dc.html` header and footer (tokens, Prompt, spacing, hairlines); toggle theme → dark tokens match `.sc.dark`; reload → theme persists with no flash; clear the cookie with OS dark mode on → dark.
+- `/th` at 390px vs `HomeMobile.dc.html` header and tab bar; menu opens, Esc closes, focus returns to the menu button.
+- Tab through header: every control shows the copper focus ring; `/en` shows English labels and the locale switch keeps the path.
+
+- [ ] **Step 5: Commit** — `git commit -m "feat(ui): design tokens, theme toggle, site header/footer/tab bar"`
+
+---
+
+### Task 7: Auth — login, callback, current profile, role guard
+
+**Files:**
+- Create: `src/app/[locale]/(site)/login/page.tsx`, `src/app/[locale]/(site)/login/login-form.tsx` (client)
 - Create: `src/app/auth/callback/route.ts`, `src/app/auth/sign-out/route.ts`
 - Create: `src/lib/auth/safe-next.ts`, `src/lib/auth/profile.ts`
 - Configure (dev project Dashboard, not `config.toml` — that only drives a local stack): Authentication → Providers: enable Email (magic link), Google, Apple with their client id/secret; Authentication → URL Configuration: Site URL `http://localhost:3000`, redirect URLs `http://localhost:3000/auth/callback`
@@ -257,7 +322,8 @@ Run: `npm test` → PASS. `npm run dev`, then `curl -sI http://localhost:3000/` 
 - Test: `src/lib/auth/safe-next.test.ts`, `src/lib/auth/profile.test.ts`
 
 **Interfaces:**
-- Consumes: `createClient()` (server/browser) from Task 5; `Database` types.
+- Consumes: `createClient()` (server/browser) from Task 5; `Database` types; `Button`, `buttonClass`, `TextField`, `redirect` from `@/i18n/navigation` (Task 6). The login page renders inside the `(site)` shell.
+- Login UI (no artboard exists — compose from tokens): centred card, max-width 420px, `bg-surface`, radius 10, `shadow-soft`, padding 40px (24px below `sm`); copper eyebrow `auth.eyebrow`, H2 heading (36px, weight 600) `auth.title`, body-L lede in `--ink2`; `TextField` email (required, `type="email"`); full-width primary `Button` `auth.sendLink`; hairline divider with `auth.or`; two full-width ghost buttons "Continue with Google" / "Continue with Apple" (text only, no brand logos). After sending: the form is replaced by `auth.checkEmail` text in an `aria-live="polite"` region; `?error=auth` shows `auth.error` above the form in copper; a send failure shows its message via `TextField` `error`. Submit button is disabled while pending.
 - Produces: `safeNextPath(next: string | null): string` — returns `next` only if it starts with a single `/` and not `//` or `/\`; otherwise `'/'`.
 - Produces: `type Profile = Database['public']['Tables']['profiles']['Row']`; `getCurrentProfile(): Promise<Profile | null>`; `requireRole(roles: Profile['role'][]): Promise<Profile>` — no session → `redirect('/{locale}/login?next=...')`; role not allowed → `notFound()`.
 - Login form: email → `signInWithOtp({ email, options: { emailRedirectTo: `${origin}/auth/callback?next=${next}` } })`; buttons → `signInWithOAuth({ provider: 'google' | 'apple', options: { redirectTo } })`.
@@ -285,13 +351,13 @@ it.each([
 
 - [ ] **Step 4: Verify**
 
-`npm test` → PASS. With `npm run dev`: submit a real email on `/th/login` (built-in SMTP sends only a few emails per hour — don't loop), open the link from that inbox, land on `/` signed in; `profiles` row exists with `locale = 'th'`.
+`npm test` → PASS. With `npm run dev`: `/th/login` at 1440px and 390px, light and dark, matches the Login UI description (tokens, Prompt, focus rings); submit a real email on `/th/login` (built-in SMTP sends only a few emails per hour — don't loop), open the link from that inbox, land on `/` signed in; `profiles` row exists with `locale = 'th'`.
 
 - [ ] **Step 5: Commit** — `git commit -m "feat(auth): magic link + OAuth login, safe callback, role guard"`
 
 ---
 
-### Task 7: API conventions — errors, validation, pagination, rate limit
+### Task 8: API conventions — errors, validation, pagination, rate limit
 
 **Files:**
 - Create: `src/lib/api/errors.ts`, `src/lib/api/validate.ts`, `src/lib/api/cursor.ts`, `src/lib/api/rate-limit.ts`
@@ -320,17 +386,18 @@ it.each([
 
 ---
 
-### Task 8: Admin shell — guard, cities CRUD with publish revalidation, audit log viewer
+### Task 9: Admin shell — guard, cities CRUD with publish revalidation, audit log viewer
 
 **Files:**
-- Create: `src/app/[locale]/admin/layout.tsx`, `src/app/[locale]/admin/page.tsx`
+- Create: `src/app/[locale]/admin/layout.tsx`, `src/app/[locale]/admin/page.tsx` (admin sits outside the `(site)` group: no public header/footer/tab bar)
 - Create: `src/app/[locale]/admin/cities/page.tsx`, `src/app/[locale]/admin/cities/[id]/page.tsx`, `src/app/[locale]/admin/cities/actions.ts`, `src/app/[locale]/admin/cities/schema.ts`
 - Create: `src/app/[locale]/admin/audit/page.tsx`
 - Modify: messages files (`admin.*`)
 - Test: `src/app/[locale]/admin/cities/schema.test.ts`
 
 **Interfaces:**
-- Consumes: `requireRole` (Task 6), server `createClient` (Task 5) — writes go through the user's session so RLS + audit triggers record the editor; `createServiceClient` only for reading `audit_log` (no policies on it); `t`, `Locale` (Task 1).
+- Consumes: `requireRole` (Task 7), server `createClient` (Task 5) — writes go through the user's session so RLS + audit triggers record the editor; `createServiceClient` only for reading `audit_log` (no policies on it); `t`, `Locale` (Task 1); `Button`, `buttonClass`, `TextField`, `IconButton`, `Logo`, `ThemeToggle`, `Link` (Task 6); `encodeCursor`/`decodeCursor` (Task 8).
+- Admin UI (no artboard — utilitarian, same tokens): top bar on `bg-surface` with `--line2` bottom border: `Logo` + eyebrow "Admin", nav links Cities / Audit log (`aria-current`), `ThemeToggle`, sign-out ghost button (POST form to `/auth/sign-out`). Content max-width 1120px with the site gutter. Lists are `<table>`s with eyebrow `<th>` (scope="col"), 1px `--line2` row rules, 14px body, status shown as a `.tag`-style pill (published uses copper text + `--copper-tint`). City form: `TextField`s in a 2-column grid (1 column below `md`), status `<select>` styled like `TextField`, primary "Save" and ghost "Cancel"; field-level errors from `citySchema` go to each `TextField` `error`; a save error shows in an `aria-live` region.
 - Produces: `citySchema = z.object({ region_id: z.coerce.number().int(), slug: z.string().regex(/^[a-z0-9-]+$/), name_th: z.string().min(1), name_en: z.string().min(1), timezone: z.string().refine(isIanaZone), lng: z.coerce.number().min(-180).max(180), lat: z.coerce.number().min(-90).max(90), status: z.enum(['draft','published','archived']) })`; `isIanaZone(tz: string): boolean` via `Intl.supportedValuesOf('timeZone')`.
 - Produces server action `saveCity(id: number | null, formData: FormData): Promise<{ error?: string }>` — `requireRole(['editor','admin'])`, parse, upsert with `name_i18n = { th, en }` and `center = 'SRID=4326;POINT(lng lat)'`, then `revalidateTag('home')`.
 - Layout calls `requireRole(['editor','admin'])`; nav: Cities, Audit log. Audit page: latest 100 rows (`table_name`, `row_id`, `action`, actor, `at`), cursor-paginated via `encodeCursor`/`decodeCursor` on `(at, id)`.
@@ -343,13 +410,13 @@ it.each([
 
 - [ ] **Step 4: Verify**
 
-`npm test` → PASS. Manually: signed-in `user` visiting `/th/admin` → 404; promote via SQL (`update profiles set role='editor' ...` in Studio), edit Sydney's `name_th` → saved, and `/th/admin/audit` shows an `UPDATE` row on `cities` with your id.
+`npm test` → PASS. Manually (1440px and 390px, light and dark): signed-in `user` visiting `/th/admin` → 404; promote via SQL (`update profiles set role='editor' ...` in Studio), edit Sydney's `name_th` → saved, and `/th/admin/audit` shows an `UPDATE` row on `cities` with your id.
 
 - [ ] **Step 5: Commit** — `git commit -m "feat(admin): role-guarded shell, cities CRUD, audit log viewer"`
 
 ---
 
-### Task 9: Observability and analytics
+### Task 10: Observability and analytics
 
 **Files:**
 - Create: `src/instrumentation.ts`, `src/instrumentation-client.ts`, `sentry.server.config.ts`, `sentry.edge.config.ts`
@@ -367,6 +434,6 @@ it.each([
 
 - [ ] **Step 3: Implement** — `npm i @sentry/nextjs posthog-js @vercel/analytics`; Sentry `tracesSampleRate: 0.1`, `sendDefaultPii: false`.
 
-- [ ] **Step 4: Verify** — `npm test` → PASS; `npm run build` succeeds; `npx supabase test db --linked` still PASS.
+- [ ] **Step 4: Verify** — `npm test` → PASS; `npm run build` succeeds; `npm run test:db` still PASS.
 
 - [ ] **Step 5: Commit** — `git commit -m "feat: sentry, posthog, vercel analytics with PII-safe track()"`
