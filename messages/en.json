@@ -6,17 +6,23 @@
     "label": "Primary",
     "destinations": "Destinations",
     "map": "Map",
-    "dishes": "Eat & Drink",
-    "currency": "Money",
+    "transport": "Transport",
+    "eatDrink": "Eat & Drink",
+    "gallery": "Gallery",
+    "money": "Money",
     "visa": "Visa & Entry",
     "prepare": "Plan your trip",
+    "group": {
+      "explore": "Explore",
+      "plan": "Plan"
+    },
     "myTrip": "My Trip",
     "tabBarLabel": "Quick links",
     "tab": {
       "discover": "Discover",
       "map": "Map",
+      "transit": "Transit",
       "eat": "Eat",
-      "money": "Money",
       "trip": "Trip"
     }
   },

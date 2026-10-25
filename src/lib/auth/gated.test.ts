@@ -5,12 +5,15 @@ describe('isGatedPath', () => {
   it.each([
     ['/prepare', true],
     ['/prepare/trips/1', true],
+    ['/trip', true],
+    ['/trip/abc', true],
+    ['/trips', false],
     ['/prepared', false],
     ['/', false],
     ['/map', false],
   ])('isGatedPath(%s)', (p, out) => expect(isGatedPath(p)).toBe(out))
 
-  it('gates exactly /prepare', () => {
-    expect(GATED_PREFIXES).toEqual(['/prepare'])
+  it('gates exactly /prepare and /trip', () => {
+    expect(GATED_PREFIXES).toEqual(['/prepare', '/trip'])
   })
 })

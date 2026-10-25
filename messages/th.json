@@ -6,17 +6,23 @@
     "label": "เมนูหลัก",
     "destinations": "ปลายทาง",
     "map": "แผนที่",
-    "dishes": "กินและดื่ม",
-    "currency": "ค่าเงิน",
+    "transport": "การเดินทาง",
+    "eatDrink": "กินและดื่ม",
+    "gallery": "แกลเลอรี",
+    "money": "ค่าเงิน",
     "visa": "วีซ่าและการเข้าเมือง",
     "prepare": "วางแผนทริป",
+    "group": {
+      "explore": "สำรวจ",
+      "plan": "วางแผน"
+    },
     "myTrip": "ทริปของฉัน",
     "tabBarLabel": "ทางลัด",
     "tab": {
       "discover": "สำรวจ",
       "map": "แผนที่",
+      "transit": "ขนส่ง",
       "eat": "กิน",
-      "money": "ค่าเงิน",
       "trip": "ทริป"
     }
   },

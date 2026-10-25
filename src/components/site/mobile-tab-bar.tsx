@@ -6,7 +6,7 @@ import { usePathname } from '@/i18n/navigation'
 import { GatedLink } from './gated-link'
 import { isActive, tabItems, type TabKey } from './nav-items'
 
-// Paths from HomeMobile.dc.html; Money uses the exchange icon from Currency.dc.html.
+// Paths from HomeMobile.dc.html.
 const icons: Record<TabKey, ReactNode> = {
   discover: (
     <>
@@ -20,8 +20,13 @@ const icons: Record<TabKey, ReactNode> = {
       <path d="M9 4v14M15 6v14" />
     </>
   ),
+  transit: (
+    <>
+      <rect x="6" y="3" width="12" height="13" rx="3" />
+      <path d="M6 10h12M9 20l1.5-4M15 20l-1.5-4" />
+    </>
+  ),
   eat: <path d="M7 3v18M5 3v5a2 2 0 0 0 4 0V3M17 21V3c-2 1-3.5 3-3.5 7v3H17" />,
-  money: <path d="M4 8h16M16 4l4 4-4 4M20 16H4M8 12l-4 4 4 4" />,
   trip: <path d="M6 3h12v18l-6-4-6 4z" />,
 }
 

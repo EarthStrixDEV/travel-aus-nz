@@ -1,24 +1,13 @@
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
-import type { NavKey } from './nav-items'
+import { navItems, type NavGroup } from './nav-items'
 
-const columns: { heading: 'explore' | 'plan'; links: { key: NavKey; href: string }[] }[] = [
-  {
-    heading: 'explore',
-    links: [
-      { key: 'map', href: '/map' },
-      { key: 'dishes', href: '/dishes' },
-    ],
-  },
-  {
-    heading: 'plan',
-    links: [
-      { key: 'currency', href: '/currency' },
-      { key: 'visa', href: '/visa' },
-      { key: 'prepare', href: '/prepare' },
-    ],
-  },
-]
+const groups: NavGroup[] = ['explore', 'plan']
+// Home (`/`) is the logo; footer columns list the remaining destinations of each group.
+const columns = groups.map((heading) => ({
+  heading,
+  links: navItems.filter((item) => item.group === heading && item.href !== '/'),
+}))
 
 export function SiteFooter() {
   const t = useTranslations()

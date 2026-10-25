@@ -36,7 +36,7 @@ export function SiteHeader() {
         <div className="hidden items-center gap-2.5 lg:flex">
           <LocaleSwitch />
           <ThemeToggle />
-          <GatedLink href="/prepare" className={`${buttonClass('ghost')} whitespace-nowrap`}>
+          <GatedLink href="/trip" className={`${buttonClass('ghost')} whitespace-nowrap`}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
               <path d="M6 3h12v18l-6-4-6 4z" />
             </svg>
