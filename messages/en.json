@@ -232,5 +232,101 @@
       "at": "When",
       "older": "Older"
     }
+  },
+  "map": {
+    "metaTitle": "Interactive map",
+    "metaDescription": "Attractions, restaurants, bars and stations across Australia and New Zealand, with the nearest stop and walking time for each place.",
+    "title": "Interactive map",
+    "canvas": "Map",
+    "canvasHint": "Use the list view to browse every place with a keyboard or screen reader.",
+    "search": {
+      "label": "Search the map",
+      "placeholder": "Search {area}"
+    },
+    "country": {
+      "label": "Country view",
+      "au": "Australia",
+      "nz": "New Zealand",
+      "switch": "Switch country, currently {country}"
+    },
+    "breadcrumb": {
+      "label": "Map location",
+      "city": "City",
+      "allCities": "All cities"
+    },
+    "layers": {
+      "label": "Map layers",
+      "attraction": "Attractions",
+      "restaurant": "Restaurants",
+      "bar": "Bars",
+      "transport": "Transport",
+      "count": "{count} in view"
+    },
+    "layerName": {
+      "attraction": "Attraction",
+      "restaurant": "Restaurant",
+      "bar": "Bar",
+      "transport": "Transport"
+    },
+    "legend": {
+      "label": "Legend",
+      "route": "Walking route"
+    },
+    "controls": {
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "locate": "My location",
+      "locating": "Finding your location…",
+      "locateError": "Your location isn't available.",
+      "located": "Map centred on your location."
+    },
+    "view": {
+      "list": "List view",
+      "map": "Map view"
+    },
+    "list": {
+      "label": "Places in view",
+      "areas": "Areas in view",
+      "empty": "No places in view. Zoom out, clear the search or turn on more layers.",
+      "area": "{count} places in {name}",
+      "zoomHint": "Choose an area to see its places.",
+      "loading": "Loading places…",
+      "error": "Places couldn't be loaded.",
+      "retry": "Try again",
+      "capped": "Showing the first {count}. Zoom in to see the rest."
+    },
+    "pin": "{type}: {name}",
+    "overview": {
+      "eyebrow": "{country} · {count} places",
+      "title": "Choose a city",
+      "text": "Numbers show how many places each area has. Open a city for individual places, train lines and walking times from the nearest stop.",
+      "open": "Open {city} in detail"
+    },
+    "sheet": {
+      "inView": "{count} places in view",
+      "swipe": "Swipe for more"
+    },
+    "drawer": {
+      "label": "Place details",
+      "close": "Close panel",
+      "openNow": "Open now",
+      "closedNow": "Closed now",
+      "today": "Today {hours}",
+      "closedToday": "Closed today",
+      "noHours": "Hours not listed",
+      "free": "Free",
+      "priceLevel": "Price level {n} of 4",
+      "walk": "{min} min walk",
+      "routeShown": "Walking route shown on map",
+      "noStop": "No stop listed within walking distance",
+      "save": "Save to My Trip",
+      "saved": "Saved to My Trip",
+      "share": "Share",
+      "copied": "Link copied",
+      "loading": "Loading place…",
+      "error": "This place couldn't be loaded.",
+      "website": "Website"
+    },
+    "noStyle": "The interactive map isn't available right now, so places are shown as a list."
   }
 }
