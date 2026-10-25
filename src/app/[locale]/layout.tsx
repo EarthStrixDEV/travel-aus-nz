@@ -1,19 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Prompt } from "next/font/google";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
+import { parseThemeCookie, THEME_COOKIE, themeClass } from "@/lib/theme";
 import "../globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const prompt = Prompt({
+  variable: "--font-prompt",
+  weight: ["300", "400", "500", "600"],
+  subsets: ["latin", "thai"],
 });
 
 export function generateStaticParams() {
@@ -41,12 +39,11 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
+  const theme = themeClass(parseThemeCookie((await cookies()).get(THEME_COOKIE)?.value));
 
   return (
-    <html lang={locale}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang={locale} className={theme || undefined}>
+      <body className={`${prompt.variable} ${prompt.className} bg-bg text-ink`}>
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>

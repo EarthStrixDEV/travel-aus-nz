@@ -9,8 +9,8 @@ export default async function HomePage({
   setRequestLocale(locale);
   const t = await getTranslations("common");
   return (
-    <main className="p-8">
+    <div className="p-8">
       <h1 className="text-2xl font-semibold">{t("siteName")}</h1>
-    </main>
+    </div>
   );
 }

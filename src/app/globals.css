@@ -1,26 +1,116 @@
 @import "tailwindcss";
 
+/* Design tokens — values verbatim from design/pages/Main.dc.html (.sc / .sc.dark). */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #F6F2EA;
+  --surface: #FBF9F4;
+  --ink: #13213A;
+  --ink2: #4A5468;
+  --ink3: #8A92A3;
+  --line: rgba(19,33,58,.14);
+  --line2: rgba(19,33,58,.07);
+  --copper: #9E5229;
+  --copper-tint: rgba(158,82,41,.09);
+  --on-copper: #FBF9F4;
+  --ph1: #D6D8DD;
+  --ph2: #C2C7D0;
+  --ph3: #A7AEBB;
+  --deep: #13213A;
+  --on-deep: #F6F2EA;
+  --shadow: 0 1px 2px rgba(19,33,58,.04),0 14px 36px rgba(19,33,58,.07);
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root.dark {
+  --bg: #0E1729;
+  --surface: #14203A;
+  --ink: #F3EEE4;
+  --ink2: #B7BDC8;
+  --ink3: #7D8698;
+  --line: rgba(243,238,228,.16);
+  --line2: rgba(243,238,228,.07);
+  --copper: #D08A5E;
+  --copper-tint: rgba(208,138,94,.14);
+  --on-copper: #0E1729;
+  --ph1: #22304A;
+  --ph2: #2A3953;
+  --ph3: #344462;
+  --deep: #091121;
+  --on-deep: #F3EEE4;
+  --shadow: 0 1px 2px rgba(0,0,0,.2),0 14px 36px rgba(0,0,0,.28);
+  color-scheme: dark;
 }
 
+/* No theme cookie → follow the OS. Must stay identical to :root.dark above. */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not(.light) {
+    --bg: #0E1729;
+    --surface: #14203A;
+    --ink: #F3EEE4;
+    --ink2: #B7BDC8;
+    --ink3: #7D8698;
+    --line: rgba(243,238,228,.16);
+    --line2: rgba(243,238,228,.07);
+    --copper: #D08A5E;
+    --copper-tint: rgba(208,138,94,.14);
+    --on-copper: #0E1729;
+    --ph1: #22304A;
+    --ph2: #2A3953;
+    --ph3: #344462;
+    --deep: #091121;
+    --on-deep: #F3EEE4;
+    --shadow: 0 1px 2px rgba(0,0,0,.2),0 14px 36px rgba(0,0,0,.28);
+    color-scheme: dark;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Utilities reference the variables, so dark mode switches without `dark:` variants. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink2);
+  --color-ink-3: var(--ink3);
+  --color-line: var(--line);
+  --color-line-2: var(--line2);
+  --color-copper: var(--copper);
+  --color-copper-tint: var(--copper-tint);
+  --color-on-copper: var(--on-copper);
+  --color-ph-1: var(--ph1);
+  --color-ph-2: var(--ph2);
+  --color-ph-3: var(--ph3);
+  --color-deep: var(--deep);
+  --color-on-deep: var(--on-deep);
+  --shadow-soft: var(--shadow);
+  --font-sans: var(--font-prompt), sans-serif;
+}
+
+@utility eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+
+@layer base {
+  body {
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .6s ease, color .6s ease;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--copper);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
 }

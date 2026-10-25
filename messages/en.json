@@ -1,5 +1,43 @@
 {
   "common": {
     "siteName": "TravelAusNZ"
+  },
+  "nav": {
+    "label": "Primary",
+    "destinations": "Destinations",
+    "map": "Map",
+    "dishes": "Eat & Drink",
+    "currency": "Money",
+    "visa": "Visa & Entry",
+    "prepare": "Plan your trip",
+    "myTrip": "My Trip",
+    "tabBarLabel": "Quick links",
+    "tab": {
+      "discover": "Discover",
+      "map": "Map",
+      "eat": "Eat",
+      "money": "Money",
+      "trip": "Trip"
+    }
+  },
+  "menu": {
+    "open": "Open menu",
+    "close": "Close menu",
+    "label": "Menu"
+  },
+  "theme": {
+    "toggle": "Toggle dark mode"
+  },
+  "locale": {
+    "label": "Language",
+    "th": "ภาษาไทย",
+    "en": "English"
+  },
+  "footer": {
+    "explore": "Explore",
+    "plan": "Plan",
+    "acknowledgement": "We acknowledge the Traditional Custodians of the lands and waters across Australia, and Māori as tangata whenua of Aotearoa New Zealand.",
+    "copyright": "© 2026 TravelAusNZ",
+    "prices": "Prices in AUD / NZD, indicative"
   }
 }
