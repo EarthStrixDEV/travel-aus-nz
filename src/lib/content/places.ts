@@ -254,6 +254,13 @@ type PlaceRow = {
 
 const hhmm = (t: string) => t.slice(0, 5)
 
+/** `place_hours` rows -> HH:MM ranges, ordered by weekday then opening time. Shared with the venue catalog. */
+export function mapHours(rows: { weekday: number; open_time: string; close_time: string }[] | null | undefined): PlaceHours[] {
+  return (rows ?? [])
+    .map((h) => ({ weekday: h.weekday, open: hhmm(h.open_time), close: hhmm(h.close_time) }))
+    .sort((a, b) => a.weekday - b.weekday || a.open.localeCompare(b.open))
+}
+
 export async function loadPlace(client: Client, slug: string, locale: Locale): Promise<PlaceDetail | null> {
   const { data, error } = await client
     .from('places')
@@ -296,9 +303,7 @@ export async function loadPlace(client: Client, slug: string, locale: Locale): P
     lng: point.coordinates[0],
     lat: point.coordinates[1],
     tags: (r.tags ?? []).flatMap((x) => (x.tag ? [text(x.tag.name_i18n, locale)] : [])).filter(Boolean),
-    hours: (r.hours ?? [])
-      .map((h) => ({ weekday: h.weekday, open: hhmm(h.open_time), close: hhmm(h.close_time) }))
-      .sort((a, b) => a.weekday - b.weekday || a.open.localeCompare(b.open)),
+    hours: mapHours(r.hours),
     hoursNote: text(r.hours_note_i18n, locale),
     priceLevel: r.price_level,
     priceNote: text(r.price_note_i18n, locale),

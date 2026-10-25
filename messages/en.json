@@ -328,5 +328,75 @@
       "website": "Website"
     },
     "noStyle": "The interactive map isn't available right now, so places are shown as a list."
+  },
+  "eatDrink": {
+    "metaTitle": "Eat & Drink",
+    "metaDescription": "Restaurants and bars our editors have visited and paid for, each with its nearest stop and walking time.",
+    "eyebrow": "Eat & drink",
+    "title": "Tables worth the detour.",
+    "lede": "Visited and paid for by our editors. Each listing names its nearest stop, so dinner never depends on a car.",
+    "tabs": {
+      "label": "Venue type",
+      "restaurant": "Restaurants",
+      "bar": "Bars"
+    },
+    "filters": {
+      "label": "Filters",
+      "city": "City",
+      "allCities": "All",
+      "price": "Price",
+      "priceUpTo": "Up to price level {n} of 4",
+      "drink": "Drink",
+      "mood": "Atmosphere",
+      "diet": "Dietary",
+      "cuisine": "Cuisine",
+      "allCuisines": "All cuisines",
+      "clear": "Clear filters"
+    },
+    "drink": {
+      "wine": "Wine",
+      "cocktails": "Cocktails",
+      "beer": "Beer",
+      "coffee": "Coffee",
+      "non_alc": "Non-alcoholic"
+    },
+    "diet": {
+      "vegetarian": "Vegetarian",
+      "vegan": "Vegan",
+      "gluten_free": "Gluten-free"
+    },
+    "count": {
+      "restaurant": "{count, plural, one {# restaurant} other {# restaurants}}",
+      "bar": "{count, plural, one {# bar} other {# bars}}"
+    },
+    "results": {
+      "label": "Venues"
+    },
+    "empty": {
+      "title": "Nothing matches these filters",
+      "text": "Try removing a filter or two to see more places."
+    },
+    "card": {
+      "details": "Show details for {name}",
+      "save": "Save {name}",
+      "unsave": "Remove {name} from saved",
+      "priceLevel": "Price level {n} of 4",
+      "free": "Free"
+    },
+    "drawer": {
+      "label": "Venue details",
+      "close": "Close panel",
+      "menu": "Menu highlights",
+      "drinks": "Signature drinks",
+      "hours": "Opening hours",
+      "noHours": "Hours not listed",
+      "daily": "Daily",
+      "stop": "Nearest stop",
+      "noStop": "No stop listed within walking distance",
+      "walk": "{min} min walk",
+      "save": "Save to my trip",
+      "saved": "Saved to my trip",
+      "onMap": "On the map"
+    }
   }
 }
