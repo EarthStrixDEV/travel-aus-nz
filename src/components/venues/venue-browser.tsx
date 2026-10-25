@@ -58,7 +58,14 @@ export function VenueBrowser({ venues }: { venues: Venue[] }) {
   })
 
   const query = searchParams.toString()
-  const filter = useMemo(() => parseVenueFilter(new URLSearchParams(query)), [query])
+  const parsed = useMemo(() => parseVenueFilter(new URLSearchParams(query)), [query])
+  // A deep link to a venue on the other tab shows that tab, so the drawer, list and saved lookup (per tab) agree.
+  // The first filter change writes the shown kind to the URL and ends the override.
+  const [deepKind, setDeepKind] = useState<VenueKind | null>(() => venues.find((v) => v.slug === openSlug)?.kind ?? null)
+  const filter = useMemo<VenueFilter>(
+    () => (deepKind && deepKind !== parsed.kind ? { ...parsed, kind: deepKind, mood: undefined, cuisine: undefined } : parsed),
+    [parsed, deepKind],
+  )
   const { items, facets } = useMemo(() => filterVenues(venues, filter), [venues, filter])
   const kindCounts = useMemo(() => countByKind(venues, filter), [venues, filter])
   const pool = useMemo(() => venues.filter((v) => v.kind === filter.kind), [venues, filter.kind])
@@ -69,6 +76,7 @@ export function VenueBrowser({ venues }: { venues: Venue[] }) {
   const selected = useMemo(() => venues.find((v) => v.slug === openSlug) ?? null, [venues, openSlug])
 
   function apply(next: VenueFilter) {
+    setDeepKind(null)
     const qs = venueFilterToParams(next).toString()
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false })
   }

@@ -8,7 +8,7 @@ import en from '../../../messages/en.json'
 import type { VenueCard } from '@/lib/venues/filter'
 import { VenueBrowser } from './venue-browser'
 
-const state = vi.hoisted(() => ({ search: '', replace: vi.fn(), toggle: vi.fn(), saved: new Set<string>() }))
+const state = vi.hoisted(() => ({ search: '', replace: vi.fn(), toggle: vi.fn(), saved: new Set<string>(), lookedUp: [] as string[] }))
 
 vi.mock('next/navigation', () => ({ useSearchParams: () => new URLSearchParams(state.search) }))
 vi.mock('@/i18n/navigation', () => ({
@@ -18,7 +18,7 @@ vi.mock('@/i18n/navigation', () => ({
     <a href={typeof href === 'string' ? href : `${href.pathname}?${new URLSearchParams(href.query)}`} {...props} />
   ),
 }))
-vi.mock('@/components/trip/use-saved-places', () => ({ useSavedPlaces: () => ({ saved: state.saved, toggle: state.toggle }) }))
+vi.mock('@/components/trip/use-saved-places', () => ({ useSavedPlaces: (ids: string[]) => ({ saved: ((state.lookedUp = ids), state.saved), toggle: state.toggle }) }))
 
 beforeAll(() => {
   HTMLDialogElement.prototype.showModal = function (this: HTMLDialogElement) {
@@ -152,6 +152,21 @@ describe('VenueBrowser', () => {
     state.search = 'venue=hollow'
     view()
     expect(screen.getByRole('dialog', { name: 'HOLLOW' })).toBeInTheDocument()
+  })
+
+  it('a ?venue deep link to a bar switches to the Bars tab so its saved state is looked up', () => {
+    state.search = 'venue=hollow'
+    state.saved = new Set(['id-hollow'])
+    view()
+    expect(screen.getByRole('tab', { name: /Bars/, selected: true })).toBeInTheDocument()
+    expect(state.lookedUp).toContain('id-hollow')
+    const dialog = screen.getByRole('dialog', { name: 'HOLLOW' })
+    expect(within(dialog).getByRole('button', { name: 'Saved to my trip' })).toBeInTheDocument()
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Saved to my trip' }))
+    expect(state.toggle).toHaveBeenCalledWith('id-hollow')
+    // A later tab change goes through the URL as usual.
+    fireEvent.click(screen.getByRole('tab', { name: /Restaurants/ }))
+    expect(state.replace).toHaveBeenLastCalledWith('/eat-drink', { scroll: false })
   })
 
   it('ignores an unknown ?venue slug', () => {
