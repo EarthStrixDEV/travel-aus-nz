@@ -587,5 +587,230 @@
       },
       "notice": "Rates shown are indicative mid-market rates for planning only and are not an offer to exchange currency. They are not suitable for financial transactions. Prices are typical examples and vary by city and season."
     }
+  },
+  "visa": {
+    "metaTitle": "Visa & Entry",
+    "metaDescription": "A calm overview of what travellers usually need for Australia and New Zealand, and where to apply on the official government sites.",
+    "eyebrow": "Plan · Visa & entry",
+    "title": "Arrive with the right permission.",
+    "lede": "A calm overview of what travellers usually need for Australia and New Zealand, and where to apply. We never take applications, passport details or payments. Every application happens on the official government site.",
+    "lastVerified": "Last verified {date}",
+    "notVerified": "Details not yet verified against official sources.",
+    "loadError": "We couldn't load the latest details. The official sites below always have the final word.",
+    "placeholder": "Placeholder",
+    "country": {
+      "label": "Country",
+      "au": "Australia",
+      "nz": "New Zealand",
+      "both": "Both"
+    },
+    "banner": {
+      "title": "Entry rules change.",
+      "text": "Always confirm with the official government source before booking or travelling."
+    },
+    "helper": {
+      "label": "What do I need",
+      "eyebrow": "What do I need?",
+      "title": "Three questions, one starting point",
+      "privacy": "Nothing you enter here is stored or sent.",
+      "names": {
+        "nationality": "Passport nationality",
+        "purpose": "Purpose",
+        "stay": "Length of stay"
+      },
+      "stepDesktop": "{n} · {name}",
+      "stepMobile": "Step {n} of 3 · {name}",
+      "progress": "Step {n} of 3",
+      "notListed": "Not listed here",
+      "noMatch": "No match. Choose “Not listed here” and check the official site directly.",
+      "needNationality": "Choose a nationality, or “Not listed here”.",
+      "purposes": {
+        "tourism": "Tourism",
+        "work_study": "Work or study"
+      },
+      "purposeNote": "Work and study use different permissions.",
+      "stays": {
+        "lt1": "Up to 1 month",
+        "1to3": "1 to 3 months",
+        "gt3": "More than 3 months"
+      },
+      "sentence": {
+        "purpose": {
+          "tourism": "tourism",
+          "work_study": "work or study"
+        },
+        "stay": {
+          "lt1": "up to 1 month",
+          "1to3": "1 to 3 months",
+          "gt3": "more than 3 months"
+        }
+      },
+      "run": "Show what I may need",
+      "next": "Next",
+      "back": "Back",
+      "empty": {
+        "title": "Your result will appear here.",
+        "text": "Choose a nationality and length of stay. We'll show the permission that typically applies and link you to the official site."
+      },
+      "loading": "Checking",
+      "result": {
+        "intro": "For a {nationality} passport, {purpose}, {stay}, travellers typically apply for",
+        "officialOnly": {
+          "title": "Check the official site",
+          "text": "We can't name the permission for this combination with confidence right now. The official site has the current answer."
+        },
+        "workStudy": {
+          "title": "Work and study use a different permission",
+          "text": "Visitor permissions don't cover work or study. The official site lists the visas that do."
+        },
+        "notListed": {
+          "title": "Your nationality isn't in our guide",
+          "text": "Check the official site directly for what applies to your passport."
+        },
+        "longStay": "Longer stays may need a different permission or conditions. Check the stay limits on the official site.",
+        "open": "Open {agency}",
+        "opens": "Opens {domain} in a new tab",
+        "disclaimer": "Indicative, confirm on the official site"
+      }
+    },
+    "permissions": {
+      "label": "Permission types",
+      "eyebrow": "Permission types",
+      "title": "The options, explained",
+      "note": "Values marked <tag>Placeholder</tag> are illustrative and must be checked.",
+      "who": "Who it's for",
+      "how": "How you apply",
+      "processing": "Typical processing",
+      "fee": "Typical fee",
+      "validity": "Validity",
+      "good": "Good to know",
+      "report": "Report outdated info",
+      "empty": "No permission types to show yet."
+    },
+    "feedback": {
+      "title": "Report outdated info",
+      "about": "About {name}",
+      "kind": "What's wrong?",
+      "kinds": {
+        "outdated": "Outdated",
+        "broken": "Link broken",
+        "unclear": "Unclear"
+      },
+      "note": "Details (optional)",
+      "hint": "Please don't include personal or passport details.",
+      "send": "Send report",
+      "sending": "Sending",
+      "cancel": "Cancel",
+      "thanks": "Thank you. We'll review this.",
+      "error": "We couldn't send that. Please try again later.",
+      "rateLimited": "You've sent several reports already. Please try again later."
+    },
+    "timeline": {
+      "label": "Application timeline",
+      "eyebrow": "Application timeline",
+      "title": "Six calm steps",
+      "step": "Step {n}",
+      "steps": {
+        "check": {
+          "title": "Check requirements",
+          "text": "Use the helper above, then confirm on the official site."
+        },
+        "prepare": {
+          "title": "Prepare documents",
+          "text": "Passport, photo, funds, tickets and plans."
+        },
+        "apply": {
+          "title": "Apply on the official site",
+          "text": "Only on .gov.au, .govt.nz or the official app."
+        },
+        "wait": {
+          "title": "Wait for result",
+          "text": "Watch your inbox, including spam."
+        },
+        "save": {
+          "title": "Save approval",
+          "text": "Keep a digital and printed copy."
+        },
+        "travel": {
+          "title": "Travel",
+          "text": "Carry the same passport you applied with."
+        }
+      },
+      "lead": {
+        "title": "Recommended lead time",
+        "note": "Apply early. Never leave it to the last few days.",
+        "chart": "Recommended lead time before departure",
+        "weeks": "{from} to {to} weeks before departure",
+        "axis12": "12 weeks before",
+        "axis8": "8 weeks",
+        "axis4": "4 weeks",
+        "axis0": "Departure",
+        "ideal": "Ideal window",
+        "risk": "Too close to departure",
+        "items": {
+          "eta": {
+            "name": "ETA, eVisitor or NZeTA",
+            "note": "Ideally 2+ weeks before"
+          },
+          "visa": {
+            "name": "Visitor visa (either country)",
+            "note": "Ideally 8–12 weeks before"
+          }
+        }
+      }
+    },
+    "documents": {
+      "label": "Documents checklist",
+      "eyebrow": "Documents checklist",
+      "title": "Have these ready",
+      "progress": "{done} of {total} ready",
+      "print": "Print or save this checklist",
+      "device": "Saved on this device only.",
+      "empty": "No documents listed yet."
+    },
+    "scams": {
+      "label": "Scams and safety",
+      "eyebrow": "Scams & safety",
+      "title": "Apply only on official government sites or apps.",
+      "i1": "Look-alike websites charge extra fees for the same application. Some never submit it.",
+      "i2": "Be wary of paid middlemen who promise faster or guaranteed approval.",
+      "i3": "Never share a passport scan through chat apps or social media.",
+      "domainTitle": "How to recognise an official domain",
+      "au": "Australia ends in .gov.au",
+      "nz": "New Zealand ends in .govt.nz",
+      "fake": "Not official"
+    },
+    "sources": {
+      "label": "Official sources",
+      "eyebrow": "Official sources",
+      "title": "Go straight to the source",
+      "newTab": "Opens in a new tab",
+      "independent": "TravelAusNZ is an independent travel guide and is not affiliated with any government."
+    },
+    "faq": {
+      "label": "Frequently asked questions",
+      "eyebrow": "FAQ",
+      "title": "Common questions"
+    },
+    "keep": {
+      "label": "Keep planning",
+      "eyebrow": "Keep planning",
+      "prepare": {
+        "title": "Prepare for your trip",
+        "text": "A calm pre-departure checklist, seasons and packing.",
+        "cta": "Open the checklist →"
+      },
+      "money": {
+        "title": "Currency converter",
+        "text": "AUD and NZD in your home currency, with everyday prices.",
+        "cta": "Convert →"
+      },
+      "transport": {
+        "title": "Public transport",
+        "text": "From the airport to the city without a car.",
+        "cta": "Plan a route →"
+      },
+      "notice": "Entry rules change. Always confirm with the official government source before booking or travelling. This page is general guidance, not legal or immigration advice."
+    }
   }
 }

@@ -116,6 +116,29 @@
   }
 }
 
+/* Print (the /visa documents checklist): site chrome off, and always ink on white, whatever the theme. */
+@media print {
+  header,
+  footer,
+  nav {
+    display: none !important;
+  }
+
+  :root,
+  :root.dark,
+  :root:not(.light) {
+    --bg: #fff;
+    --surface: #fff;
+    --ink: #13213A;
+    --ink2: #4A5468;
+    --ink3: #8A92A3;
+    --line: rgba(19,33,58,.3);
+    --line2: rgba(19,33,58,.15);
+    --copper: #9E5229;
+    color-scheme: light;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

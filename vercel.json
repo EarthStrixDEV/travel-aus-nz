@@ -1,6 +1,7 @@
 {
   "crons": [
     { "path": "/api/cron/fx-ingest", "schedule": "0 * * * *" },
-    { "path": "/api/cron/fx-daily", "schedule": "10 0 * * *" }
+    { "path": "/api/cron/fx-daily", "schedule": "10 0 * * *" },
+    { "path": "/api/cron/link-check", "schedule": "0 2 * * *" }
   ]
 }
