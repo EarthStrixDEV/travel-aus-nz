@@ -453,5 +453,139 @@
       "addToTrip": "Add to trip",
       "inTrip": "In your trip"
     }
+  },
+  "money": {
+    "metaTitle": "Money",
+    "metaDescription": "Convert Australian and New Zealand dollars into your own currency, see the rate trend, typical prices and a rough trip budget.",
+    "eyebrow": "Money",
+    "title": "What it costs, in your currency.",
+    "lede": "Australian and New Zealand dollars, translated into the money you think in.",
+    "disclaimer": "Indicative mid-market rates. Not for financial transactions.",
+    "placeholder": "Placeholder",
+    "converter": {
+      "label": "Currency converter",
+      "target": "Target currency",
+      "both": "Both",
+      "quickLabel": "Quick amounts",
+      "quick": "Quick",
+      "have": "You have",
+      "get": "You get",
+      "amount": "Amount you have",
+      "home": "Home currency",
+      "swap": "Swap currencies",
+      "midMarket": "Mid-market rate. Your bank or card will add a margin.",
+      "rateLine": "1 AUD = {aud} · 1 NZD = {nzd} · Updated {updated}",
+      "shortRate": "1 AUD = {aud}",
+      "loading": "Loading rates",
+      "unavailable": "Rates unavailable.",
+      "retry": "Try again",
+      "errorTitle": "We couldn't load today's rates.",
+      "errorText": "Check your connection and try again. Prices on this page use the last saved rates from {date}."
+    },
+    "currency": {
+      "AUD": "Australian dollar",
+      "NZD": "New Zealand dollar",
+      "USD": "US dollar",
+      "THB": "Thai baht",
+      "EUR": "Euro",
+      "GBP": "British pound",
+      "JPY": "Japanese yen",
+      "SGD": "Singapore dollar",
+      "CNY": "Chinese yuan"
+    },
+    "cross": {
+      "eyebrow": "Travelling to both",
+      "title": "AUD ↔ NZD cross rate",
+      "text": "For the Tasman crossing. Convert what's left before you fly.",
+      "audToNzd": "1 AUD = {rate} NZD",
+      "nzdToAud": "1 NZD = {rate} AUD",
+      "quick": "Quick conversions, Australian to New Zealand dollars"
+    },
+    "trend": {
+      "label": "Rate trend",
+      "eyebrow": "Rate trend",
+      "title": "{pair} in {home}",
+      "pair": "Currency pair",
+      "period": "Period",
+      "range": {
+        "7d": "7D",
+        "1m": "1M",
+        "3m": "3M",
+        "1y": "1Y"
+      },
+      "rangeName": {
+        "7d": "7 days",
+        "1m": "1 month",
+        "3m": "3 months",
+        "1y": "1 year"
+      },
+      "now": "Now",
+      "change": "Change",
+      "high": "High",
+      "low": "Low",
+      "chart": "{pair} to {home} over {range}. Now {now}, change {change}, high {high}, low {low}.",
+      "loading": "Loading chart",
+      "error": "We couldn't load the rate history.",
+      "empty": "No rate history yet."
+    },
+    "cost": {
+      "label": "What things cost",
+      "eyebrow": "Reference",
+      "title": "What things cost",
+      "sub": "Typical city prices, {month} · converted to {home} live",
+      "item": "Item",
+      "australia": "Australia",
+      "newZealand": "New Zealand",
+      "inHome": "in {home}"
+    },
+    "budget": {
+      "label": "Budget helper",
+      "eyebrow": "Budget helper",
+      "title": "Roughly how much per trip?",
+      "text": "Per person, including stays, food and local transport. Flights not included.",
+      "length": "Trip length",
+      "days": "{n} days",
+      "style": "Daily style",
+      "styleLabel": "Spending style",
+      "styles": {
+        "budget": "Budget",
+        "comfortable": "Comfortable",
+        "luxury": "Luxury"
+      },
+      "inAu": "In Australia",
+      "inNz": "In New Zealand",
+      "perDay": "{amount} a day",
+      "approx": "≈ {amount}"
+    },
+    "tips": {
+      "label": "Money tips",
+      "eyebrow": "Money tips",
+      "title": "Paying, calmly",
+      "card": {
+        "title": "Tap almost everywhere",
+        "text": "Cards and phone wallets are accepted nearly everywhere, from cafés to city transit."
+      },
+      "cash": {
+        "title": "Cash is rarely needed",
+        "text": "Carry a little for markets and remote areas. Some cafés now refuse cash entirely."
+      },
+      "tipping": {
+        "title": "Tipping isn't expected",
+        "text": "Staff earn a full wage. Rounding up for great service is welcome, never required."
+      },
+      "fees": {
+        "title": "Check foreign fees",
+        "text": "Many cards add 2–3% per purchase. When asked, always pay in the local currency."
+      },
+      "atm": {
+        "title": "Use ATMs inside banks",
+        "text": "Bank-branch ATMs are safer and usually cheaper than standalone machines."
+      },
+      "gst": {
+        "title": "GST refund, Australia only",
+        "text": "Spend A$300+ with one shop within 60 days of departure, then claim via the TRS at the airport."
+      },
+      "notice": "Rates shown are indicative mid-market rates for planning only and are not an offer to exchange currency. They are not suitable for financial transactions. Prices are typical examples and vary by city and season."
+    }
   }
 }

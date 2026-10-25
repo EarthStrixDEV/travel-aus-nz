@@ -6,6 +6,7 @@ export type ApiErrorCode =
   | 'FORBIDDEN'
   | 'NOT_FOUND'
   | 'RATE_LIMITED'
+  | 'FX_UNAVAILABLE'
   | 'INTERNAL';
 
 export function apiError(code: ApiErrorCode, message: string, status: number): NextResponse {
