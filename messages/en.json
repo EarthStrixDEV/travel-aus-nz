@@ -43,5 +43,19 @@
     "acknowledgement": "We acknowledge the Traditional Custodians of the lands and waters across Australia, and Māori as tangata whenua of Aotearoa New Zealand.",
     "copyright": "© 2026 TravelAusNZ",
     "prices": "Prices in AUD / NZD, indicative"
+  },
+  "auth": {
+    "eyebrow": "Sign in",
+    "title": "Welcome back",
+    "lede": "Save your trips and picks across devices. No password needed.",
+    "email": "Email",
+    "sendLink": "Email me a sign-in link",
+    "sending": "Sending…",
+    "or": "or",
+    "google": "Continue with Google",
+    "apple": "Continue with Apple",
+    "checkEmail": "Check your inbox. We sent a sign-in link to {email}.",
+    "error": "We couldn’t sign you in. Please try again.",
+    "sendFailed": "Something went wrong. Please try again."
   }
 }
