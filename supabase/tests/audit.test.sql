@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap;
-select plan(16);
+select plan(19);
 
 -- Triggers present on every status table
 select has_trigger('public'::name, 'cities'::name,              'cities_audit'::name);
@@ -70,6 +70,24 @@ select ok(
   not has_function_privilege('authenticated', 'public.audit_content()', 'execute')
   and not has_function_privilege('anon', 'public.audit_content()', 'execute'),
   'audit_content not executable by anon/authenticated'
+);
+
+-- Account deletion (spec §9): deleting an auth user who is an audit actor succeeds
+-- and nulls the actor instead of blocking on the FK.
+set local request.jwt.claims = '';
+select lives_ok(
+  $$ delete from auth.users where id = '00000000-0000-0000-0000-0000000005e1' $$,
+  'deleting an auth user who is an audit actor succeeds'
+);
+select results_eq(
+  $$ select count(*)::int from public.audit_log where actor = '00000000-0000-0000-0000-0000000005e1' $$,
+  array[0], 'no audit rows reference the deleted user'
+);
+select results_eq(
+  $$ select actor is null from public.audit_log
+     where row_id = '00000000-0000-0000-0000-00000000f001' and action = 'UPDATE'
+     order by id limit 1 $$,
+  array[true], 'editor UPDATE audit row kept with actor nulled'
 );
 
 select * from finish();

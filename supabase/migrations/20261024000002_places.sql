@@ -13,7 +13,7 @@ create table places (
   cover_media_id uuid references media_assets,
   is_closed boolean not null default false,
   status content_status not null default 'draft',
-  updated_by uuid references profiles,
+  updated_by uuid references profiles on delete set null,
   updated_at timestamptz not null default now()
 );
 create index places_geom_gix on places using gist (geom);
@@ -54,13 +54,15 @@ create table collection_items (
 );
 
 create or replace function is_open_now(p_place uuid, p_at timestamptz)
-returns boolean language sql stable as $$
+returns boolean language sql stable
+set search_path = ''
+as $$
   with t as (
     select (p_at at time zone c.timezone) as local
-    from places p join cities c on c.id = p.city_id where p.id = p_place
+    from public.places p join public.cities c on c.id = p.city_id where p.id = p_place
   )
   select exists (
-    select 1 from place_hours h, t
+    select 1 from public.place_hours h, t
     where h.place_id = p_place and (
       (h.close_time > h.open_time and h.weekday = extract(dow from t.local)
         and t.local::time between h.open_time and h.close_time)

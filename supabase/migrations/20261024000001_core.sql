@@ -56,7 +56,7 @@ create table audit_log (
   id bigserial primary key,
   table_name text not null, row_id text not null,
   action text not null, diff jsonb,
-  actor uuid references profiles, at timestamptz default now()
+  actor uuid references profiles on delete set null, at timestamptz default now()
 );
 
 -- Auto-create a profile row for every new auth user (spec §2.1)

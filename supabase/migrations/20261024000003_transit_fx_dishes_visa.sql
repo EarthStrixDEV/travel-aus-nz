@@ -95,7 +95,7 @@ create table dishes (
   typical_price_local numeric(8,2),
   cover_media_id uuid references media_assets,
   status content_status not null default 'draft',
-  updated_by uuid references profiles,
+  updated_by uuid references profiles on delete set null,
   updated_at timestamptz default now()
 );
 
@@ -146,6 +146,6 @@ create table content_feedback (
   id bigserial primary key,
   entity_type text not null, entity_id text not null,
   kind text check (kind in ('outdated','broken','unclear')),
-  note text, user_id uuid references profiles,
+  note text, user_id uuid references profiles on delete set null,
   created_at timestamptz default now(), resolved boolean default false
 );
