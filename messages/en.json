@@ -56,6 +56,10 @@
     "apple": "Continue with Apple",
     "checkEmail": "Check your inbox. We sent a sign-in link to {email}.",
     "error": "We couldn’t sign you in. Please try again.",
-    "sendFailed": "Something went wrong. Please try again."
+    "sendFailed": "Something went wrong. Please try again.",
+    "rateLimited": "Too many requests. Please wait a few minutes and try again.",
+    "signupDisabled": "Sign-in by email isn’t available right now.",
+    "invalidEmail": "Please enter a valid email address.",
+    "providerDisabled": "This sign-in option isn’t available right now."
   }
 }

@@ -7,7 +7,7 @@ export default async function LoginPage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ error?: string; next?: string }>
+  searchParams: Promise<{ error?: string | string[]; next?: string | string[] }>
 }) {
   const { locale } = await params
   setRequestLocale(locale)

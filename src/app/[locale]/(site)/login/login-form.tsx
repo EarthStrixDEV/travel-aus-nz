@@ -8,6 +8,17 @@ import { createClient } from '@/lib/supabase/browser'
 
 type Provider = 'google' | 'apple'
 
+// Supabase `error.code` -> auth.* message key. Unknown codes fall back to sendFailed.
+const ERROR_KEYS: Record<string, string> = {
+  over_email_send_rate_limit: 'rateLimited',
+  over_request_rate_limit: 'rateLimited',
+  otp_disabled: 'signupDisabled',
+  signup_disabled: 'signupDisabled',
+  email_address_invalid: 'invalidEmail',
+  validation_failed: 'invalidEmail',
+  provider_disabled: 'providerDisabled',
+}
+
 export function LoginForm({ next }: { next: string }) {
   const t = useTranslations('auth')
   const [busy, setBusy] = useState<'email' | 'oauth' | null>(null)
@@ -15,6 +26,11 @@ export function LoginForm({ next }: { next: string }) {
   const [sentTo, setSentTo] = useState<string | null>(null)
   const [emailError, setEmailError] = useState<string>()
   const [oauthError, setOauthError] = useState<string>()
+
+  const errorText = (error: { code?: string }) => {
+    const key = error.code ? ERROR_KEYS[error.code] : undefined
+    return t((key ?? 'sendFailed') as 'sendFailed')
+  }
 
   // `next` was sanitised server-side; encode it so it stays one query value.
   const redirectTo = () => `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`
@@ -30,7 +46,7 @@ export function LoginForm({ next }: { next: string }) {
         email,
         options: { emailRedirectTo: redirectTo() },
       })
-      if (error) setEmailError(error.message || t('sendFailed'))
+      if (error) setEmailError(errorText(error))
       else setSentTo(email)
     } catch {
       setEmailError(t('sendFailed'))
@@ -49,7 +65,7 @@ export function LoginForm({ next }: { next: string }) {
         options: { redirectTo: redirectTo() },
       })
       if (error) {
-        setOauthError(error.message || t('sendFailed'))
+        setOauthError(errorText(error))
         setBusy(null)
       }
       // On success the browser navigates away to the provider; keep buttons disabled.
@@ -72,7 +88,7 @@ export function LoginForm({ next }: { next: string }) {
               {busy === 'email' ? t('sending') : t('sendLink')}
             </Button>
           </form>
-          <div className="my-6 flex items-center gap-4 text-ink-3">
+          <div className="my-6 flex items-center gap-4 text-ink-2">
             <span className="h-px flex-1 bg-line" />
             <span className="eyebrow">{t('or')}</span>
             <span className="h-px flex-1 bg-line" />

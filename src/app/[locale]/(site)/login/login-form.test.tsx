@@ -25,6 +25,14 @@ beforeEach(() => vi.clearAllMocks())
 afterEach(cleanup)
 
 describe('LoginForm', () => {
+  it('unknown error code falls back to the generic message, never the raw text', async () => {
+    signInWithOtp.mockResolvedValue({ error: { code: 'weird', message: 'RAW BACKEND TEXT' } })
+    renderForm()
+    await userEvent.setup().type(screen.getByLabelText('Email'), 'a@b.co{Enter}')
+    expect(await screen.findByText(en.auth.sendFailed)).toBeInTheDocument()
+    expect(screen.queryByText('RAW BACKEND TEXT')).not.toBeInTheDocument()
+  })
+
   it('sends a magic link with an encoded callback redirect, then shows the check-email text', async () => {
     signInWithOtp.mockResolvedValue({ error: null })
     renderForm('/th/admin?tab=2')
@@ -41,11 +49,11 @@ describe('LoginForm', () => {
   })
 
   it('send failure surfaces on the email field and keeps the form', async () => {
-    signInWithOtp.mockResolvedValue({ error: { message: 'Rate limit hit' } })
+    signInWithOtp.mockResolvedValue({ error: { code: 'over_email_send_rate_limit', message: 'email rate limit exceeded' } })
     renderForm()
     await userEvent.setup().type(screen.getByLabelText('Email'), 'a@b.co{Enter}')
-    expect(await screen.findByText('Rate limit hit')).toBeInTheDocument()
-    expect(screen.getByLabelText('Email')).toHaveAccessibleDescription('Rate limit hit')
+    expect(await screen.findByText(en.auth.rateLimited)).toBeInTheDocument()
+    expect(screen.getByLabelText('Email')).toHaveAccessibleDescription(en.auth.rateLimited)
     expect(screen.getByRole('button', { name: 'Email me a sign-in link' })).toBeEnabled()
   })
 
@@ -72,10 +80,10 @@ describe('LoginForm', () => {
   })
 
   it('OAuth error is shown and buttons re-enable', async () => {
-    signInWithOAuth.mockResolvedValue({ error: { message: 'Provider disabled' } })
+    signInWithOAuth.mockResolvedValue({ error: { code: 'provider_disabled', message: 'Unsupported provider: provider is not enabled' } })
     renderForm()
     await userEvent.setup().click(screen.getByRole('button', { name: 'Continue with Apple' }))
-    expect(await screen.findByRole('alert')).toHaveTextContent('Provider disabled')
+    expect(await screen.findByRole('alert')).toHaveTextContent(en.auth.providerDisabled)
     expect(screen.getByRole('button', { name: 'Continue with Apple' })).toBeEnabled()
   })
 })
