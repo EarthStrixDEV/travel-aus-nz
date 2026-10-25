@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useId, useRef, useState, type KeyboardEvent } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { Link } from '@/i18n/navigation'
+import { Link, usePathname as useLocalePathname } from '@/i18n/navigation'
 import { Button, buttonClass, IconButton } from '@/components/ui/button'
 import { useAuth } from '@/components/auth/auth-provider'
 import { createClient } from '@/lib/supabase/browser'
@@ -34,8 +34,11 @@ function AccountMenuInner({ inline }: { inline: boolean }) {
   const { user, ready } = useAuth()
   const pathname = usePathname()
   const search = useSearchParams().toString()
+  const onLogin = useLocalePathname() === '/login'
 
   if (!ready) return <Placeholder inline={inline} />
+  // Already on the login page: a Sign in link would nest it in `next`.
+  if (!user && onLogin) return inline ? null : <Placeholder inline={false} />
   if (!user) {
     return (
       <Link href={loginHref(pathname, search)} className={`${buttonClass('ghost')} whitespace-nowrap`}>
@@ -135,7 +138,8 @@ function AccountItems({ email, userId }: { email: string; userId: string }) {
 
 /** Own profile role via the browser client (`profile_select_self` RLS); null until known. */
 function useRole(userId: string): Role | null {
-  const [role, setRole] = useState<Role | null>(null)
+  // Keyed by user so a user switch never shows the previous user's role.
+  const [loaded, setLoaded] = useState<{ userId: string; role: Role } | null>(null)
   useEffect(() => {
     let active = true
     createClient()
@@ -144,11 +148,11 @@ function useRole(userId: string): Role | null {
       .eq('id', userId)
       .maybeSingle()
       .then(({ data }) => {
-        if (active) setRole((data?.role as Role | undefined) ?? 'user')
+        if (active) setLoaded({ userId, role: (data?.role as Role | undefined) ?? 'user' })
       })
     return () => {
       active = false
     }
   }, [userId])
-  return role
+  return loaded?.userId === userId ? loaded.role : null
 }

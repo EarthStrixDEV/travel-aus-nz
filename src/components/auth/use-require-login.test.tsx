@@ -9,6 +9,8 @@ import { LoginRequiredDialogProvider } from './login-required-dialog'
 import { useRequireLogin } from './use-require-login'
 
 const auth = vi.hoisted(() => ({ value: { user: null as { id: string } | null, ready: true } }))
+const nav = vi.hoisted(() => ({ pathname: '/th/map' }))
+vi.mock('next/navigation', () => ({ usePathname: () => nav.pathname }))
 vi.mock('./auth-provider', () => ({ useAuth: () => auth.value }))
 vi.mock('@/i18n/navigation', () => ({
   Link: (props: ComponentProps<'a'>) => <a {...props} />,
@@ -29,6 +31,7 @@ afterEach(() => {
   cleanup()
   auth.value = { user: null, ready: true }
   window.history.pushState({}, '', '/')
+  nav.pathname = '/th/map'
 })
 
 function Probe({ action }: { action: () => void }) {
@@ -82,6 +85,23 @@ describe('useRequireLogin', () => {
     const action = vi.fn()
     fireEvent.click(setup(action))
     expect(action).not.toHaveBeenCalled()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('closes the open dialog when the route changes (e.g. after following Sign in)', () => {
+    const view = () => (
+      <NextIntlClientProvider locale="en" messages={en}>
+        <LoginRequiredDialogProvider>
+          <Probe action={vi.fn()} />
+        </LoginRequiredDialogProvider>
+      </NextIntlClientProvider>
+    )
+    window.history.pushState({}, '', '/th/map?x=1')
+    const { rerender } = render(view())
+    fireEvent.click(screen.getByRole('button', { name: 'go' }))
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    nav.pathname = '/th/login'
+    rerender(view())
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 })

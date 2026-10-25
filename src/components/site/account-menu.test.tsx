@@ -2,11 +2,12 @@
 import '@testing-library/jest-dom/vitest'
 import type { ComponentProps } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { NextIntlClientProvider } from 'next-intl'
 import en from '../../../messages/en.json'
 import { AccountMenu } from './account-menu'
 
+const route = vi.hoisted(() => ({ locale: '/map' }))
 const auth = vi.hoisted(() => ({
   value: { user: null as { id: string; email: string } | null, ready: true },
 }))
@@ -22,12 +23,14 @@ vi.mock('next/navigation', () => ({
 }))
 vi.mock('@/i18n/navigation', () => ({
   Link: (props: ComponentProps<'a'>) => <a {...props} />,
+  usePathname: () => route.locale,
 }))
 
 afterEach(() => {
   cleanup()
   auth.value = { user: null, ready: true }
   maybeSingle.mockReset()
+  route.locale = '/map'
 })
 
 const renderMenu = (props: ComponentProps<typeof AccountMenu> = {}) =>
@@ -51,6 +54,12 @@ describe('AccountMenu', () => {
     expect(container.firstElementChild).toHaveAttribute('aria-hidden', 'true')
   })
 
+  it('guest on the login page: no Sign in link (would nest next)', () => {
+    route.locale = '/login'
+    renderMenu()
+    expect(screen.queryByRole('link', { name: 'Sign in' })).not.toBeInTheDocument()
+  })
+
   it('guest: Sign in link carrying next', () => {
     renderMenu()
     const link = screen.getByRole('link', { name: 'Sign in' })
@@ -69,8 +78,11 @@ describe('AccountMenu', () => {
     const form = signOut.closest('form')!
     expect(form).toHaveAttribute('method', 'post')
     expect(form).toHaveAttribute('action', '/auth/sign-out')
-    await waitFor(() => expect(maybeSingle).toHaveBeenCalled())
-    await Promise.resolve()
+    // Flush the role query so the absence below is checked after it resolved.
+    await act(async () => {
+      await maybeSingle.mock.results[0].value
+    })
+    expect(maybeSingle).toHaveBeenCalledTimes(1)
     expect(screen.queryByRole('link', { name: 'Admin' })).not.toBeInTheDocument()
   })
 

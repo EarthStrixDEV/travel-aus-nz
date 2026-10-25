@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { usePathname } from '@/i18n/navigation'
 import { IconButton } from '@/components/ui/button'
@@ -17,7 +17,17 @@ export function MobileMenu() {
   const triggerRef = useRef<HTMLButtonElement>(null)
   const dialogRef = useRef<HTMLDialogElement>(null)
 
+  const closedByNavigation = useRef(false)
+
   const close = () => dialogRef.current?.close()
+
+  // Any navigation (nav link, inline Sign in, future links) closes the menu; focus stays with the new page.
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog?.open) return
+    closedByNavigation.current = true
+    dialog.close()
+  }, [pathname])
 
   return (
     <>
@@ -34,7 +44,10 @@ export function MobileMenu() {
       <dialog
         ref={dialogRef}
         aria-label={t('menu.label')}
-        onClose={() => triggerRef.current?.focus()}
+        onClose={() => {
+          if (closedByNavigation.current) closedByNavigation.current = false
+          else triggerRef.current?.focus()
+        }}
         className="m-0 h-dvh max-h-none w-full max-w-none flex-col gap-8 bg-bg px-[clamp(16px,4vw,56px)] pb-10 text-ink open:flex backdrop:bg-deep/40"
       >
         <div className="flex h-16 shrink-0 items-center justify-end border-b border-line-2">
