@@ -50,6 +50,102 @@
     "copyright": "© 2026 TravelAusNZ",
     "prices": "Prices in AUD / NZD, indicative"
   },
+  "home": {
+    "hero": {
+      "carousel": "Featured destinations",
+      "section": "Featured destination",
+      "eyebrow": "Australia & New Zealand · Edited, not aggregated",
+      "titleLine1": "The far south,",
+      "titleLine2": "considered.",
+      "lede": "Places worth the long flight, routes that don't need a car, and tables worth booking ahead.",
+      "slide": "Slide {n} of {total}",
+      "showSlide": "Show slide {n}",
+      "counter": "{current} / {total}",
+      "pause": "Pause slideshow",
+      "play": "Play slideshow"
+    },
+    "search": {
+      "label": "Search destinations",
+      "where": "Where",
+      "wherePlaceholder": "City, region or place",
+      "when": "When",
+      "anyMonth": "Any month",
+      "interests": "Interests",
+      "anyInterest": "Any interest",
+      "submit": "Search",
+      "searching": "Searching…",
+      "tooShort": "Type at least 2 characters.",
+      "noResults": "Nothing matched. Try another name or clear a filter.",
+      "failed": "Search isn't available right now. Please try again.",
+      "rateLimited": "Too many searches. Please wait a moment.",
+      "results": "Search results",
+      "clear": "Clear results",
+      "kind": {
+        "place": "Place",
+        "region": "Region",
+        "journey": "Journey"
+      }
+    },
+    "regions": {
+      "eyebrow": "Featured regions",
+      "list": "Regions",
+      "chooseCountry": "Choose country",
+      "au": "Australia",
+      "nz": "New Zealand",
+      "best": "Best {range}",
+      "empty": "Regions are coming soon."
+    },
+    "journeys": {
+      "section": "Curated journeys",
+      "eyebrow": "Curated journeys",
+      "title": "Itineraries that move at the right speed",
+      "all": "All journeys",
+      "from": "From <b>{price}</b> pp",
+      "view": "View journey →"
+    },
+    "carFree": {
+      "section": "Car-free travel",
+      "eyebrow": "Public transport, first class",
+      "title": "Car-free, by design.",
+      "body": "Every place we feature lists its nearest stop. Every journey shows the train, tram, bus or ferry that gets you there, with fares, frequency and the transit card you'll need.",
+      "plan": "Plan a route",
+      "map": "Open the map",
+      "route": "Route",
+      "fareFrom": "From {price}",
+      "legend": "Line styles",
+      "rail": "Rail",
+      "bus": "Bus / coach",
+      "ferry": "Ferry",
+      "durationHm": "{h} h {mm}",
+      "durationM": "{m} min"
+    },
+    "dining": {
+      "section": "Where to eat and drink now",
+      "all": "The full catalogue",
+      "free": "Free",
+      "priceLevel": "Price level {n} of 4",
+      "save": "Save {name}",
+      "unsave": "Remove {name} from saved",
+      "list": "Venues"
+    },
+    "mode": {
+      "train": "Rail",
+      "metro": "Metro",
+      "tram": "Tram",
+      "bus": "Bus",
+      "coach": "Coach",
+      "ferry": "Ferry",
+      "walk": "Walk"
+    },
+    "placeType": {
+      "attraction": "Attraction",
+      "restaurant": "Restaurant",
+      "bar": "Bar",
+      "cafe": "Café",
+      "station": "Station",
+      "village": "Village"
+    }
+  },
   "auth": {
     "eyebrow": "Sign in",
     "title": "Welcome back",

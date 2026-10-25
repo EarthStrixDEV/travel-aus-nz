@@ -2221,6 +2221,21 @@ export type Database = {
         }
         Returns: Json
       }
+      search_content: {
+        Args: {
+          p_interests?: string[]
+          p_locale: string
+          p_month?: number
+          p_region?: string
+          q: string
+        }
+        Returns: {
+          kind: string
+          name: string
+          slug: string
+          sub: string
+        }[]
+      }
     }
     Enums: {
       content_status: "draft" | "published" | "archived"
