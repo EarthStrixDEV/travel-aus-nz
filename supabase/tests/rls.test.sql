@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap;
-select plan(26);
+select plan(32);
 
 -- Fixtures (as the connecting role, before any impersonation).
 -- a1 = user A, b1 = user B, e1 = editor. Profiles are created by on_auth_user_created.
@@ -14,6 +14,23 @@ insert into public.places (id, city_id, slug, type, name_i18n, geom, status) val
   ('00000000-0000-0000-0000-00000000d001', (select id from public.cities where slug = 'sydney'), 'rls-published', 'cafe', '{"en":"Pub"}',   'SRID=4326;POINT(151.2 -33.8)', 'published'),
   ('00000000-0000-0000-0000-00000000d002', (select id from public.cities where slug = 'sydney'), 'rls-draft',     'cafe', '{"en":"Draft"}', 'SRID=4326;POINT(151.2 -33.8)', 'draft');
 
+-- Children of published (…01) vs draft (…02) parents
+insert into public.place_hours (place_id, weekday, open_time, close_time) values
+  ('00000000-0000-0000-0000-00000000d001', 1, '09:00', '17:00'),
+  ('00000000-0000-0000-0000-00000000d002', 1, '09:00', '17:00');
+insert into public.collections (id, slug, kind, title_i18n, status) values
+  ('00000000-0000-0000-0000-00000000c701', 'rls-col-pub',   'place', '{"en":"P"}', 'published'),
+  ('00000000-0000-0000-0000-00000000c702', 'rls-col-draft', 'place', '{"en":"D"}', 'draft');
+insert into public.collection_items (collection_id, entity_type, entity_id, position, note_i18n) values
+  ('00000000-0000-0000-0000-00000000c701', 'place', '00000000-0000-0000-0000-00000000d001', 1, '{"en":"pub note"}'),
+  ('00000000-0000-0000-0000-00000000c702', 'place', '00000000-0000-0000-0000-00000000d001', 1, '{"en":"secret note"}');
+insert into public.dishes (id, slug, country, name_i18n, status) values
+  ('00000000-0000-0000-0000-00000000a701', 'rls-dish-pub',   'AU', '{"en":"P"}', 'published'),
+  ('00000000-0000-0000-0000-00000000a702', 'rls-dish-draft', 'AU', '{"en":"D"}', 'draft');
+insert into public.dish_venues (dish_id, place_id, editor_note_i18n) values
+  ('00000000-0000-0000-0000-00000000a701', '00000000-0000-0000-0000-00000000d001', '{"en":"pub"}'),
+  ('00000000-0000-0000-0000-00000000a702', '00000000-0000-0000-0000-00000000d001', '{"en":"secret"}');
+
 insert into public.trips (id, user_id, title) values
   ('00000000-0000-0000-0000-00000000e0b1', '00000000-0000-0000-0000-0000000004b1', 'B trip');
 
@@ -23,10 +40,8 @@ values ('AUD', 'THB', 23.5, 'test', '2026-10-24 00:00Z');
 -- Structure
 select is_empty(
   $$ select c.relname from pg_class c join pg_namespace n on n.oid = c.relnamespace
-     where n.nspname = 'public' and c.relkind = 'r' and not c.relrowsecurity
-       and not exists (select 1 from pg_depend d
-                       where d.classid = 'pg_class'::regclass and d.objid = c.oid and d.deptype = 'e') $$,
-  'every public table has RLS (extension-owned tables such as spatial_ref_sys excluded)'
+     where n.nspname = 'public' and c.relkind in ('r','p') and not c.relrowsecurity $$,
+  'every public table has RLS'
 );
 select is_empty(
   $$ select tablename from pg_policies where schemaname = 'public'
@@ -55,6 +70,30 @@ select throws_ok(
 select results_eq($$ select count(*)::int from public.fx_rates $$, array[0], 'anon sees zero fx_rates rows');
 select results_eq($$ select count(*)::int from public.regions $$, array[3], 'anon can read reference table regions');
 select is(public.is_editor(), false, 'is_editor() callable by anon and false');
+select results_eq(
+  $$ select count(*)::int from public.place_hours where place_id = '00000000-0000-0000-0000-00000000d001' $$,
+  array[1], 'anon sees place_hours of a published place'
+);
+select is_empty(
+  $$ select 1 from public.place_hours where place_id = '00000000-0000-0000-0000-00000000d002' $$,
+  'anon cannot see place_hours of a draft place'
+);
+select results_eq(
+  $$ select count(*)::int from public.collection_items where collection_id = '00000000-0000-0000-0000-00000000c701' $$,
+  array[1], 'anon sees collection_items of a published collection'
+);
+select is_empty(
+  $$ select 1 from public.collection_items where collection_id = '00000000-0000-0000-0000-00000000c702' $$,
+  'anon cannot see collection_items of a draft collection'
+);
+select results_eq(
+  $$ select count(*)::int from public.dish_venues where dish_id = '00000000-0000-0000-0000-00000000a701' $$,
+  array[1], 'anon sees dish_venues of a published dish at a published place'
+);
+select is_empty(
+  $$ select 1 from public.dish_venues where dish_id = '00000000-0000-0000-0000-00000000a702' $$,
+  'anon cannot see dish_venues of a draft dish'
+);
 select is_empty($$ select 1 from public.profiles $$, 'anon sees no profiles');
 reset role;
 

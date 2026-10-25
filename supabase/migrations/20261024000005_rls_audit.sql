@@ -78,7 +78,9 @@ begin
 end $$;
 
 -- ---------------------------------------------------------------------------
--- Reference tables: public read, editor write
+-- Reference tables: editor write; public read is either unconditional or,
+-- for children of status tables, inherited from the parent's RLS (so rows of
+-- draft/archived parents stay hidden from anon/authenticated).
 -- ---------------------------------------------------------------------------
 do $$
 declare t text;
@@ -89,10 +91,30 @@ begin
     'city_climate','currencies','fx_rates_daily','cost_reference_items','dish_categories',
     'dish_venues','official_links','section_links','checklist_templates'
   ] loop
-    execute format('create policy %I on public.%I for select using (true)', t || '_read', t);
     execute format('create policy %I on public.%I for all using ((select public.is_editor())) with check ((select public.is_editor()))', t || '_edit', t);
   end loop;
+
+  foreach t in array array[
+    'regions','tags','media_assets',
+    'transit_agencies','transit_routes','transit_stops','route_stops','transit_cards',
+    'city_climate','currencies','fx_rates_daily','cost_reference_items','dish_categories',
+    'official_links','checklist_templates'
+  ] loop
+    execute format('create policy %I on public.%I for select using (true)', t || '_read', t);
+  end loop;
 end $$;
+
+create policy place_hours_read on public.place_hours for select
+  using (exists (select 1 from public.places p where p.id = place_id));
+create policy place_tags_read on public.place_tags for select
+  using (exists (select 1 from public.places p where p.id = place_id));
+create policy collection_items_read on public.collection_items for select
+  using (exists (select 1 from public.collections p where p.id = collection_id));
+create policy dish_venues_read on public.dish_venues for select
+  using (exists (select 1 from public.dishes d where d.id = dish_id)
+     and exists (select 1 from public.places p where p.id = place_id));
+create policy section_links_read on public.section_links for select
+  using (exists (select 1 from public.visa_guide_sections s where s.id = section_id));
 
 -- ---------------------------------------------------------------------------
 -- Owner tables

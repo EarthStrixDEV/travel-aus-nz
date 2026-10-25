@@ -1,6 +1,6 @@
-create extension if not exists postgis;
-create extension if not exists pg_trgm;
-create extension if not exists pgcrypto;
+create extension if not exists postgis  with schema extensions;
+create extension if not exists pg_trgm  with schema extensions;
+create extension if not exists pgcrypto with schema extensions;
 
 create type content_status as enum ('draft','published','archived');
 create type country_code   as enum ('AU','NZ');

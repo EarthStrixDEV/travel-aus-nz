@@ -2,8 +2,8 @@ begin;
 create extension if not exists pgtap;
 select plan(6);
 
-select has_extension('postgis');
-select has_extension('pg_trgm');
+select has_extension('extensions'::name, 'postgis'::name);
+select has_extension('extensions'::name, 'pg_trgm'::name);
 select has_table('public'::name, 'profiles'::name);
 
 insert into auth.users (id, email, raw_user_meta_data)
