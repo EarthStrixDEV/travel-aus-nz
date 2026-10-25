@@ -42,7 +42,7 @@ export default async function LocaleLayout({
   const theme = themeClass(parseThemeCookie((await cookies()).get(THEME_COOKIE)?.value));
 
   return (
-    <html lang={locale} className={theme || undefined}>
+    <html lang={locale} className={theme || undefined} suppressHydrationWarning>
       <body className={`${prompt.variable} ${prompt.className} bg-bg text-ink`}>
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>

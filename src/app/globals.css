@@ -92,6 +92,11 @@
   text-transform: uppercase;
 }
 
+/* Wide tracking detaches Thai vowel/tone marks. Unlayered so it beats the utility. */
+:lang(th) .eyebrow {
+  letter-spacing: .04em;
+}
+
 @layer base {
   body {
     font-weight: 300;
@@ -102,6 +107,12 @@
   :focus-visible {
     outline: 2px solid var(--copper);
     outline-offset: 2px;
+  }
+
+  /* Copper on --deep is under 3:1 in light mode (WCAG 1.4.11). */
+  .bg-deep :focus-visible,
+  .bg-deep:focus-visible {
+    outline-color: var(--on-deep);
   }
 }
 

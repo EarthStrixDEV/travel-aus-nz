@@ -31,7 +31,11 @@
   "locale": {
     "label": "Language",
     "th": "ภาษาไทย",
-    "en": "English"
+    "en": "English",
+    "code": {
+      "th": "TH",
+      "en": "EN"
+    }
   },
   "footer": {
     "explore": "Explore",
