@@ -4,6 +4,9 @@ import { blurDataUrl, IMAGE_WIDTHS, imageSizes, mediaPath } from './path'
 it('builds bucket key', () =>
   expect(mediaPath('places', 'abc', 'f00')).toBe('places/abc/f00.webp'))
 
+it('keeps the original file extension when given', () =>
+  expect(mediaPath('assets', 'abc', 'f00', 'jpg')).toBe('assets/abc/f00.jpg'))
+
 describe('image sizes', () => {
   it('serves 480 / 960 / 1920 only', () => expect(IMAGE_WIDTHS).toEqual([480, 960, 1920]))
 

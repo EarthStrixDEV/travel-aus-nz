@@ -494,7 +494,7 @@
       "newTitle": "Upload image",
       "editTitle": "Edit media",
       "file": "Image file",
-      "fileHint": "JPEG, PNG, WebP or AVIF, up to 10 MB. Stored as WebP with a blur placeholder.",
+      "fileHint": "JPEG, PNG, WebP or AVIF, up to 10 MB. The original file is stored unchanged; a blur placeholder is generated.",
       "credit": "Credit",
       "license": "License",
       "alt": "Alt text",
@@ -542,7 +542,6 @@
       "fileRequired": "Choose an image to upload.",
       "fileType": "Use a JPEG, PNG, WebP or AVIF image.",
       "fileTooLarge": "The image must be 10 MB or smaller.",
-      "fileUnreadable": "This file couldn’t be read as an image.",
       "uploadFailed": "Couldn’t upload the image. Please try again."
     }
   },

@@ -18,13 +18,12 @@ describe('mediaAssetSchema', () => {
 
 describe('checkUpload', () => {
   const file = (type: string, size: number) => new File([new Uint8Array(size)], 'x', { type })
-  it('accepts JPEG, PNG, WebP and AVIF within the size cap', () => {
-    for (const type of ['image/jpeg', 'image/png', 'image/webp', 'image/avif']) expect(checkUpload(file(type, 10))).toBeNull()
+  it('accepts a non-empty file within the size cap (format is checked from the bytes later)', () => {
+    expect(checkUpload(file('image/jpeg', 10))).toBeNull()
   })
-  it('rejects a missing/empty file, other types and oversized files', () => {
+  it('rejects a missing/empty file and oversized files', () => {
     expect(checkUpload(null)).toBe('fileRequired')
     expect(checkUpload(file('image/jpeg', 0))).toBe('fileRequired')
-    expect(checkUpload(file('image/svg+xml', 10))).toBe('fileType')
     expect(checkUpload(file('image/jpeg', MAX_UPLOAD_BYTES + 1))).toBe('fileTooLarge')
   })
 })

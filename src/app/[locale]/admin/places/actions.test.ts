@@ -9,7 +9,7 @@ const { requireRole, createClient, revalidateTag, calls, results } = vi.hoisted(
   function builder(table: string) {
     let op = 'select'
     const b: Record<string, unknown> = {}
-    for (const m of ['select', 'upsert', 'insert', 'update', 'delete', 'eq', 'in', 'single', 'maybeSingle']) {
+    for (const m of ['select', 'upsert', 'insert', 'update', 'delete', 'eq', 'in', 'match', 'single', 'maybeSingle']) {
       b[m] = (...args: unknown[]) => {
         if (['upsert', 'insert', 'update', 'delete'].includes(m)) op = m
         calls.push({ table, op: m, args })
@@ -95,15 +95,21 @@ describe('savePlace', () => {
       geom: 'SRID=4326;POINT(151.2 -33.8)',
       status: 'published',
     })
-    expect(calls.find((c) => c.table === 'place_hours' && c.op === 'insert')!.args[0]).toEqual([
-      { place_id: ID, weekday: 1, open_time: '11:00', close_time: '21:30' },
+    const upsertOf = (table: string) => calls.find((c) => c.table === table && c.op === 'upsert')!.args
+    expect(upsertOf('place_hours')).toEqual([
+      [{ place_id: ID, weekday: 1, open_time: '11:00', close_time: '21:30' }],
+      { onConflict: 'place_id,weekday,open_time' },
     ])
-    expect(calls.find((c) => c.table === 'place_tags' && c.op === 'insert')!.args[0]).toEqual([{ place_id: ID, tag_id: 3 }])
-    expect(calls.find((c) => c.table === 'place_stop_links' && c.op === 'insert')!.args[0]).toEqual([
-      { place_id: ID, stop_id: 7, rank: 1, walk_min: 4 },
+    expect(upsertOf('place_tags')).toEqual([[{ place_id: ID, tag_id: 3 }], { onConflict: 'place_id,tag_id' }])
+    expect(upsertOf('place_stop_links')).toEqual([
+      [{ place_id: ID, stop_id: 7, rank: 1, walk_min: 4 }],
+      { onConflict: 'place_id,stop_id' },
     ])
-    expect(calls.find((c) => c.table === 'venues' && c.op === 'upsert')!.args[0]).toMatchObject({ place_id: ID, booking: 'walk_in' })
-    expect(calls.find((c) => c.table === 'venue_drinks' && c.op === 'insert')!.args[0]).toEqual([{ place_id: ID, drink: 'beer' }])
+    expect((upsertOf('place_stop_links')[0] as object[])[0]).not.toHaveProperty('walk_geom')
+    expect(upsertOf('venues')[0]).toMatchObject({ place_id: ID, booking: 'walk_in' })
+    expect(upsertOf('venue_drinks')).toEqual([[{ place_id: ID, drink: 'beer' }], { onConflict: 'place_id,drink' }])
+    // Nothing existed before, so nothing is deleted.
+    expect(calls.some((c) => c.op === 'delete')).toBe(false)
 
     expect(tags()).toEqual(['home', 'map', 'venues'])
   })
@@ -135,10 +141,40 @@ describe('savePlace', () => {
     expect(revalidateTag).not.toHaveBeenCalled()
   })
 
-  it('a child-table failure after the place write -> error, but caches still revalidate', async () => {
-    results['place_tags.insert'] = { data: null, error: { code: '42501', message: 'rls' } }
-    expect(await savePlace(ID, form())).toEqual({ error: 'errors.forbidden' })
+  it('a failing child upsert leaves existing rows untouched and skips revalidation', async () => {
+    results['place_tags.select'] = { data: [{ tag_id: 3 }, { tag_id: 9 }], error: null }
+    results['place_tags.upsert'] = { data: null, error: { code: '23503', message: 'fk' } }
+    expect(await savePlace(ID, form())).toEqual({ error: 'errors.reference' })
+    expect(calls.some((c) => c.table === 'place_tags' && c.op === 'delete')).toBe(false)
+    // Later child tables are not touched either.
+    expect(calls.some((c) => c.table === 'place_stop_links')).toBe(false)
+    expect(revalidateTag).not.toHaveBeenCalled()
+  })
+
+  it('after a successful upsert, deletes only the rows no longer in the set', async () => {
+    results['place_tags.select'] = { data: [{ tag_id: 3 }, { tag_id: 9 }], error: null }
+    // DB returns HH:MM:SS; the kept 11:00 interval must not be mistaken for a stale row.
+    results['place_hours.select'] = {
+      data: [
+        { weekday: 1, open_time: '11:00:00' },
+        { weekday: 3, open_time: '09:00:00' },
+      ],
+      error: null,
+    }
+    expect(await savePlace(ID, form())).toEqual({})
+    const deletes = (table: string) => calls.filter((c) => c.table === table && c.op === 'match').map((c) => c.args[0])
+    expect(deletes('place_tags')).toEqual([{ place_id: ID, tag_id: 9 }])
+    expect(deletes('place_hours')).toEqual([{ place_id: ID, weekday: 3, open_time: '09:00:00' }])
+    const order = (table: string, op: string) => calls.findIndex((c) => c.table === table && c.op === op)
+    expect(order('place_tags', 'upsert')).toBeLessThan(order('place_tags', 'delete'))
     expect(tags()).toEqual(['home', 'map', 'venues'])
+  })
+
+  it('a failing stale-row delete -> error, no revalidation', async () => {
+    results['place_tags.select'] = { data: [{ tag_id: 9 }], error: null }
+    results['place_tags.delete'] = { data: null, error: { code: '42501', message: 'rls' } }
+    expect(await savePlace(ID, form())).toEqual({ error: 'errors.forbidden' })
+    expect(revalidateTag).not.toHaveBeenCalled()
   })
 
   it('a malformed id is rejected before the DB', async () => {

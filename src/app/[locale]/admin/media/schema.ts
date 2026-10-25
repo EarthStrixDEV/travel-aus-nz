@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { i18nRequired } from '../_lib/form'
 
 export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+/** For the file input's `accept` hint only; the server checks the decoded format. */
 export const UPLOAD_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'] as const
 
 /** Credit and license are required on every asset: published content may only show licensed media. */
@@ -11,10 +12,12 @@ export const mediaAssetSchema = z.object({
   ...i18nRequired('alt'),
 })
 
-/** The uploaded file's problem as an `admin.errors.*` key, or null when acceptable. */
-export function checkUpload(file: File | null): 'fileRequired' | 'fileType' | 'fileTooLarge' | null {
+/**
+ * Presence and size of the upload as an `admin.errors.*` key, or null when acceptable. The
+ * format is checked from the decoded bytes in `inspectImage`, not from the browser's `file.type`.
+ */
+export function checkUpload(file: File | null): 'fileRequired' | 'fileTooLarge' | null {
   if (!file || file.size === 0) return 'fileRequired'
-  if (!(UPLOAD_TYPES as readonly string[]).includes(file.type)) return 'fileType'
   if (file.size > MAX_UPLOAD_BYTES) return 'fileTooLarge'
   return null
 }

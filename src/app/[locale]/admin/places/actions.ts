@@ -5,7 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import { requireRole } from '@/lib/auth/profile'
 import { CACHE_TAGS } from '@/lib/content/cache'
 import { createClient } from '@/lib/supabase/server'
-import { replaceChildren } from '../_lib/db'
+import { syncChildren, timeKey } from '../_lib/db'
 import { dbError, fieldErrors, formToInput, rows, toI18n, uuidId, type MediaMeta, type SaveResult } from '../_lib/form'
 import { isVenueType, placeSchema } from './schema'
 
@@ -76,9 +76,11 @@ export async function savePlace(id: string | null, formData: FormData): Promise<
   const pid = saved.id
 
   const childError = await saveChildren(supabase, pid, d)
-  // The place row itself changed either way, so public caches must not keep the old one.
+  // Don't publish a half-saved place: existing child rows are untouched on failure, and the
+  // editor's re-save (or the next successful save) revalidates.
+  if (childError) return { error: dbError(childError, t) }
   revalidatePlaces()
-  return childError ? { error: dbError(childError, t) } : {}
+  return {}
 }
 
 type Db = Awaited<ReturnType<typeof createClient>>
@@ -86,16 +88,26 @@ type Parsed = ReturnType<typeof placeSchema.parse>
 
 async function saveChildren(db: Db, pid: string, d: Parsed) {
   const steps = [
-    () => replaceChildren(db, 'place_hours', 'place_id', pid, d.hours.map((h) => ({ place_id: pid, ...h }))),
-    () => replaceChildren(db, 'place_tags', 'place_id', pid, [...new Set(d.tags)].map((tag_id) => ({ place_id: pid, tag_id }))),
     () =>
-      replaceChildren(
-        db,
-        'place_stop_links',
-        'place_id',
-        pid,
-        d.stops.map((s, i) => ({ place_id: pid, stop_id: s.stop_id, rank: i + 1, walk_min: s.walk_min })),
-      ),
+      syncChildren(db, 'place_hours', {
+        parent: ['place_id', pid],
+        keys: ['weekday', 'open_time'],
+        rows: d.hours.map((h) => ({ place_id: pid, ...h })),
+        normalize: { open_time: timeKey },
+      }),
+    () =>
+      syncChildren(db, 'place_tags', {
+        parent: ['place_id', pid],
+        keys: ['tag_id'],
+        rows: [...new Set(d.tags)].map((tag_id) => ({ place_id: pid, tag_id })),
+      }),
+    // Only the columns the form owns: walk_geom (computed elsewhere) must survive an edit.
+    () =>
+      syncChildren(db, 'place_stop_links', {
+        parent: ['place_id', pid],
+        keys: ['stop_id'],
+        rows: d.stops.map((s, i) => ({ place_id: pid, stop_id: s.stop_id, rank: i + 1, walk_min: s.walk_min })),
+      }),
     ...(isVenueType(d.type)
       ? [
           async () =>
@@ -109,7 +121,12 @@ async function saveChildren(db: Db, pid: string, d: Parsed) {
                 booking: d.booking ?? null,
               })
             ).error,
-          () => replaceChildren(db, 'venue_drinks', 'place_id', pid, [...new Set(d.drinks)].map((drink) => ({ place_id: pid, drink }))),
+          () =>
+            syncChildren(db, 'venue_drinks', {
+              parent: ['place_id', pid],
+              keys: ['drink'],
+              rows: [...new Set(d.drinks)].map((drink) => ({ place_id: pid, drink })),
+            }),
         ]
       : // Type changed away from a venue: drop the venue row (venue_drinks cascade).
         [async () => (await db.from('venues').delete().eq('place_id', pid)).error]),

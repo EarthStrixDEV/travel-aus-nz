@@ -5,7 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import { requireRole } from '@/lib/auth/profile'
 import { CACHE_TAGS } from '@/lib/content/cache'
 import { createClient } from '@/lib/supabase/server'
-import { replaceChildren } from '../_lib/db'
+import { syncChildren } from '../_lib/db'
 import { dbError, fieldErrors, formToInput, toI18n, uuidId, type SaveResult } from '../_lib/form'
 import { collectionSchema } from './schema'
 
@@ -36,13 +36,12 @@ export async function saveCollection(id: string | null, formData: FormData): Pro
     .single()
   if (error || !saved) return { error: error ? dbError(error, t) : t('errors.saveFailed') }
 
-  const itemsError = await replaceChildren(
-    supabase,
-    'collection_items',
-    'collection_id',
-    saved.id,
-    d.items.map((entity_id, i) => ({ collection_id: saved.id, entity_id, position: i + 1 })),
-  )
+  const itemsError = await syncChildren(supabase, 'collection_items', {
+    parent: ['collection_id', saved.id],
+    keys: ['entity_id'],
+    rows: d.items.map((entity_id, i) => ({ collection_id: saved.id, entity_id, position: i + 1 })),
+  })
+  if (itemsError) return { error: dbError(itemsError, t) }
   revalidateTag(CACHE_TAGS.home)
-  return itemsError ? { error: dbError(itemsError, t) } : {}
+  return {}
 }

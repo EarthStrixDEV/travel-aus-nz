@@ -5,7 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import { requireRole } from '@/lib/auth/profile'
 import { CACHE_TAGS } from '@/lib/content/cache'
 import { createClient } from '@/lib/supabase/server'
-import { mediaMetaFor, replaceChildren } from '../_lib/db'
+import { mediaMetaFor, syncChildren } from '../_lib/db'
 import { dbError, fieldErrors, formToInput, rows, toI18n, uuidId, type SaveResult } from '../_lib/form'
 import { journeySchema } from './schema'
 
@@ -49,12 +49,10 @@ export async function saveJourney(id: string | null, formData: FormData): Promis
     .single()
   if (error || !saved) return { error: error ? dbError(error, t) : t('errors.saveFailed') }
 
-  const legsError = await replaceChildren(
-    supabase,
-    'journey_legs',
-    'journey_id',
-    saved.id,
-    d.legs.map((l, i) => ({
+  const legsError = await syncChildren(supabase, 'journey_legs', {
+    parent: ['journey_id', saved.id],
+    keys: ['seq'],
+    rows: d.legs.map((l, i) => ({
       journey_id: saved.id,
       seq: i + 1,
       day: l.day,
@@ -65,7 +63,8 @@ export async function saveJourney(id: string | null, formData: FormData): Promis
       duration_min: l.duration_min ?? null,
       frequency_text: l.frequency_text ?? null,
     })),
-  )
+  })
+  if (legsError) return { error: dbError(legsError, t) }
   revalidateTag(CACHE_TAGS.home)
-  return legsError ? { error: dbError(legsError, t) } : {}
+  return {}
 }

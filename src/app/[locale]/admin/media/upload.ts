@@ -6,7 +6,7 @@ import { requireRole } from '@/lib/auth/profile'
 import { mediaPath } from '@/lib/media/path'
 import { createClient } from '@/lib/supabase/server'
 import { dbError, fieldErrors, formToInput, toI18n, type SaveResult } from '../_lib/form'
-import { processImage, type ProcessedImage } from './image'
+import { inspectImage, type InspectedImage } from './image'
 import { checkUpload, mediaAssetSchema } from './schema'
 
 /**
@@ -32,19 +32,21 @@ export async function uploadMedia(formData: FormData): Promise<SaveResult> {
   }
   const d = parsed.data
 
-  let image: ProcessedImage
+  // The original is stored byte-for-byte (spec §6); next/image derives the served sizes.
+  const original = Buffer.from(await file!.arrayBuffer())
+  let image: InspectedImage
   try {
-    image = await processImage(Buffer.from(await file!.arrayBuffer()))
+    image = await inspectImage(original)
   } catch {
-    return { fieldErrors: { file: t('errors.fileUnreadable') } }
+    return { fieldErrors: { file: t('errors.fileType') } }
   }
 
   const id = randomUUID()
-  const path = mediaPath('assets', id, image.hash)
+  const path = mediaPath('assets', id, image.hash, image.ext)
   const supabase = await createClient()
   const bucket = supabase.storage.from('media')
-  const { error: uploadError } = await bucket.upload(path, image.data, {
-    contentType: 'image/webp',
+  const { error: uploadError } = await bucket.upload(path, original, {
+    contentType: image.contentType,
     cacheControl: '31536000',
     upsert: false,
   })

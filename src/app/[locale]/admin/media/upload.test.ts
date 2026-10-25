@@ -23,10 +23,11 @@ vi.mock('next-intl/server', () => ({ getTranslations: async () => (key: string) 
 
 import { uploadMedia } from './upload'
 
+const jpeg = () => sharp({ create: { width: 40, height: 30, channels: 3, background: '#c87828' } }).jpeg().toBuffer()
+
 async function form(over: Record<string, string> = {}, file?: File) {
-  const png = await sharp({ create: { width: 40, height: 30, channels: 3, background: '#c87828' } }).png().toBuffer()
   const fd = new FormData()
-  fd.set('file', file ?? new File([new Uint8Array(png)], 'harbour.png', { type: 'image/png' }))
+  fd.set('file', file ?? new File([new Uint8Array(await jpeg())], 'harbour.jpg', { type: 'image/jpeg' }))
   for (const [k, v] of Object.entries({ credit: 'Jane Doe', license: 'CC BY 4.0', alt_th: 'อ่าว', alt_en: 'Harbour', ...over })) fd.set(k, v)
   return fd
 }
@@ -46,12 +47,14 @@ describe('uploadMedia', () => {
     expect(createClient).not.toHaveBeenCalled()
   })
 
-  it('stores a WebP under assets/<id>/<hash>.webp and registers it with an 8 px base64 blurDataURL', async () => {
-    expect(await uploadMedia(await form())).toEqual({})
+  it('stores the original bytes unchanged under assets/<id>/<hash>.<ext> with the real type, plus an 8 px blurDataURL', async () => {
+    const original = await jpeg()
+    const fd = await form({}, new File([new Uint8Array(original)], 'harbour.jpg', { type: 'image/jpeg' }))
+    expect(await uploadMedia(fd)).toEqual({})
     const [path, body, opts] = upload.mock.calls[0]
-    expect(path).toMatch(/^assets\/[0-9a-f-]{36}\/[0-9a-f]{16}\.webp$/)
-    expect(opts).toMatchObject({ contentType: 'image/webp', upsert: false })
-    expect((await sharp(body).metadata()).format).toBe('webp')
+    expect(path).toMatch(/^assets\/[0-9a-f-]{36}\/[0-9a-f]{16}\.jpg$/)
+    expect(opts).toMatchObject({ contentType: 'image/jpeg', upsert: false })
+    expect(Buffer.compare(Buffer.from(body), original)).toBe(0)
     const row = insert.mock.calls[0][0]
     expect(row).toMatchObject({
       path,
@@ -65,15 +68,26 @@ describe('uploadMedia', () => {
     expect(row.blurhash).toMatch(/^data:image\/webp;base64,/)
   })
 
-  it('requires credit and license (and a file) before touching Storage', async () => {
-    const r = await uploadMedia(await form({ credit: '', license: ' ' }, new File([], 'empty.png', { type: 'image/png' })))
-    expect(r.fieldErrors).toEqual({ credit: 'errors.required', license: 'errors.required', file: 'errors.fileRequired' })
+  it('trusts the bytes, not the browser type: a PNG labelled image/jpeg is stored as image/png', async () => {
+    const png = await sharp({ create: { width: 4, height: 4, channels: 3, background: '#000' } }).png().toBuffer()
+    await uploadMedia(await form({}, new File([new Uint8Array(png)], 'x.jpg', { type: 'image/jpeg' })))
+    expect(upload.mock.calls[0][0]).toMatch(/\.png$/)
+    expect(upload.mock.calls[0][2]).toMatchObject({ contentType: 'image/png' })
+  })
+
+  it('a GIF or SVG renamed to .jpg is rejected before Storage', async () => {
+    const gif = await sharp({ create: { width: 4, height: 4, channels: 3, background: '#000' } }).gif().toBuffer()
+    const svg = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4"/>')
+    for (const bytes of [gif, svg]) {
+      const r = await uploadMedia(await form({}, new File([new Uint8Array(bytes)], 'photo.jpg', { type: 'image/jpeg' })))
+      expect(r.fieldErrors).toEqual({ file: 'errors.fileType' })
+    }
     expect(upload).not.toHaveBeenCalled()
   })
 
-  it('a non-image payload -> file error, nothing stored', async () => {
-    const r = await uploadMedia(await form({}, new File(['<svg/>'], 'x.png', { type: 'image/png' })))
-    expect(r.fieldErrors).toEqual({ file: 'errors.fileUnreadable' })
+  it('requires credit and license (and a file) before touching Storage', async () => {
+    const r = await uploadMedia(await form({ credit: '', license: ' ' }, new File([], 'empty.png', { type: 'image/png' })))
+    expect(r.fieldErrors).toEqual({ credit: 'errors.required', license: 'errors.required', file: 'errors.fileRequired' })
     expect(upload).not.toHaveBeenCalled()
   })
 

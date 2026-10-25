@@ -1,6 +1,6 @@
 /** Bucket-relative object key inside the Supabase `media` bucket. */
-export function mediaPath(entity: string, id: string, hash: string): string {
-  return `${entity}/${id}/${hash}.webp`
+export function mediaPath(entity: string, id: string, hash: string, ext = 'webp'): string {
+  return `${entity}/${id}/${hash}.${ext}`
 }
 
 /** Public URL of an object in the `media` bucket (e.g. a `media_assets.path`). */
