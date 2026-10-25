@@ -11,12 +11,28 @@ export type AnalyticsEvent =
 export type AnalyticsProps = Record<string, string | number | boolean>;
 
 // Props are flat by type, so key + value checks are sufficient (no nested objects to hide PII in).
-const PII_KEY = /email|name|phone|passport|nationality|birth|ip/i;
+// Keys are split into whole tokens (`_`, `-`, camelCase) so `trip_id`/`zip` pass but
+// `client_ip`/`firstName` are dropped. Any key containing a PII token is dropped (fail safe).
+const PII_TOKENS = new Set([
+  'email', 'name', 'phone', 'passport', 'nationality',
+  'birth', 'birthday', 'dob', 'ip', 'ipaddress',
+]);
+
+function keyTokens(key: string): string[] {
+  return key
+    .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
+    .split(/[_\-\s]+/)
+    .filter(Boolean)
+    .map((t) => t.toLowerCase());
+}
+
+const isPiiKey = (key: string) => keyTokens(key).some((t) => PII_TOKENS.has(t));
 
 function sanitize(props: AnalyticsProps): AnalyticsProps {
   const safe: AnalyticsProps = {};
   for (const [key, value] of Object.entries(props)) {
-    if (PII_KEY.test(key)) continue;
+    if (isPiiKey(key)) continue;
     if (typeof value === 'string' && value.includes('@')) continue;
     safe[key] = value;
   }

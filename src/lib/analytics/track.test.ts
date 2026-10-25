@@ -38,6 +38,30 @@ describe('track', () => {
     expect(capture).toHaveBeenCalledWith('save_item', { kind: 'place' });
   });
 
+  it('matches whole key tokens only', () => {
+    track('place_view', {
+      trip_id: 'a',
+      tripId: 'b',
+      description: 'c',
+      zip: 'd',
+      email: 'x',
+      user_name: 'x',
+      firstName: 'x',
+      ip: 'x',
+      client_ip: 'x',
+      ipAddress: 'x',
+      clientIP: 'x',
+      place_name: 'x',
+      dob: 'x',
+    });
+    expect(capture).toHaveBeenCalledWith('place_view', {
+      trip_id: 'a',
+      tripId: 'b',
+      description: 'c',
+      zip: 'd',
+    });
+  });
+
   it('keeps numbers and booleans', () => {
     track('fx_convert', { amount: 10, saved: true });
     expect(capture).toHaveBeenCalledWith('fx_convert', { amount: 10, saved: true });
