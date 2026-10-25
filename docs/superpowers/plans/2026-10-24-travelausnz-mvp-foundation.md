@@ -10,7 +10,7 @@
 
 **Spec:** `TravelAusNZ— Module & System Design.md` (project root). Sections 2 (shared modules) and 8 (schema) are implemented here.
 
-**Out of scope (separate plans, in this order):** Home + Map (incl. `core-search` + `search_index` view), Currency (fx ingest/rollup), Dishes, Visa (link-check job), Prepare/trip (incl. `create_trip()`, `get_shared_trip()`, `/api/v1/me/saved`, guest-save localStorage merge), admin CRUD for places/dishes/visa + review queue.
+**Out of scope (separate plans, in this order):** Home + Map (incl. `core-search` + `search_index` view), Currency (fx ingest/rollup), Dishes, Visa (link-check job), Prepare/trip (incl. `create_trip()`, `get_shared_trip()`, `/api/v1/me/saved`; pages call `requireUser()` and Save buttons use `useRequireLogin` from Task 11), admin CRUD for places/dishes/visa + review queue.
 
 ## Global Constraints
 
@@ -42,6 +42,12 @@
 - Footer (Earth's decision): no newsletter form. Contents: wordmark, the land acknowledgement from `Main.dc.html`, link columns Explore (Map, Eat & Drink) and Plan (Money, Visa & Entry, Plan your trip), bottom row `© 2026 TravelAusNZ` and "Prices in AUD / NZD, indicative". No links to pages that no plan builds (the design's "Company" column is dropped).
 - Out of this plan: header search button and AU/NZ country segment (page-level, come with Home/search plans).
 - All user-visible strings come from `messages/{th,en}.json`.
+
+**Guest access (Earth's decision, supersedes spec §2.1's localStorage guest-save):**
+
+- Guests can browse every public page without signing in. Features that require login: Save (any place/dish/collection) and everything under Plan your trip / My Trip (`/prepare` — trips, checklist, budget, share). There is no guest/local save and no post-login merge.
+- A guest who triggers a gated action stays on the page and gets a login dialog (native `<dialog>`) with a primary "Sign in" link to `/{locale}/login?next=<current path + query>` and a ghost "Not now"; after signing in they return to that page. A guest who opens a gated route directly (`/prepare/...`) is redirected server-side to the login page with the same `next`.
+- Auth state on the client comes from the browser Supabase client (`getSession` + `onAuthStateChange`) so public pages stay static; server-side gating uses `getUser()`.
 
 ## Deviations from spec (security/consistency — confirm in review)
 
@@ -437,3 +443,41 @@ it.each([
 - [ ] **Step 4: Verify** — `npm test` → PASS; `npm run build` succeeds; `npm run test:db` still PASS.
 
 - [ ] **Step 5: Commit** — `git commit -m "feat: sentry, posthog, vercel analytics with PII-safe track()"`
+
+---
+
+### Task 11: Guest access — login-gated features, login dialog, header account entry
+
+**Files:**
+- Create: `src/lib/auth/gated.ts`, `src/components/auth/auth-provider.tsx` (client), `src/components/auth/login-required-dialog.tsx` (client), `src/components/auth/use-require-login.ts` (client), `src/components/site/account-menu.tsx` (client)
+- Modify: `src/lib/auth/profile.ts` (add `requireUser`, build `requireRole` on it), `src/app/[locale]/(site)/layout.tsx` (wrap in `AuthProvider`, mount the dialog once), `src/components/site/site-header.tsx` + `src/components/site/mobile-menu.tsx` (account entry; "My Trip" goes through `useRequireLogin`), messages files (`gate.*`, `account.*`)
+- Test: `src/lib/auth/gated.test.ts`, `src/lib/auth/profile.test.ts` (extend), `src/components/auth/use-require-login.test.tsx`, `src/components/site/account-menu.test.tsx`
+
+**Interfaces:**
+- Consumes: browser/server `createClient` (Task 5); `safeNextPath`, `requireRole`, `getCurrentProfile` (Task 7); `Button`, `buttonClass`, `IconButton`, `Link`, `usePathname` (Task 6).
+- Produces: `GATED_PREFIXES = ['/prepare']`; `isGatedPath(pathname: string): boolean` — locale-stripped path; `/prepare` and `/prepare/...` true, `/prepared` false.
+- Produces: `requireUser(): Promise<User>` (server) — `getUser()`; no user → login redirect with `next` = current path via the existing `x-pathname` header + `safeNextPath`; `requireRole` calls `requireUser` first (behaviour unchanged).
+- Produces: `AuthProvider` + `useAuth(): { user: User | null; ready: boolean }` — initial `getSession()`, then `onAuthStateChange`; no server cookie read.
+- Produces: `useRequireLogin(): (action: () => void) => void` — signed in → runs `action`; guest → opens the single `LoginRequiredDialog` (context-driven), never runs `action`; before `ready` it does nothing.
+- `LoginRequiredDialog`: native `<dialog>` + `showModal()`, `aria-labelledby` title `gate.title`, body `gate.body`, primary `Link` "Sign in" → `/{locale}/login?next=<encodeURIComponent(safeNextPath(pathname + search))>`, ghost "Not now" closes; Esc closes; focus returns to the trigger.
+- `AccountMenu` (header right, desktop; and inside `MobileMenu`): guest → ghost link `account.signIn` to login with current `next`; signed in → `IconButton` (label `account.menu`) opening a small menu with the email (truncate), "Admin" link only when the profile role is editor/admin (fetch own profile via browser client — `profile_select_self` RLS), and a sign-out POST form to `/auth/sign-out`.
+- "My Trip" header/mobile button and the mobile tab "Trip": guests get the dialog via `useRequireLogin` instead of navigating; signed-in users navigate to `/prepare`.
+
+- [ ] **Step 1: Write failing tests**
+
+```ts
+// gated.test.ts
+it.each([['/prepare', true], ['/prepare/trips/1', true], ['/prepared', false], ['/', false], ['/map', false]])
+  ('isGatedPath(%s)', (p, out) => expect(isGatedPath(p)).toBe(out))
+```
+- `profile.test.ts`: `requireUser` with no user → `redirect` to `/th/login?next=%2Fth%2Fprepare`; with user → resolves the user; `requireRole` with no user still redirects (via `requireUser`).
+- `use-require-login.test.tsx` (jsdom, mocked `useAuth`): guest → action not called and dialog opens with a Sign-in link whose `href` contains `next=%2Fth%2Fmap%3Fx%3D1` for pathname `/th/map` + search `?x=1`; signed in → action called once, no dialog; `ready: false` → neither.
+- `account-menu.test.tsx`: guest → "Sign in" link with `next`; signed-in user role `user` → menu has sign-out form (method post, action `/auth/sign-out`) and no Admin link; role `editor` → Admin link present.
+
+- [ ] **Step 2: Run `npm test` — expect FAIL**
+
+- [ ] **Step 3: Implement** per Interfaces; th + en messages with identical keys.
+
+- [ ] **Step 4: Verify** — `npm test`, `npm run lint`, `npm run build` (public pages stay static: `/[locale]` route remains ○/● in the route table). In the browser as a guest: click "My Trip" → dialog opens, focus inside, Esc closes and focus returns; "Sign in" goes to `/th/login?next=...`; header shows the Sign-in link at 1440px and inside the mobile menu at 390px, light and dark.
+
+- [ ] **Step 5: Commit** — `git commit -m "feat(auth): guest access with login-gated features and account menu"`
