@@ -22,7 +22,7 @@ export default async function CityEditPage({ params }: { params: Promise<{ local
     .from('regions')
     .select('id, country, name_i18n')
     .order('country')
-    .order('sort')
+    .order('slug')
   if (regionsError) throw new Error('Failed to load regions')
   const regionOptions = (regions ?? []).map((r) => ({
     value: String(r.id),

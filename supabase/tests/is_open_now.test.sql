@@ -4,8 +4,8 @@ select plan(9);
 
 -- Fixtures: three cities in three time zones, one place each (fixed literal UUIDs)
 insert into public.cities (id, region_id, slug, name_i18n, timezone, center, status) values
-  (9101, (select id from public.regions where slug = 'nsw'),      'oh-sydney',   '{"en":"Sydney"}',   'Australia/Sydney', 'SRID=4326;POINT(151.2093 -33.8688)', 'published'),
-  (9102, (select id from public.regions where slug = 'nsw'),      'oh-perth',    '{"en":"Perth"}',    'Australia/Perth',  'SRID=4326;POINT(115.8605 -31.9505)', 'published'),
+  (9101, (select id from public.regions where slug = 'sydney'),   'oh-sydney',   '{"en":"Sydney"}',   'Australia/Sydney', 'SRID=4326;POINT(151.2093 -33.8688)', 'published'),
+  (9102, (select id from public.regions where slug = 'sydney'),   'oh-perth',    '{"en":"Perth"}',    'Australia/Perth',  'SRID=4326;POINT(115.8605 -31.9505)', 'published'),
   (9103, (select id from public.regions where slug = 'auckland'), 'oh-auckland', '{"en":"Auckland"}', 'Pacific/Auckland', 'SRID=4326;POINT(174.7633 -36.8485)', 'published');
 
 insert into public.places (id, city_id, slug, type, name_i18n, geom, status) values
