@@ -15,7 +15,7 @@ vi.mock('@/i18n/navigation', () => ({
 }))
 vi.mock('next/image', () => ({
   // eslint-disable-next-line @next/next/no-img-element -- stands in for next/image in jsdom
-  default: ({ src, alt, className }: { src: string; alt: string; className?: string }) => <img src={src} alt={alt} className={className} />,
+  default: ({ src, alt, className, onError }: { src: string; alt: string; className?: string; onError?: () => void }) => <img src={src} alt={alt} className={className} onError={onError} />,
 }))
 
 beforeAll(() => {
@@ -135,6 +135,20 @@ describe('Lightbox', () => {
   it('reflects an already saved place', () => {
     view(1, true)
     expect(screen.getByRole('button', { name: 'In your trip' })).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  it('a failed image does not leak into the next photo', () => {
+    const ui = (index: number) => (
+      <NextIntlClientProvider locale="en" messages={en}>
+        <Lightbox photos={PHOTOS} index={index} saved={false} onIndex={onIndex} onClose={onClose} onToggleSave={onToggleSave} />
+      </NextIntlClientProvider>
+    )
+    const { rerender } = render(ui(0))
+    fireEvent.error(screen.getByRole('img', { name: 'Alt bondi' }))
+    expect(screen.queryByRole('img', { name: 'Alt bondi' })).not.toBeInTheDocument()
+
+    rerender(ui(1))
+    expect(screen.getByRole('img', { name: 'Alt opera' })).toBeInTheDocument()
   })
 
   it('closing (Close button, or the native Esc / backdrop close) reports onClose', () => {

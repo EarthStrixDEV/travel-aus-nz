@@ -1,6 +1,7 @@
 import { withSentryConfig } from "@sentry/nextjs/config";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
+import { imageWidthConfig } from "./src/lib/media/image-config";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
@@ -9,9 +10,8 @@ const storageUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ? new URL(process.env.NE
 
 const nextConfig: NextConfig = {
   images: {
-    // Spec §6 media rules: AVIF/WebP in three widths (480 / 960 / 1920); keep in step with IMAGE_WIDTHS in lib/media/path.ts.
-    deviceSizes: [480, 960, 1920],
-    imageSizes: [64, 128, 256, 384],
+    // Spec §6 media rules: AVIF/WebP in exactly three widths (480 / 960 / 1920), see lib/media/image-config.ts.
+    ...imageWidthConfig,
     formats: ["image/avif", "image/webp"],
     remotePatterns: storageUrl
       ? [

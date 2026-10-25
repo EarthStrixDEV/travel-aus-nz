@@ -88,6 +88,7 @@ export function Lightbox({
         <>
           <div className="relative flex h-[42dvh] flex-none items-center justify-center p-4 md:h-auto md:min-w-0 md:flex-1 md:p-14 [&_:focus-visible]:outline-on-deep">
             <GalleryImage
+              key={photo.id}
               image={photo.image}
               sizes={imageSizes('lightbox')}
               fit="contain"
