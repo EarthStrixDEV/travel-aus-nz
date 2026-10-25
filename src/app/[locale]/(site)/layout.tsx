@@ -1,8 +1,16 @@
+import { setRequestLocale } from 'next-intl/server'
 import { MobileTabBar } from '@/components/site/mobile-tab-bar'
 import { SiteFooter } from '@/components/site/site-footer'
 import { SiteHeader } from '@/components/site/site-header'
 
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default async function SiteLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode
+  params: Promise<{ locale: string }>
+}) {
+  setRequestLocale((await params).locale)
   return (
     <div className="flex min-h-dvh flex-col">
       <SiteHeader />
