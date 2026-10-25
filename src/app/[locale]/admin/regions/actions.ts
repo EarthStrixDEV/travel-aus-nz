@@ -9,7 +9,7 @@ import { mediaMetaFor } from '../_lib/db'
 import { dbError, fieldErrors, formToInput, serialId, toI18n, type SaveResult } from '../_lib/form'
 import { regionSchema } from './schema'
 
-/** Create (id null) or update a region through the editor's session (RLS + audit), then bust `home`. */
+/** Create (id null) or update a region through the editor's session (RLS + audit), then bust `home` and `gallery` (which embeds region slug/name). */
 export async function saveRegion(id: number | null, formData: FormData): Promise<SaveResult> {
   await requireRole(['editor', 'admin'])
   const t = await getTranslations('admin')
@@ -40,5 +40,6 @@ export async function saveRegion(id: number | null, formData: FormData): Promise
   if (error) return { error: dbError(error, t) }
 
   revalidateTag(CACHE_TAGS.home)
+  revalidateTag(CACHE_TAGS.gallery)
   return {}
 }

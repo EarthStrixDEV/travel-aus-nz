@@ -51,7 +51,7 @@ describe('saveCity', () => {
     expect(revalidateTag).not.toHaveBeenCalled()
   })
 
-  it('valid input -> upserts i18n name + EWKT center, then revalidates home', async () => {
+  it('valid input -> upserts i18n name + EWKT center, then revalidates home, map, venues, gallery', async () => {
     const r = await saveCity(1, form())
     expect(r).toEqual({})
     expect(from).toHaveBeenCalledWith('cities')
@@ -64,7 +64,7 @@ describe('saveCity', () => {
       center: 'SRID=4326;POINT(151.2093 -33.8688)',
       status: 'published',
     })
-    expect(revalidateTag).toHaveBeenCalledWith('home')
+    expect(revalidateTag.mock.calls.map((c) => c[0]).sort()).toEqual(['gallery', 'home', 'map', 'venues'])
     expect(upsert.mock.invocationCallOrder[0]).toBeLessThan(revalidateTag.mock.invocationCallOrder[0])
   })
 

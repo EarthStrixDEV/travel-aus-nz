@@ -83,7 +83,7 @@ describe('savePlace', () => {
     expect(createClient).not.toHaveBeenCalled()
   })
 
-  it('valid venue -> upserts place + children through the session, then revalidates map, venues, home', async () => {
+  it('valid venue -> upserts place + children through the session, then revalidates map, venues, home, gallery', async () => {
     expect(await savePlace(ID, form())).toEqual({})
     const placeUpsert = calls.find((c) => c.table === 'places' && c.op === 'upsert')!
     expect(placeUpsert.args[0]).toMatchObject({
@@ -111,14 +111,14 @@ describe('savePlace', () => {
     // Nothing existed before, so nothing is deleted.
     expect(calls.some((c) => c.op === 'delete')).toBe(false)
 
-    expect(tags()).toEqual(['home', 'map', 'venues'])
+    expect(tags()).toEqual(['gallery', 'home', 'map', 'venues'])
   })
 
   it('non-venue type -> removes any venue row instead of writing one', async () => {
     await savePlace(ID, form({ type: 'attraction' }))
     expect(calls.some((c) => c.table === 'venues' && c.op === 'delete')).toBe(true)
     expect(calls.some((c) => c.table === 'venues' && c.op === 'upsert')).toBe(false)
-    expect(tags()).toEqual(['home', 'map', 'venues'])
+    expect(tags()).toEqual(['gallery', 'home', 'map', 'venues'])
   })
 
   it('publishing while a linked gallery asset lacks a license -> field error, no write, no revalidate', async () => {
@@ -167,7 +167,7 @@ describe('savePlace', () => {
     expect(deletes('place_hours')).toEqual([{ place_id: ID, weekday: 3, open_time: '09:00:00' }])
     const order = (table: string, op: string) => calls.findIndex((c) => c.table === table && c.op === op)
     expect(order('place_tags', 'upsert')).toBeLessThan(order('place_tags', 'delete'))
-    expect(tags()).toEqual(['home', 'map', 'venues'])
+    expect(tags()).toEqual(['gallery', 'home', 'map', 'venues'])
   })
 
   it('a failing stale-row delete -> error, no revalidation', async () => {

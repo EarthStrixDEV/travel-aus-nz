@@ -4,6 +4,7 @@ import { revalidateTag } from 'next/cache'
 import { getTranslations } from 'next-intl/server'
 import { z } from 'zod'
 import { requireRole } from '@/lib/auth/profile'
+import { CACHE_TAGS } from '@/lib/content/cache'
 import { createClient } from '@/lib/supabase/server'
 import { citySchema, type CityInput } from './schema'
 
@@ -67,6 +68,7 @@ export async function saveCity(id: number | null, formData: FormData): Promise<S
     return { error: t('errors.saveFailed') }
   }
 
-  revalidateTag('home')
+  // Cities feed the home page, map, venue lists and gallery.
+  for (const tag of [CACHE_TAGS.home, CACHE_TAGS.map, CACHE_TAGS.venues, CACHE_TAGS.gallery]) revalidateTag(tag)
   return {}
 }

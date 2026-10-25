@@ -13,6 +13,8 @@ function revalidatePlaces() {
   revalidateTag(CACHE_TAGS.map)
   revalidateTag(CACHE_TAGS.venues)
   revalidateTag(CACHE_TAGS.home)
+  // The gallery embeds place text and nearby venues' status / is_closed.
+  revalidateTag(CACHE_TAGS.gallery)
 }
 
 /**
