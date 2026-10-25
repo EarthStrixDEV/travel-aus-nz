@@ -20,6 +20,11 @@ describe('blurDataUrl', () => {
     expect(blurDataUrl('short')).toBeUndefined()
   })
 
+  it('passes through a base64 image data URL stored at upload (admin media)', () => {
+    const stored = 'data:image/webp;base64,UklGRhIAAABXRUJQVlA4'
+    expect(blurDataUrl(stored)).toBe(stored)
+  })
+
   it('paints the blurhash average colour into a tiny SVG', () => {
     // Chars 2-5 of the hash ("HV6n") are the base-83 DC value 17*83^3 + 31*83^2 + 6*83 + 49 = 9934485 = 0x979695.
     const url = blurDataUrl('LEHV6nWB2yk8pyo0adR*.7kCMdnj')!

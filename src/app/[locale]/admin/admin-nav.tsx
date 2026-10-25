@@ -4,7 +4,17 @@ import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
 
 const items = [
+  { href: '/admin/regions', key: 'navRegions' },
   { href: '/admin/cities', key: 'navCities' },
+  { href: '/admin/places', key: 'navPlaces' },
+  { href: '/admin/gallery', key: 'navGallery' },
+  { href: '/admin/hero', key: 'navHero' },
+  { href: '/admin/journeys', key: 'navJourneys' },
+  { href: '/admin/collections', key: 'navCollections' },
+  { href: '/admin/entry', key: 'navEntry' },
+  { href: '/admin/fx-reference', key: 'navFx' },
+  { href: '/admin/media', key: 'navMedia' },
+  { href: '/admin/review', key: 'navReview' },
   { href: '/admin/audit', key: 'navAudit' },
 ] as const
 
@@ -13,7 +23,7 @@ export function AdminNav() {
   const pathname = usePathname()
   return (
     <nav aria-label={t('navLabel')}>
-      <ul className="flex gap-5">
+      <ul className="flex flex-wrap gap-x-5">
         {items.map((item) => {
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`)
           return (

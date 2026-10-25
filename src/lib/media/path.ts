@@ -24,8 +24,10 @@ const BASE83 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#$
  * Next `blurDataURL` derived from a blurhash: a 1x1 SVG filled with the hash's average colour
  * (its DC component, characters 2-5, stored as plain sRGB bytes). `next/image` blurs it up.
  * Undefined when the hash is missing or malformed, so callers fall back to no placeholder.
+ * Admin uploads store a ready 8 px base64 image data URL in the same column; that passes through.
  */
 export function blurDataUrl(blurhash: string | null | undefined): string | undefined {
+  if (blurhash?.startsWith('data:image/')) return blurhash
   if (!blurhash || blurhash.length < 6) return undefined
   let dc = 0
   for (const ch of blurhash.slice(2, 6)) {

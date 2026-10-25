@@ -3,7 +3,7 @@ import { useId } from 'react'
 type TextFieldProps = {
   label: string
   name: string
-  type?: 'text' | 'email' | 'password'
+  type?: 'text' | 'email' | 'password' | 'date' | 'url'
   defaultValue?: string
   error?: string
   required?: boolean
