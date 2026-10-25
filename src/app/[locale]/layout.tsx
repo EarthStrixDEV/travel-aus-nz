@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AnalyticsProvider } from "@/components/analytics-provider";
+import { ThemeSync } from "@/components/theme-sync";
 import { routing } from "@/i18n/routing";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import "../globals.css";
@@ -42,8 +43,8 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
 
   return (
-    // The theme class is applied by THEME_INIT_SCRIPT (not React) before paint, so React
-    // never owns <html className> and client navigations leave it untouched.
+    // The theme class is applied by THEME_INIT_SCRIPT (not React) before paint; ThemeSync
+    // re-applies it when a TH<->EN soft navigation remounts this root layout.
     <html lang={locale} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
@@ -53,6 +54,7 @@ export default async function LocaleLayout({
           <AnalyticsProvider>{children}</AnalyticsProvider>
         </NextIntlClientProvider>
         <Analytics />
+        <ThemeSync />
       </body>
     </html>
   );

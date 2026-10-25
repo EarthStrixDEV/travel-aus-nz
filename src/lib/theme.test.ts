@@ -1,18 +1,27 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vitest'
-import { THEME_INIT_SCRIPT } from './theme'
+import { applyThemeCookie, THEME_INIT_SCRIPT } from './theme'
 
-function runWithCookie(...cookies: string[]) {
+function setCookies(cookies: string[]) {
   document.cookie.split(';').forEach((c) => {
     const name = c.split('=')[0].trim()
     if (name) document.cookie = `${name}=; Max-Age=0; Path=/`
   })
   cookies.filter(Boolean).forEach((c) => (document.cookie = c))
-  new Function(THEME_INIT_SCRIPT)()
-  return document.documentElement.className
 }
 
-describe('THEME_INIT_SCRIPT', () => {
+const appliers = {
+  THEME_INIT_SCRIPT: () => new Function(THEME_INIT_SCRIPT)(),
+  applyThemeCookie,
+}
+
+describe.each(Object.entries(appliers))('%s', (_, apply) => {
+  function runWithCookie(...cookies: string[]) {
+    setCookies(cookies)
+    apply()
+    return document.documentElement.className
+  }
+
   afterEach(() => {
     document.documentElement.className = ''
   })
