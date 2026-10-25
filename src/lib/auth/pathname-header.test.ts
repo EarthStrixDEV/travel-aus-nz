@@ -1,16 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { withPathnameHeader } from './pathname-header'
+import { PATHNAME_HEADER, setPathnameHeader } from './pathname-header'
 
-describe('withPathnameHeader', () => {
-  it('appends to existing request-header overrides', () => {
-    const res = { headers: new Headers({ 'x-middleware-override-headers': 'a,x-next-intl-locale' }) }
-    withPathnameHeader(res, '/th/admin?x=1')
-    expect(res.headers.get('x-middleware-override-headers')).toBe('a,x-next-intl-locale,x-pathname')
-    expect(res.headers.get('x-middleware-request-x-pathname')).toBe('/th/admin?x=1')
+describe('setPathnameHeader', () => {
+  it('sets the path on the request headers', () => {
+    const headers = new Headers()
+    setPathnameHeader(headers, '/th/admin?x=1')
+    expect(headers.get(PATHNAME_HEADER)).toBe('/th/admin?x=1')
   })
-  it('does nothing on responses without overrides (redirects)', () => {
-    const res = { headers: new Headers() }
-    withPathnameHeader(res, '/th')
-    expect(res.headers.get('x-middleware-request-x-pathname')).toBeNull()
+  it('overwrites a client-supplied value', () => {
+    const headers = new Headers({ [PATHNAME_HEADER]: '/spoofed' })
+    setPathnameHeader(headers, '/th')
+    expect(headers.get(PATHNAME_HEADER)).toBe('/th')
   })
 })

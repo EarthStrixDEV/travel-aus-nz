@@ -1,13 +1,12 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Prompt } from "next/font/google";
-import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AnalyticsProvider } from "@/components/analytics-provider";
 import { routing } from "@/i18n/routing";
-import { parseThemeCookie, THEME_COOKIE, themeClass } from "@/lib/theme";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import "../globals.css";
 
 const prompt = Prompt({
@@ -41,10 +40,14 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
-  const theme = themeClass(parseThemeCookie((await cookies()).get(THEME_COOKIE)?.value));
 
   return (
-    <html lang={locale} className={theme || undefined} suppressHydrationWarning>
+    // The theme class is applied by THEME_INIT_SCRIPT (not React) before paint, so React
+    // never owns <html className> and client navigations leave it untouched.
+    <html lang={locale} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className={`${prompt.variable} ${prompt.className} bg-bg text-ink`}>
         <NextIntlClientProvider>
           <AnalyticsProvider>{children}</AnalyticsProvider>

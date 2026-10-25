@@ -1,14 +1,33 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
+import { Suspense } from 'react'
 import { Link, usePathname } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
 
-/** TH | EN segmented switch; keeps the current path. */
+/**
+ * TH | EN segmented switch; keeps the current path and query string.
+ * useSearchParams needs a Suspense boundary to keep pages static; the fallback
+ * (prerendered HTML) links without the query until the client hydrates.
+ */
 export function LocaleSwitch() {
+  return (
+    <Suspense fallback={<Switch search="" />}>
+      <SwitchWithSearch />
+    </Suspense>
+  )
+}
+
+function SwitchWithSearch() {
+  return <Switch search={useSearchParams().toString()} />
+}
+
+function Switch({ search }: { search: string }) {
   const t = useTranslations('locale')
   const current = useLocale()
   const pathname = usePathname()
+  const href = search ? `${pathname}?${search}` : pathname
   return (
     <div role="group" aria-label={t('label')} className="inline-flex rounded-full border border-line">
       {routing.locales.map((locale) => {
@@ -16,7 +35,7 @@ export function LocaleSwitch() {
         return (
           <Link
             key={locale}
-            href={pathname}
+            href={href}
             locale={locale}
             lang={locale}
             aria-current={on ? 'true' : undefined}

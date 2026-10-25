@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { IconButton } from '@/components/ui/button'
 import { THEME_COOKIE } from '@/lib/theme'
@@ -9,7 +8,6 @@ const ONE_YEAR = 60 * 60 * 24 * 365
 
 export function ThemeToggle() {
   const t = useTranslations('theme')
-  const router = useRouter()
 
   function toggle() {
     const root = document.documentElement
@@ -20,9 +18,6 @@ export function ThemeToggle() {
     root.classList.remove('light', 'dark')
     root.classList.add(next)
     document.cookie = `${THEME_COOKIE}=${next}; Max-Age=${ONE_YEAR}; Path=/; SameSite=Lax`
-    // Re-render server components so React's <html className> matches the cookie;
-    // otherwise a cached RSC payload (e.g. on Back) restores the old class.
-    router.refresh()
   }
 
   return (

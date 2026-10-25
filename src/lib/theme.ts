@@ -1,13 +1,9 @@
 export const THEME_COOKIE = 'theme'
 
-export type ThemePref = 'light' | 'dark' | 'system'
-
-/** Cookie value → preference. Anything other than `light`/`dark` means "follow the OS". */
-export function parseThemeCookie(value: string | undefined): ThemePref {
-  return value === 'light' || value === 'dark' ? value : 'system'
-}
-
-/** Class for `<html>`. `system` renders no class so the CSS media query decides. */
-export function themeClass(pref: ThemePref): '' | 'light' | 'dark' {
-  return pref === 'system' ? '' : pref
-}
+/**
+ * Blocking inline script for `<head>`: applies the `theme` cookie (`light`|`dark`) as a
+ * class on `<html>` before first paint. Anything else leaves no class, so the CSS
+ * `prefers-color-scheme` media query decides. Runs client-side so the server never
+ * reads cookies and pages stay static.
+ */
+export const THEME_INIT_SCRIPT = `(function(){try{var m=document.cookie.match(/(?:^|;\\s*)${THEME_COOKIE}=(light|dark)(?:;|$)/);if(m)document.documentElement.classList.add(m[1])}catch(e){}})()`
