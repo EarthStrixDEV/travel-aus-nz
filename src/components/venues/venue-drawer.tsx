@@ -8,7 +8,7 @@ import { summariseHours } from '@/lib/venues/hours'
 import type { VenueCard as Venue } from '@/lib/venues/filter'
 import { BookmarkIcon, PriceLevel } from './venue-card'
 
-function Row({ icon, title, children }: { icon: React.ReactNode; title?: string; children: React.ReactNode }) {
+export function Row({ icon, title, children }: { icon: React.ReactNode; title?: string; children: React.ReactNode }) {
   return (
     <div className="flex items-start gap-3.5 border-t border-line-2 py-3.5">
       <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" className="mt-0.5 flex-none text-ink-2">

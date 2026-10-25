@@ -398,5 +398,60 @@
       "saved": "Saved to my trip",
       "onMap": "On the map"
     }
+  },
+  "gallery": {
+    "metaTitle": "Gallery",
+    "metaDescription": "Photographs of Australia and New Zealand, each linked to its place: when to go, how to get there without a car, and where to eat nearby.",
+    "eyebrow": "Gallery",
+    "title": "Seen in good light.",
+    "lede": "Every frame links to its place: when to go, how to get there without a car, and where to eat nearby.",
+    "count": "{count, plural, one {# photograph} other {# photographs}}",
+    "filters": {
+      "label": "Filters",
+      "region": "Region",
+      "type": "Type",
+      "season": "Season",
+      "all": "All",
+      "any": "Any",
+      "clear": "Clear filters"
+    },
+    "type": {
+      "beach": "Beach",
+      "mountain": "Mountain",
+      "city": "City",
+      "wildlife": "Wildlife",
+      "wine-region": "Wine region",
+      "heritage": "Heritage"
+    },
+    "season": {
+      "summer": "Summer",
+      "autumn": "Autumn",
+      "winter": "Winter",
+      "spring": "Spring"
+    },
+    "results": {
+      "label": "Photographs"
+    },
+    "tile": {
+      "open": "Open {title}"
+    },
+    "empty": {
+      "title": "Nothing matches every filter"
+    },
+    "lightbox": {
+      "close": "Close",
+      "prev": "Previous photo",
+      "next": "Next photo",
+      "position": "{n} / {total}",
+      "best": "Best time to visit",
+      "access": "How to get there",
+      "dining": "Nearby dining",
+      "noBest": "No best season listed",
+      "noAccess": "No car-free directions listed yet",
+      "noDining": "No venues listed nearby",
+      "openPlace": "Open attraction page",
+      "addToTrip": "Add to trip",
+      "inTrip": "In your trip"
+    }
   }
 }

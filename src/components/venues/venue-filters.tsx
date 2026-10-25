@@ -12,7 +12,7 @@ export type FilterOptions = {
   diets: string[]
 }
 
-function Chip({
+export function Chip({
   pressed,
   disabled,
   onClick,
@@ -46,7 +46,7 @@ function Chip({
   )
 }
 
-function Group({ label, children }: { label: string; children: React.ReactNode }) {
+export function Group({ label, children }: { label: string; children: React.ReactNode }) {
   const id = useId()
   return (
     <div role="group" aria-labelledby={id} className="flex flex-wrap items-center gap-1.5">
