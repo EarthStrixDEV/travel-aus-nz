@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TravelAusNZ
 
-## Getting Started
+Thai-first travel guide for Australia and New Zealand. Next.js 15 (App Router) + next-intl (`/th`, `/en`), Supabase (Postgres + Auth + Storage), Tailwind v4.
 
-First, run the development server:
+## Prerequisites
+
+- Node.js 22.22+, 24.15+ or 26+ (required by the test toolchain: Vitest, jsdom) and npm
+- A hosted Supabase project for development. Docker is **not** required: the CLI runs against the linked hosted project.
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # then fill in the values
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`.env.local` keys (see `.env.example`):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Key | Used for |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | App Supabase client |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server-only reads (e.g. admin audit log) |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Rate limiting |
+| `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_AUTH_TOKEN` | Error tracking; optional, inert when empty |
+| `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST` | Product analytics; optional, no-op when empty |
+| `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD` | Supabase CLI and `npm run test:db` |
+| `SUPABASE_DB_URL` | Optional: direct Postgres URL for `npm run test:db` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Link the Supabase project
 
-## Learn More
+The CLI does not read `.env.local`, so export the two CLI keys in your shell first:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+export SUPABASE_ACCESS_TOKEN=...   # personal access token (Dashboard > Account > Access Tokens)
+export SUPABASE_DB_PASSWORD=...    # database password of the project
+npx supabase link --project-ref <ref>
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Apply migrations
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npx supabase db reset --linked --yes
+```
 
-## Deploy on Vercel
+> **Warning:** this wipes the linked database and re-applies every migration in `supabase/migrations` plus `supabase/seed.sql`. Use it only against the dev project. Check `supabase/.temp/project-ref` before running it.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Reference data (regions, MVP cities, currencies) is in a migration, so it exists in every environment; `seed.sql` is for dev-only sample data.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Commands
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Dev server on http://localhost:3000 |
+| `npm test` | Unit/component tests (Vitest) |
+| `npm run test:db` | pgTAP tests in `supabase/tests` against the linked DB (reads `.env.local`) |
+| `npm run db:types` | Regenerates `src/lib/supabase/database.types.ts` from the linked project |
+| `npm run lint` | ESLint |
+| `npm run build` | Production build |
+
+## Supabase Dashboard setup (one-time)
+
+1. **Authentication > Sign In / Providers:** enable Email, Google and Apple (Google and Apple need their OAuth client credentials).
+2. **Authentication > URL Configuration:** set the Site URL, and add these to the redirect allowlist:
+   - `http://localhost:3000/**`
+   - `http://localhost:3001/**`
+3. **Promote an editor** (SQL Editor). Sign in once so the profile exists, then:
+
+   ```sql
+   update public.profiles
+   set role = 'editor'   -- or 'admin'
+   where id = (select id from auth.users where email = 'you@example.com');
+   ```
+
+   Editors can use `/th/admin`.
