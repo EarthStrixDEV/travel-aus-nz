@@ -1,9 +1,11 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Prompt } from "next/font/google";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { AnalyticsProvider } from "@/components/analytics-provider";
 import { routing } from "@/i18n/routing";
 import { parseThemeCookie, THEME_COOKIE, themeClass } from "@/lib/theme";
 import "../globals.css";
@@ -44,7 +46,10 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={theme || undefined} suppressHydrationWarning>
       <body className={`${prompt.variable} ${prompt.className} bg-bg text-ink`}>
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <AnalyticsProvider>{children}</AnalyticsProvider>
+        </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );
