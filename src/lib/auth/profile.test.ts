@@ -23,7 +23,7 @@ vi.mock('next/headers', () => ({ headers: async () => ({ get: headerGet }) }))
 
 import { notFound } from 'next/navigation'
 import { redirect } from '@/i18n/navigation'
-import { getCurrentProfile, requireRole } from './profile'
+import { getCurrentProfile, requireRole, requireUser } from './profile'
 
 const profile = (role: 'user' | 'editor' | 'admin') => ({
   id: 'u1',
@@ -52,7 +52,41 @@ describe('getCurrentProfile', () => {
   })
 })
 
+describe('requireUser', () => {
+  it('no user -> redirects to locale login with next', async () => {
+    getUser.mockResolvedValue({ data: { user: null } })
+    headerGet.mockReturnValue('/th/prepare')
+    await expect(requireUser()).rejects.toThrow('NEXT_REDIRECT')
+    expect(redirect).toHaveBeenCalledWith({
+      href: { pathname: '/login', query: { next: '/th/prepare' } },
+      locale: 'th',
+    })
+  })
+  it('hostile pathname header is sanitised', async () => {
+    getUser.mockResolvedValue({ data: { user: null } })
+    headerGet.mockReturnValue('//evil.com')
+    await expect(requireUser()).rejects.toThrow('NEXT_REDIRECT')
+    expect(redirect).toHaveBeenCalledWith({
+      href: { pathname: '/login', query: { next: '/th' } },
+      locale: 'th',
+    })
+  })
+  it('with a user -> resolves the user without reading the profile', async () => {
+    const user = { id: 'u1' }
+    getUser.mockResolvedValue({ data: { user } })
+    await expect(requireUser()).resolves.toEqual(user)
+    expect(redirect).not.toHaveBeenCalled()
+    expect(from).not.toHaveBeenCalled()
+  })
+})
+
 describe('requireRole', () => {
+  it('no user -> still redirects (via requireUser) and never reads a profile', async () => {
+    getUser.mockResolvedValue({ data: { user: null } })
+    headerGet.mockReturnValue('/th/admin')
+    await expect(requireRole(['admin'])).rejects.toThrow('NEXT_REDIRECT')
+    expect(from).not.toHaveBeenCalled()
+  })
   it('no user -> redirects to locale login with next', async () => {
     getUser.mockResolvedValue({ data: { user: null } })
     headerGet.mockReturnValue('/th/admin')

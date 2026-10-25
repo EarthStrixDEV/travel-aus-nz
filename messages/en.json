@@ -62,6 +62,18 @@
     "invalidEmail": "Please enter a valid email address.",
     "providerDisabled": "This sign-in option isn’t available right now."
   },
+  "gate": {
+    "title": "Sign in to continue",
+    "body": "Saving places and planning your trip need an account. Sign in and you’ll come right back here.",
+    "signIn": "Sign in",
+    "notNow": "Not now"
+  },
+  "account": {
+    "signIn": "Sign in",
+    "menu": "Account menu",
+    "admin": "Admin",
+    "signOut": "Sign out"
+  },
   "admin": {
     "eyebrow": "Admin",
     "navLabel": "Admin",

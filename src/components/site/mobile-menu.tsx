@@ -2,9 +2,11 @@
 
 import { useRef } from 'react'
 import { useTranslations } from 'next-intl'
-import { Link, usePathname } from '@/i18n/navigation'
+import { usePathname } from '@/i18n/navigation'
 import { IconButton } from '@/components/ui/button'
 import { isActive, navItems } from './nav-items'
+import { AccountMenu } from './account-menu'
+import { GatedLink } from './gated-link'
 import { LocaleSwitch } from './locale-switch'
 import { ThemeToggle } from './theme-toggle'
 
@@ -46,18 +48,19 @@ export function MobileMenu() {
           <ul className="flex flex-col">
             {navItems.map((item) => (
               <li key={item.key} className="border-b border-line-2">
-                <Link
+                <GatedLink
                   href={item.href}
                   onClick={close}
                   aria-current={isActive(pathname, item.href) ? 'page' : undefined}
                   className="flex min-h-14 items-center text-lg font-medium transition-colors duration-500 ease-out hover:text-copper aria-[current=page]:text-copper"
                 >
                   {t(`nav.${item.key}`)}
-                </Link>
+                </GatedLink>
               </li>
             ))}
           </ul>
         </nav>
+        <AccountMenu inline />
         <div className="flex items-center gap-3">
           <LocaleSwitch />
           <ThemeToggle />

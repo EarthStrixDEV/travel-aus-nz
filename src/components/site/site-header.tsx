@@ -1,9 +1,11 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Link, usePathname } from '@/i18n/navigation'
+import { usePathname } from '@/i18n/navigation'
 import { buttonClass } from '@/components/ui/button'
 import { isActive, navItems } from './nav-items'
+import { AccountMenu } from './account-menu'
+import { GatedLink } from './gated-link'
 import { Logo } from './logo'
 import { LocaleSwitch } from './locale-switch'
 import { MobileMenu } from './mobile-menu'
@@ -20,13 +22,13 @@ export function SiteHeader() {
           <ul className="flex gap-5 xl:gap-7">
             {navItems.map((item) => (
               <li key={item.key}>
-                <Link
+                <GatedLink
                   href={item.href}
                   aria-current={isActive(pathname, item.href) ? 'page' : undefined}
                   className="inline-flex min-h-11 items-center text-sm font-medium whitespace-nowrap text-ink transition-colors duration-500 ease-out hover:text-copper aria-[current=page]:text-copper"
                 >
                   {t(item.key)}
-                </Link>
+                </GatedLink>
               </li>
             ))}
           </ul>
@@ -34,12 +36,13 @@ export function SiteHeader() {
         <div className="hidden items-center gap-2.5 lg:flex">
           <LocaleSwitch />
           <ThemeToggle />
-          <Link href="/prepare" className={`${buttonClass('ghost')} whitespace-nowrap`}>
+          <GatedLink href="/prepare" className={`${buttonClass('ghost')} whitespace-nowrap`}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
               <path d="M6 3h12v18l-6-4-6 4z" />
             </svg>
             {t('myTrip')}
-          </Link>
+          </GatedLink>
+          <AccountMenu />
         </div>
         <div className="lg:hidden">
           <MobileMenu />

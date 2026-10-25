@@ -2,7 +2,8 @@
 
 import type { ReactNode } from 'react'
 import { useTranslations } from 'next-intl'
-import { Link, usePathname } from '@/i18n/navigation'
+import { usePathname } from '@/i18n/navigation'
+import { GatedLink } from './gated-link'
 import { isActive, tabItems, type TabKey } from './nav-items'
 
 // Paths from HomeMobile.dc.html; Money uses the exchange icon from Currency.dc.html.
@@ -35,7 +36,7 @@ export function MobileTabBar() {
       <ul className="flex h-[72px] justify-around">
         {tabItems.map((item) => (
           <li key={item.key} className="flex">
-            <Link
+            <GatedLink
               href={item.href}
               aria-current={isActive(pathname, item.href) ? 'page' : undefined}
               className="flex min-w-14 flex-col items-center gap-1 pt-2.5 text-[10px] font-medium tracking-[.06em] text-ink-2 transition-colors duration-500 ease-out aria-[current=page]:text-copper"
@@ -44,7 +45,7 @@ export function MobileTabBar() {
                 {icons[item.key]}
               </svg>
               {t(`tab.${item.key}`)}
-            </Link>
+            </GatedLink>
           </li>
         ))}
       </ul>
