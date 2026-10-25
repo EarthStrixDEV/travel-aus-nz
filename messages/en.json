@@ -61,5 +61,62 @@
     "signupDisabled": "Sign-in by email isn’t available right now.",
     "invalidEmail": "Please enter a valid email address.",
     "providerDisabled": "This sign-in option isn’t available right now."
+  },
+  "admin": {
+    "eyebrow": "Admin",
+    "navLabel": "Admin",
+    "navCities": "Cities",
+    "navAudit": "Audit log",
+    "signOut": "Sign out",
+    "status": {
+      "draft": "Draft",
+      "published": "Published",
+      "archived": "Archived"
+    },
+    "cities": {
+      "title": "Cities",
+      "add": "Add city",
+      "empty": "No cities yet.",
+      "name": "Name",
+      "slug": "Slug",
+      "region": "Region",
+      "timezone": "Time zone",
+      "status": "Status",
+      "actions": "Actions",
+      "edit": "Edit",
+      "newTitle": "New city",
+      "editTitle": "Edit city",
+      "nameTh": "Name (Thai)",
+      "nameEn": "Name (English)",
+      "lng": "Longitude",
+      "lat": "Latitude",
+      "save": "Save",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "errors": {
+        "invalidId": "This city could not be found.",
+        "region_id": "Choose a region.",
+        "slug": "Use lowercase letters, numbers and hyphens only.",
+        "name_th": "Enter the Thai name.",
+        "name_en": "Enter the English name.",
+        "timezone": "Use an IANA time zone such as Australia/Sydney.",
+        "lng": "Longitude must be between -180 and 180.",
+        "lat": "Latitude must be between -90 and 90.",
+        "status": "Choose a status.",
+        "duplicateSlug": "Another city already uses this slug.",
+        "forbidden": "You don’t have permission to save this city.",
+        "saveFailed": "Couldn’t save the city. Please try again."
+      }
+    },
+    "audit": {
+      "title": "Audit log",
+      "empty": "No changes recorded yet.",
+      "table": "Table",
+      "row": "Row",
+      "action": "Action",
+      "actor": "Changed by",
+      "at": "When",
+      "older": "Older"
+    }
   }
 }
