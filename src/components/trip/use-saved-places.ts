@@ -5,9 +5,12 @@ import { useAuth } from '@/components/auth/auth-provider'
 import { useRequireLogin } from '@/components/auth/use-require-login'
 import { track } from '@/lib/analytics/track'
 import { createClient } from '@/lib/supabase/browser'
+import type { Database } from '@/lib/supabase/database.types'
+
+export type SavedEntity = Database['public']['Enums']['saved_entity']
 
 /** Save to My Trip picks: signed-in users write `saved_items` (RLS owner policy); guests get the login dialog. */
-export function useSavedPlaces(ids: string[]) {
+export function useSaved(entityType: SavedEntity, ids: string[]) {
   const { user } = useAuth()
   const requireLogin = useRequireLogin()
   const [saved, setSaved] = useState<ReadonlySet<string>>(new Set())
@@ -22,7 +25,7 @@ export function useSavedPlaces(ids: string[]) {
     createClient()
       .from('saved_items')
       .select('entity_id')
-      .eq('entity_type', 'place')
+      .eq('entity_type', entityType)
       .in('entity_id', key.split(','))
       .then(({ data }) => {
         if (active) setSaved(new Set((data ?? []).map((r) => r.entity_id)))
@@ -30,7 +33,7 @@ export function useSavedPlaces(ids: string[]) {
     return () => {
       active = false
     }
-  }, [user, key])
+  }, [user, key, entityType])
 
   function toggle(id: string) {
     requireLogin(() => {
@@ -46,14 +49,16 @@ export function useSavedPlaces(ids: string[]) {
       apply(adding)
       const db = createClient().from('saved_items')
       const request = adding
-        ? db.insert({ user_id: user.id, entity_type: 'place', entity_id: id })
-        : db.delete().eq('user_id', user.id).eq('entity_type', 'place').eq('entity_id', id)
+        ? db.insert({ user_id: user.id, entity_type: entityType, entity_id: id })
+        : db.delete().eq('user_id', user.id).eq('entity_type', entityType).eq('entity_id', id)
       void request.then(({ error }) => {
         if (error) apply(!adding)
-        else if (adding) track('save_item', { entity_type: 'place' })
+        else if (adding) track('save_item', { entity_type: entityType })
       })
     })
   }
 
   return { saved, toggle }
 }
+
+export const useSavedPlaces = (ids: string[]) => useSaved('place', ids)

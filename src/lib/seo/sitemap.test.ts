@@ -25,6 +25,11 @@ describe('sitemapEntries', () => {
     expect(sitemapEntries('gallery', { places: [], venues: [] }).map((e) => e.loc)).toEqual([`${BASE}/th/gallery`, `${BASE}/en/gallery`])
   })
 
+  it('dishes: the dishes page plus one detail page per dish, per locale', () => {
+    const urls = sitemapEntries('dishes', { places: [], venues: [], dishes: ['pavlova'] }).map((e) => e.loc)
+    expect(urls).toEqual([`${BASE}/th/dishes`, `${BASE}/en/dishes`, `${BASE}/th/dishes/pavlova`, `${BASE}/en/dishes/pavlova`])
+  })
+
   it('every entry links its th and en alternates', () => {
     for (const e of sitemapEntries('venues', { places: [], venues: ['hollow'] }).filter((x) => x.loc.includes('venue='))) {
       expect(e.alternates).toEqual({ th: `${BASE}/th/eat-drink?venue=hollow`, en: `${BASE}/en/eat-drink?venue=hollow` })
@@ -41,9 +46,9 @@ describe('xml', () => {
     expect(xml).not.toMatch(/&(?!amp;|lt;|gt;|quot;|apos;)/)
   })
 
-  it('sitemapIndexXml lists the three sitemaps', () => {
+  it('sitemapIndexXml lists every sitemap', () => {
     const xml = sitemapIndexXml()
-    for (const k of ['destinations', 'venues', 'gallery']) expect(xml).toContain(`<loc>${BASE}/sitemaps/${k}.xml</loc>`)
+    for (const k of ['destinations', 'venues', 'gallery', 'dishes']) expect(xml).toContain(`<loc>${BASE}/sitemaps/${k}.xml</loc>`)
     expect(xml).toContain('<sitemapindex')
   })
 })

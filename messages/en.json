@@ -646,6 +646,85 @@
     },
     "noStyle": "The interactive map isn't available right now, so places are shown as a list."
   },
+  "dishes": {
+    "metaTitle": "Signature dishes",
+    "metaDescription": "The dishes that define Australia and New Zealand, what they taste like, and where locals go to eat them.",
+    "eyebrow": "Eat & drink · Signature dishes",
+    "title": "Eat the place, not the menu.",
+    "lede": "The dishes that define Australia and New Zealand, what they taste like, and where locals actually go to eat them. Start with the plate, then find the table.",
+    "filters": {
+      "label": "Filters",
+      "open": "Filters",
+      "close": "Close filters",
+      "country": "Country",
+      "allCountries": "All",
+      "region": "Region",
+      "allRegions": "All",
+      "type": "Type",
+      "price": "Price",
+      "priceUpTo": "Up to price level {n} of 4",
+      "diet": "Dietary",
+      "clear": "Clear all",
+      "show": "{count, plural, one {Show # dish} other {Show # dishes}}"
+    },
+    "country": {
+      "au": "Australia",
+      "nz": "New Zealand"
+    },
+    "type": {
+      "savoury": "Savoury",
+      "sweet": "Sweet",
+      "drink": "Drinks",
+      "snack": "Snacks"
+    },
+    "diet": {
+      "vegetarian": "Vegetarian",
+      "vegan": "Vegan",
+      "gluten_free": "Gluten-free",
+      "halal": "Halal-friendly",
+      "no_pork": "No pork",
+      "no_shellfish": "No shellfish"
+    },
+    "count": "{count, plural, one {# dish} other {# dishes}}",
+    "mustTry": {
+      "eyebrow": "Must try",
+      "title": "If you eat only three things"
+    },
+    "all": {
+      "eyebrow": "All dishes",
+      "title": "Sorted by our editors"
+    },
+    "empty": {
+      "title": "No dishes match every filter.",
+      "text": "Try removing a dietary filter or switching region."
+    },
+    "collections": {
+      "eyebrow": "Collections",
+      "title": "Ways to eat your way through"
+    },
+    "card": {
+      "save": "Save {name}",
+      "unsave": "Remove {name} from saved",
+      "priceLevel": "Price level {n} of 4"
+    },
+    "detail": {
+      "back": "All dishes",
+      "dispute": "A friendly dispute",
+      "taste": "What it tastes like",
+      "served": "How it’s served",
+      "allergy": "Dietary & allergy notes",
+      "allergyWarning": "Always tell the venue about allergies and ask before you order.",
+      "pairings": "Best paired with",
+      "whereToTry": "Where to try it",
+      "region": "Region",
+      "noVenues": "We haven’t listed a place for this dish yet.",
+      "walk": "{stop} · {min} min walk",
+      "save": "Save to My Trip",
+      "saved": "Saved",
+      "openMap": "Open map",
+      "openMapFor": "Open {name} on the map"
+    }
+  },
   "eatDrink": {
     "metaTitle": "Eat & Drink",
     "metaDescription": "Restaurants and bars our editors have visited and paid for, each with its nearest stop and walking time.",

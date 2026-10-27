@@ -2,15 +2,15 @@ import { locales, type Locale } from '@/lib/i18n/t'
 import { localeUrls, localizedUrl } from './metadata'
 import { siteUrl } from './site-url'
 
-export const SITEMAP_KINDS = ['destinations', 'venues', 'gallery'] as const
+export const SITEMAP_KINDS = ['destinations', 'venues', 'gallery', 'dishes'] as const
 export type SitemapKind = (typeof SITEMAP_KINDS)[number]
 
 export const isSitemapKind = (s: string): s is SitemapKind => (SITEMAP_KINDS as readonly string[]).includes(s)
 
 export type SitemapEntry = { loc: string; alternates: Record<Locale, string> }
 
-/** Slugs of published attractions (`places`) and venues. */
-export type SitemapSlugs = { places: string[]; venues: string[] }
+/** Slugs of published attractions (`places`), venues and dishes. */
+export type SitemapSlugs = { places: string[]; venues: string[]; dishes?: string[] }
 
 const q = encodeURIComponent
 
@@ -20,10 +20,7 @@ function perLocale(path: string): SitemapEntry[] {
   return locales.map((l) => ({ loc: localizedUrl(l, path), alternates }))
 }
 
-/**
- * Dishes get their own kind in Phase 2. Bare section pages ride along with their kind so the
- * listing pages themselves are crawlable, not only their deep links.
- */
+/** Bare section pages ride along with their kind so the listing pages themselves are crawlable, not only their deep links. */
 export function sitemapEntries(kind: SitemapKind, slugs: SitemapSlugs): SitemapEntry[] {
   switch (kind) {
     case 'destinations':
@@ -32,6 +29,8 @@ export function sitemapEntries(kind: SitemapKind, slugs: SitemapSlugs): SitemapE
       return ['/eat-drink', ...slugs.venues.map((s) => `/eat-drink?venue=${q(s)}`)].flatMap(perLocale)
     case 'gallery':
       return perLocale('/gallery')
+    case 'dishes':
+      return ['/dishes', ...(slugs.dishes ?? []).map((s) => `/dishes/${q(s)}`)].flatMap(perLocale)
   }
 }
 

@@ -1,7 +1,8 @@
+import { getDishSlugs } from '@/lib/content/dishes'
 import { getSeoPlaces } from '@/lib/content/seo'
 import { isSitemapKind, SITEMAP_KINDS, sitemapEntries, urlsetXml, type SitemapKind } from '@/lib/seo/sitemap'
 
-// Served at /sitemaps/<kind>.xml. Static with hourly ISR; the places are cached under the `map` / `venues` tags.
+// Served at /sitemaps/<kind>.xml. Static with hourly ISR; slugs are cached under the `map` / `venues` / `dishes` tags.
 export const dynamic = 'force-static'
 export const dynamicParams = false
 export const revalidate = 3600
@@ -12,11 +13,12 @@ export function generateStaticParams() {
 
 async function slugsFor(kind: SitemapKind) {
   // Slugs are locale-independent; `en` is only the cache key.
-  const [places, venues] = await Promise.all([
+  const [places, venues, dishes] = await Promise.all([
     kind === 'destinations' ? getSeoPlaces('attractions', 'en') : [],
     kind === 'venues' ? getSeoPlaces('venues', 'en') : [],
+    kind === 'dishes' ? getDishSlugs() : [],
   ])
-  return { places: places.map((p) => p.slug), venues: venues.map((p) => p.slug) }
+  return { places: places.map((p) => p.slug), venues: venues.map((p) => p.slug), dishes }
 }
 
 export async function GET(_req: Request, { params }: { params: Promise<{ kind: string }> }) {
