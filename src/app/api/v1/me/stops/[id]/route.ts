@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { meRoute, NO_STORE, NotFound } from '@/lib/api/session'
 import { parseBody } from '@/lib/api/validate'
 import { deleteStop, ownedStop, patchStop } from '@/lib/trip/mutate'
+import { scheduleLegRecompute } from '@/lib/trip/recompute'
 import { patchStopSchema } from '@/lib/trip/schema'
 
 type Ctx = { params: Promise<{ id: string }> }
@@ -19,6 +20,7 @@ export async function PATCH(req: NextRequest, ctx: Ctx) {
     const parsed = await parseBody(patchStopSchema, req)
     if (!parsed.ok) return parsed.response
     await patchStop(db, stop, parsed.data)
+    scheduleLegRecompute(stop.tripId)
     return new NextResponse(null, { status: 204, headers: NO_STORE })
   })
 }
@@ -28,6 +30,7 @@ export async function DELETE(req: NextRequest, ctx: Ctx) {
   return meRoute(req, { write: true, label: 'stop' }, async ({ user, db }) => {
     const stop = await ownedStop(db, user.id, await stopId(ctx))
     await deleteStop(db, user.id, stop)
+    scheduleLegRecompute(stop.tripId)
     return new NextResponse(null, { status: 204, headers: NO_STORE })
   })
 }

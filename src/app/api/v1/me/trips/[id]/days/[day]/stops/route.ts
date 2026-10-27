@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { meRoute, NO_STORE, NotFound } from '@/lib/api/session'
 import { parseBody } from '@/lib/api/validate'
 import { addStop, ownedDay } from '@/lib/trip/mutate'
+import { scheduleLegRecompute } from '@/lib/trip/recompute'
 import { newStopSchema } from '@/lib/trip/schema'
 
 const params = z.object({ id: z.uuid(), day: z.coerce.number().int().min(1).max(60) })
@@ -16,6 +17,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     if (!parsed.ok) return parsed.response
     const dayId = await ownedDay(db, user.id, p.data.id, p.data.day)
     const id = await addStop(db, dayId, parsed.data)
+    scheduleLegRecompute(p.data.id)
     return NextResponse.json({ id }, { status: 201, headers: NO_STORE })
   })
 }
