@@ -646,6 +646,112 @@
     },
     "noStyle": "The interactive map isn't available right now, so places are shown as a list."
   },
+  "prepare": {
+    "metaTitle": "Prepare for your trip",
+    "metaDescription": "A short, ordered checklist of what to sort before you fly, with seasons, packing and the local facts that make arrival easy.",
+    "eyebrow": "Plan · Before you go",
+    "title": "Everything ready, nothing rushed.",
+    "lede": "A short, ordered list of what to sort before you fly, with the seasons, the packing and the small local facts that make arrival easy.",
+    "country": {
+      "label": "Country",
+      "au": "Australia",
+      "nz": "New Zealand",
+      "both": "Both"
+    },
+    "progress": {
+      "label": "Checklist progress",
+      "ready": "{done} of {total} ready",
+      "pct": "{pct}% ready",
+      "next": "Next: {item}",
+      "allDone": "All done. Have a good trip."
+    },
+    "checklist": {
+      "eyebrow": "Personal checklist",
+      "title": "Four moments, in order",
+      "synced": "Saved to your account",
+      "reset": "Reset",
+      "resetConfirm": "Untick every item?",
+      "resetYes": "Yes, reset",
+      "cancel": "Cancel",
+      "pdf": "Save as PDF",
+      "groupCount": "{done}/{count}",
+      "saveFailed": "That change wasn’t saved. Check your connection and try again.",
+      "empty": "No checklist items yet.",
+      "moment": {
+        "3m": "3 months before",
+        "1m": "1 month before",
+        "1w": "1 week before",
+        "day0": "Day of departure"
+      }
+    },
+    "seasons": {
+      "eyebrow": "Best time to go",
+      "title": "Seasons, the other way round",
+      "lede": "Australia and New Zealand are in the Southern Hemisphere, so the seasons are reversed: December is midsummer and July is midwinter.",
+      "southern": "Southern seasons",
+      "northern": "For comparison: Northern",
+      "comfort": "Weather comfort, low to high",
+      "crowds": "Crowds",
+      "recommended": "Recommended window",
+      "best": "Best {months}",
+      "cell": "{region}, {month}: comfort {comfort} of 3, crowds {crowds} of 3",
+      "cellRecommended": "{region}, {month}: comfort {comfort} of 3, crowds {crowds} of 3, recommended",
+      "noData": "{region}, {month}: no data",
+      "empty": "Season data is coming soon.",
+      "season": {
+        "summer": "Summer",
+        "autumn": "Autumn",
+        "winter": "Winter",
+        "spring": "Spring"
+      }
+    },
+    "packing": {
+      "eyebrow": "Packing guide",
+      "title": "Pack in layers",
+      "season": "Season",
+      "packed": "{done}/{count} packed",
+      "empty": "No packing list for this season yet."
+    },
+    "facts": {
+      "eyebrow": "Know before you go",
+      "title": "Small facts that make arrival easy"
+    },
+    "connectivity": {
+      "eyebrow": "Connectivity & health",
+      "title": "Staying connected",
+      "option": "Option",
+      "setup": "Setup",
+      "cost": "Typical cost",
+      "best": "Best for",
+      "watch": "Watch out",
+      "placeholder": "Placeholder",
+      "note": "Free Wi-Fi is common in cities, cafés and on many trains. Coverage drops sharply in the Outback, Fiordland and on alpine roads: download maps and tickets before you leave town."
+    },
+    "health": {
+      "title": "Health & insurance"
+    },
+    "airport": {
+      "eyebrow": "Getting around",
+      "title": "From the airport, without a car",
+      "allTransport": "All public transport",
+      "route": "Route details",
+      "routeFor": "Route details for {city}",
+      "minutes": "{min} min",
+      "placeholder": "Placeholder"
+    },
+    "keep": {
+      "eyebrow": "Keep planning",
+      "visa": "Visa & Entry",
+      "visaText": "What permission you may need.",
+      "money": "Currency converter",
+      "moneyText": "AUD and NZD in your currency.",
+      "dishes": "Signature dishes",
+      "dishesText": "What to eat, and where.",
+      "trip": "My Trip",
+      "tripText": "Your day-by-day plan."
+    },
+    "disclaimer": "Rules, prices and timetables can change. Confirm with official sources before you book or travel."
+  },
   "dishes": {
     "metaTitle": "Signature dishes",
     "metaDescription": "The dishes that define Australia and New Zealand, what they taste like, and where locals go to eat them.",

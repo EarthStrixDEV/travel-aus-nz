@@ -7,6 +7,7 @@ export type AnalyticsEvent =
   | 'fx_convert'
   | 'visa_official_click'
   | 'checklist_complete'
+  | 'checklist_toggle'
   | 'route_plan';
 
 export type AnalyticsProps = Record<string, string | number | boolean>;
