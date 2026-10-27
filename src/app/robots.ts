@@ -3,7 +3,12 @@ import { siteUrl } from '@/lib/seo/site-url'
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: '*', allow: '/', disallow: ['/th/admin', '/en/admin', '/api/'] },
+    // Signed-in pages (trip, prepare) and read-only share links are user data, never indexed.
+    rules: {
+      userAgent: '*',
+      allow: '/',
+      disallow: ['/api/', ...['admin', 'trip', 'prepare', 'shared'].flatMap((p) => [`/th/${p}`, `/en/${p}`])],
+    },
     sitemap: `${siteUrl()}/sitemap.xml`,
   }
 }

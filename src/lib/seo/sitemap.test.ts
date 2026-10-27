@@ -30,6 +30,14 @@ describe('sitemapEntries', () => {
     expect(urls).toEqual([`${BASE}/th/dishes`, `${BASE}/en/dishes`, `${BASE}/th/dishes/pavlova`, `${BASE}/en/dishes/pavlova`])
   })
 
+  it('lists the public Phase 2 pages and never the signed-in or shared ones', () => {
+    const slugs = { places: [], venues: [], dishes: ['pavlova'] }
+    const urls = (['destinations', 'venues', 'gallery', 'dishes'] as const).flatMap((k) => sitemapEntries(k, slugs).map((e) => e.loc))
+    expect(urls).toContain(`${BASE}/en/transport`)
+    expect(urls).toContain(`${BASE}/en/dishes`)
+    expect(urls.some((u) => /\/(trip|prepare|shared)(\/|$|\?)/.test(u))).toBe(false)
+  })
+
   it('every entry links its th and en alternates', () => {
     for (const e of sitemapEntries('venues', { places: [], venues: ['hollow'] }).filter((x) => x.loc.includes('venue='))) {
       expect(e.alternates).toEqual({ th: `${BASE}/th/eat-drink?venue=hollow`, en: `${BASE}/en/eat-drink?venue=hollow` })

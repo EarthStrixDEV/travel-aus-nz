@@ -24,7 +24,7 @@ function perLocale(path: string): SitemapEntry[] {
 export function sitemapEntries(kind: SitemapKind, slugs: SitemapSlugs): SitemapEntry[] {
   switch (kind) {
     case 'destinations':
-      return ['', '/map', '/money', '/visa', ...slugs.places.map((s) => `/map?place=${q(s)}`)].flatMap(perLocale)
+      return ['', '/map', '/transport', '/money', '/visa', ...slugs.places.map((s) => `/map?place=${q(s)}`)].flatMap(perLocale)
     case 'venues':
       return ['/eat-drink', ...slugs.venues.map((s) => `/eat-drink?venue=${q(s)}`)].flatMap(perLocale)
     case 'gallery':
