@@ -17,7 +17,7 @@ export type OffpeakWindow = z.infer<typeof offpeakWindow>
  * `fare_rules.rule` shapes we model (plan Deviation 2). Zone fares are not modelled; any other shape
  * is ignored, so the leg counts as "no rule" and the option's fares are null.
  */
-const fareRule = z.discriminatedUnion('kind', [
+export const fareRule = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('flat'), peak: price, offpeak: price, offpeak_windows: z.array(offpeakWindow).optional() }),
   z.object({
     kind: z.literal('distance'),

@@ -445,3 +445,161 @@ insert into public.faqs (scope, q_i18n, a_i18n, sort) values
    '{"en":"Transit rules depend on your nationality, airport and how long you stay airside. Check the transit section of each official site before you fly."}', 4),
   ('visa', '{"en":"What if the application is refused?"}',
    '{"en":"The decision letter usually explains why. Read it carefully and follow the official guidance. Be cautious of anyone offering a guaranteed fix for a fee."}', 5);
+
+-- ===========================================================================
+-- Phase 2 (Transport, Dishes, Prepare). Placeholders: verified_at stays null.
+-- ===========================================================================
+
+-- ---------------------------------------------------------------------------
+-- Transport: fare rules, lines with editorial summaries, scenic routes, airports
+-- ---------------------------------------------------------------------------
+insert into public.fare_rules (agency_id, mode, rule, currency)
+select a.id, v.mode::public.transit_mode, v.rule::jsonb, v.currency
+from (values
+  ('Transport for NSW', null, '{"kind":"distance","bands":[{"upto_km":10,"peak":4.20,"offpeak":2.94},{"upto_km":20,"peak":5.22,"offpeak":3.65},{"upto_km":35,"peak":6.01,"offpeak":4.20},{"upto_km":65,"peak":8.03,"offpeak":5.62}],"daily_cap":19.30}', 'AUD'),
+  ('Public Transport Victoria', null, '{"kind":"flat","peak":5.30,"offpeak":5.30}', 'AUD'),
+  ('Auckland Transport', null, '{"kind":"flat","peak":2.40,"offpeak":2.40}', 'NZD')
+) as v(agency, mode, rule, currency)
+join public.transit_agencies a on a.name = v.agency;
+
+insert into public.transit_lines (agency_id, city_id, gtfs_route_id, mode, short_name, long_name)
+select a.id, c.id, v.route, v.mode::public.transit_mode, v.short, v.long
+from (values
+  ('Transport for NSW',         'sydney',    'seed-t2',  'train', 'T2', 'City Circle via Circular Quay'),
+  ('Transport for NSW',         'sydney',    'seed-f1',  'ferry', 'F1', 'Circular Quay to Manly'),
+  ('Public Transport Victoria', 'melbourne', 'seed-35',  'tram',  '35', 'City Circle (free)'),
+  ('Auckland Transport',        'auckland',  'seed-wst', 'train', 'WEST', 'Britomart to Swanson')
+) as v(agency, city, route, mode, short, long)
+join public.transit_agencies a on a.name = v.agency
+join public.cities c on c.slug = v.city;
+
+insert into public.line_service_summary (line_id, end_to_end_min, headway_peak_min, headway_offpeak_min, fare_min, fare_max, computed_at)
+select l.id, v.e2e, v.peak, v.offpeak, v.fmin, v.fmax, now()
+from (values
+  ('seed-t2', 18, 4, 8, 2.94, 4.20),
+  ('seed-f1', 18, 20, 30, 6.43, 9.18),
+  ('seed-35', 50, 12, 12, 0, 0),
+  ('seed-wst', 55, 10, 20, 2.40, 7.20)
+) as v(route, e2e, peak, offpeak, fmin, fmax)
+join public.transit_lines l on l.gtfs_route_id = v.route;
+
+insert into public.line_stops (line_id, stop_id, seq)
+select l.id, s.id, v.seq
+from (values
+  ('seed-t2', 'seed-ce', 1), ('seed-t2', 'seed-th', 2), ('seed-t2', 'seed-wy', 3), ('seed-t2', 'seed-cq', 4), ('seed-t2', 'seed-mp', 5)
+) as v(route, stop, seq)
+join public.transit_lines l on l.gtfs_route_id = v.route
+join public.transit_stops s on s.gtfs_stop_id = v.stop;
+
+insert into public.scenic_routes (country, mode, slug, name_i18n, from_name, to_name, line_i18n, duration_text, frequency_text, fare_from, currency, status) values
+  ('AU', 'train', 'the-ghan', '{"en":"The Ghan","th":"เดอะกาน"}', 'Adelaide', 'Darwin', '{"en":"Three days north through the red centre."}', '3 days', 'Weekly', 2390, 'AUD', 'published'),
+  ('AU', 'train', 'indian-pacific', '{"en":"Indian Pacific"}', 'Sydney', 'Perth', '{"en":"Ocean to ocean across the Nullarbor."}', '4 days', 'Weekly', 2790, 'AUD', 'published'),
+  ('NZ', 'train', 'tranzalpine', '{"en":"TranzAlpine","th":"ทรานซ์อัลไพน์"}', 'Christchurch', 'Greymouth', '{"en":"Over the Southern Alps via Arthur''s Pass."}', '4 h 50', 'Daily', 219, 'NZD', 'published'),
+  ('NZ', 'ferry', 'interislander', '{"en":"Interislander"}', 'Wellington', 'Picton', '{"en":"Cook Strait and the Marlborough Sounds."}', '3 h 30', 'Several daily', 75, 'NZD', 'published');
+
+insert into public.airport_transfers (airport_code, city_id, option_name, mode, duration_min, fare_min, fare_max, currency)
+select v.code, c.id, v.name, v.mode::public.transit_mode, v.minutes, v.fmin, v.fmax, v.currency
+from (values
+  ('SYD', 'sydney',    'Airport Link train to Central', 'train', 15, 20.62, 21.99, 'AUD'),
+  ('SYD', 'sydney',    'Bus 420 to Burwood',            'bus',   40, 4.50, 4.50, 'AUD'),
+  ('MEL', 'melbourne', 'SkyBus to Southern Cross',      'coach', 30, 23.70, 23.70, 'AUD'),
+  ('AKL', 'auckland',  'AirportLink bus to Puhinui, then train', 'bus', 45, 4.10, 5.60, 'NZD')
+) as v(code, city, name, mode, minutes, fmin, fmax, currency)
+join public.cities c on c.slug = v.city;
+
+insert into public.content_blocks (key, body_i18n) values
+  ('transport_tips', '{"en":"Opal and AT HOP caps limit what you pay per day and week; in Melbourne a myki card is still required.","th":"Opal และ AT HOP มีเพดานค่าโดยสารรายวันและรายสัปดาห์ ส่วนเมลเบิร์นยังต้องใช้บัตร myki"}')
+on conflict (key) do update set body_i18n = excluded.body_i18n;
+
+-- ---------------------------------------------------------------------------
+-- Signature dishes, pairings, where to try, one collection
+-- ---------------------------------------------------------------------------
+insert into public.dishes (slug, country, region_id, type, name_i18n, line_i18n, story_i18n, dispute_note_i18n, taste_i18n, served_i18n, allergy_i18n, dietary, price_level, price_text, must_try_rank, sort, status)
+select v.slug, v.country::public.country_code, r.id, v.type, v.name::jsonb, jsonb_build_object('en', v.line), jsonb_build_object('en', v.story),
+       case when v.dispute is null then null else jsonb_build_object('en', v.dispute) end,
+       jsonb_build_object('en', v.taste), jsonb_build_object('en', v.served), jsonb_build_object('en', v.allergy),
+       v.diet::text[], v.price, v.price_text, v.must, v.sort, 'published'
+from (values
+  ('sydney-rock-oysters', 'AU', 'sydney', 'savoury', '{"en":"Sydney rock oysters","th":"หอยนางรมซิดนีย์ร็อก"}', 'Small, creamy and briny, from the NSW estuaries.', 'Farmed in the river estuaries of New South Wales for over a century.', null, 'Creamy, mineral and gently sweet.', 'Natural on ice with lemon.', 'Shellfish. Eat only where shucked to order.', '{gluten_free,no_pork,halal}', 3, 'A$4.50–6 each', 1, 1),
+  ('pavlova', 'AU', 'sydney', 'sweet', '{"en":"Pavlova","th":"พาฟโลวา"}', 'Crisp meringue, soft centre, cream and summer fruit.', 'Named for the ballerina Anna Pavlova and served at nearly every summer gathering.', 'Both countries claim it. Order one in each and decide for yourself.', 'Crackly outside, marshmallow inside.', 'In wedges with cream and passionfruit.', 'Contains egg and dairy.', '{vegetarian,gluten_free,no_pork,no_shellfish,halal}', 2, 'A$14–19 · NZ$15–20', 2, 2),
+  ('hangi', 'NZ', 'auckland', 'savoury', '{"en":"Hāngī","th":"ฮางี"}', 'Meat and vegetables cooked in an earth oven.', 'The traditional Māori method of cooking for a gathering.', null, 'Smoky, earthy and tender.', 'Shared family style.', 'Usually includes pork; ask for a pork-free plate.', '{gluten_free,no_shellfish}', 2, 'NZ$35–48', 3, 3),
+  ('meat-pie', 'AU', 'melbourne', 'snack', '{"en":"Meat pie"}', 'Minced beef and gravy in flaky pastry.', 'The unofficial food of the football ground.', null, 'Rich, peppery gravy and buttery pastry.', 'With tomato sauce, at a bakery counter.', 'Contains gluten and dairy.', '{no_pork,no_shellfish}', 1, 'A$6–9', null, 4),
+  ('flat-white', 'AU', 'melbourne', 'drink', '{"en":"Flat white"}', 'Espresso with a thin layer of velvety milk.', 'Both sides of the Tasman claim it; Melbourne cafés perfected it.', 'Auckland and Melbourne both say they poured it first.', 'Strong, smooth and short.', 'In a small ceramic cup.', 'Contains dairy; most cafés offer plant milks.', '{vegetarian,gluten_free,no_pork,no_shellfish,halal}', 1, 'A$5–6', null, 5),
+  ('lamington', 'AU', 'tasmania', 'sweet', '{"en":"Lamington"}', 'Sponge cake dipped in chocolate and coconut.', 'The cake of school fundraisers and country bakeries.', null, 'Light sponge, thin chocolate shell.', 'With a cup of tea.', 'Contains gluten, egg and dairy.', '{vegetarian,no_pork,no_shellfish,halal}', 1, 'A$4–7', null, 6)
+) as v(slug, country, region, type, name, line, story, dispute, taste, served, allergy, diet, price, price_text, must, sort)
+join public.regions r on r.slug = v.region;
+
+insert into public.dish_pairings (dish_id, k_i18n, v_i18n, sort)
+select d.id, jsonb_build_object('en', v.k), jsonb_build_object('en', v.val), v.sort
+from (values
+  ('sydney-rock-oysters', 'Wine', 'Hunter Valley semillon', 1), ('sydney-rock-oysters', 'Beer', 'Pale ale', 2),
+  ('pavlova', 'Wine', 'Late-harvest riesling', 1), ('pavlova', 'Coffee', 'Long black', 2),
+  ('hangi', 'Wine', 'Hawke''s Bay syrah', 1)
+) as v(dish, k, val, sort)
+join public.dishes d on d.slug = v.dish;
+
+insert into public.dish_venues (dish_id, place_id, region_id, rank, price_text, note_i18n)
+select d.id, p.id, r.id, v.rank, v.price, case when v.note is null then null else jsonb_build_object('en', v.note) end
+from (values
+  ('sydney-rock-oysters', 'harbourline-oyster-room', 'sydney', 1, 'A$5 each', 'Shucked to order.'),
+  ('pavlova', 'saltbush-dining-room', 'sydney', 1, 'A$18', null),
+  ('hangi', 'kokako-kitchen', 'auckland', 1, 'NZ$42', 'Sundays only.'),
+  ('flat-white', 'kettle-and-kiln', 'melbourne', 1, 'A$5.50', null)
+) as v(dish, place, region, rank, price, note)
+join public.dishes d on d.slug = v.dish
+join public.places p on p.slug = v.place
+join public.regions r on r.slug = v.region;
+
+insert into public.collections (id, slug, kind, placement, title_i18n, sub_i18n, status) values
+  ('00000000-0000-0000-0000-00000000c801', 'sweet-tooth', 'dish', 'dishes', '{"en":"For a sweet tooth"}', '{"en":"Cakes and puddings on both sides of the Tasman."}', 'published');
+insert into public.collection_items (collection_id, entity_id, position)
+select '00000000-0000-0000-0000-00000000c801', d.id, v.pos
+from (values ('pavlova', 1), ('lamington', 2)) as v(slug, pos)
+join public.dishes d on d.slug = v.slug;
+
+-- ---------------------------------------------------------------------------
+-- Prepare: checklist, packing, months, connectivity, facts, health
+-- ---------------------------------------------------------------------------
+insert into public.checklist_templates (slug, moment, title_i18n, note_i18n, applies_to, sort) values
+  ('permit',    '3m',   '{"en":"Entry permission","th":"การขออนุญาตเข้าประเทศ"}', '{"en":"Check what you need on Visa & Entry, then apply on the official site."}', '{AU,NZ}', 1),
+  ('passport',  '3m',   '{"en":"Passport","th":"หนังสือเดินทาง"}', '{"en":"Confirm validity covers your whole trip."}', '{AU,NZ}', 2),
+  ('insurance', '3m',   '{"en":"Travel insurance"}', '{"en":"Include medical cover and your activities."}', '{AU,NZ}', 3),
+  ('flights',   '3m',   '{"en":"Flights"}', '{"en":"Book long-haul and key internal flights."}', '{AU,NZ}', 4),
+  ('stay',      '1m',   '{"en":"Accommodation"}', '{"en":"Confirm every night, including the first."}', '{AU,NZ}', 5),
+  ('transit',   '1m',   '{"en":"Public transport cards"}', '{"en":"Note which card each city uses."}', '{AU,NZ}', 6),
+  ('money',     '1m',   '{"en":"Currency and cards"}', '{"en":"Check foreign fees; tell your bank."}', '{AU,NZ}', 7),
+  ('esim',      '1m',   '{"en":"eSIM"}', '{"en":"Buy and install; activate on arrival."}', '{AU,NZ}', 8),
+  ('pack',      '1w',   '{"en":"Packing"}', '{"en":"Use the season list below."}', '{AU,NZ}', 9),
+  ('maps',      '1w',   '{"en":"Offline maps"}', '{"en":"Download regions with weak coverage."}', '{AU,NZ}', 10),
+  ('contacts',  '1w',   '{"en":"Emergency contacts"}', '{"en":"Save 000 (AU) / 111 (NZ) and share your plan."}', '{AU,NZ}', 11),
+  ('docs',      'day0', '{"en":"Documents in carry-on"}', '{"en":"Passport, approvals, insurance, bookings."}', '{AU,NZ}', 12),
+  ('charge',    'day0', '{"en":"Charger and adapter"}', '{"en":"Type I adapter in your carry-on."}', '{AU,NZ}', 13),
+  ('declare',   'day0', '{"en":"Arrival declaration"}', '{"en":"Declare food and outdoor gear."}', '{AU,NZ}', 14);
+
+insert into public.packing_items (season, grp, title_i18n, sort) values
+  ('summer', 'Clothes', '{"en":"Wide-brimmed hat"}', 1), ('summer', 'Clothes', '{"en":"Light long sleeves"}', 2), ('summer', 'Health', '{"en":"SPF 50 sunscreen"}', 3),
+  ('autumn', 'Clothes', '{"en":"Light jacket"}', 1), ('autumn', 'Clothes', '{"en":"Layers for cool evenings"}', 2),
+  ('winter', 'Clothes', '{"en":"Warm coat"}', 1), ('winter', 'Clothes', '{"en":"Thermal base layer"}', 2), ('winter', 'Gear', '{"en":"Waterproof shoes"}', 3),
+  ('spring', 'Clothes', '{"en":"Rain jacket"}', 1), ('spring', 'Gear', '{"en":"Compact umbrella"}', 2);
+
+insert into public.region_months (region_id, month, comfort, crowds, recommended)
+select r.id, m.month, v.comfort[m.month], v.crowds[m.month], m.month = any (v.rec)
+from (values
+  ('sydney',     '{3,3,3,3,2,1,1,1,2,3,3,3}'::int[], '{3,2,2,2,1,1,2,1,1,2,2,3}'::int[], '{3,4,5,9,10,11}'::int[]),
+  ('melbourne',  '{3,3,3,2,1,1,1,1,2,2,3,3}'::int[], '{3,2,2,1,1,1,1,1,1,2,2,3}'::int[], '{3,4,11}'::int[]),
+  ('auckland',   '{3,3,3,2,2,1,1,1,2,2,3,3}'::int[], '{3,2,2,1,1,1,1,1,1,1,2,3}'::int[], '{1,2,3,4,11,12}'::int[]),
+  ('queenstown', '{3,3,3,2,1,2,2,2,1,2,2,3}'::int[], '{3,2,2,1,1,2,3,3,1,1,2,3}'::int[], '{1,2,3,7,8,12}'::int[])
+) as v(region, comfort, crowds, rec)
+join public.regions r on r.slug = v.region
+cross join generate_series(1, 12) as m(month);
+
+insert into public.connectivity_options (name_i18n, setup_i18n, cost_text, best_i18n, watch_i18n) values
+  ('{"en":"eSIM"}', '{"en":"Buy and install before you fly; activate on arrival."}', 'A$25–40', '{"en":"Most visitors"}', '{"en":"Check your phone supports eSIM."}'),
+  ('{"en":"Local SIM"}', '{"en":"Buy at the airport or a supermarket; bring your passport."}', 'A$30', '{"en":"Long stays"}', '{"en":"Registration needs ID."}'),
+  ('{"en":"Roaming"}', '{"en":"Turn on with your home carrier."}', 'Varies', '{"en":"Short trips"}', '{"en":"Daily fees add up fast."}'),
+  ('{"en":"Pocket Wi-Fi"}', '{"en":"Rent before you fly; collect at the airport."}', 'A$10/day', '{"en":"Groups"}', '{"en":"One more device to charge."}');
+
+insert into public.content_blocks (key, body_i18n) values
+  ('facts', '{"en":[{"title":"Tipping","text":"Not expected; round up for great service.","icon":"coin"},{"title":"Tap water","text":"Safe to drink everywhere in the cities.","icon":"water"},{"title":"Power","text":"Type I plugs, 230 V.","icon":"plug"},{"title":"Driving side","text":"Traffic keeps left; look right when crossing.","icon":"road"},{"title":"Sun","text":"UV is strong even on cloudy days.","icon":"sun"}]}'),
+  ('health', '{"en":[{"title":"Travel insurance with medical cover","text":"Healthcare is excellent but costly for visitors."},{"title":"Bring prescriptions with documentation","text":"Carry medicines in original packaging with a doctor''s letter."},{"title":"Check official medicine rules","text":"Confirm quantities and rules before you pack."}]}')
+on conflict (key) do update set body_i18n = excluded.body_i18n;

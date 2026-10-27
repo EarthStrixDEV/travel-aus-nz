@@ -72,6 +72,17 @@ export async function dishOptions(db: Client, locale: string): Promise<Option[]>
   }))
 }
 
+export async function agencyOptions(db: Client): Promise<Option[]> {
+  return must(await db.from('transit_agencies').select('id, country, name').order('country').order('name'), 'agencies').map((a) => ({
+    value: String(a.id),
+    label: `${a.country} · ${a.name}`,
+  }))
+}
+
+export async function cardOptions(db: Client): Promise<Option[]> {
+  return must(await db.from('transit_cards').select('id, name').order('name'), 'cards').map((c) => ({ value: String(c.id), label: c.name }))
+}
+
 export async function permissionOptions(db: Client, locale: string): Promise<Option[]> {
   return must(await db.from('permission_types').select('id, country, name_i18n').order('country').order('id'), 'permissions').map(
     (p) => ({ value: String(p.id), label: `${p.country} · ${name(p.name_i18n, locale)}` }),

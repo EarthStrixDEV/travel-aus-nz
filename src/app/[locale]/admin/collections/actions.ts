@@ -43,5 +43,7 @@ export async function saveCollection(id: string | null, formData: FormData): Pro
   })
   if (itemsError) return { error: dbError(itemsError, t) }
   revalidateTag(CACHE_TAGS.home)
+  // Dish collections are shown on /dishes.
+  if (d.kind === 'dish') revalidateTag(CACHE_TAGS.dishes)
   return {}
 }
