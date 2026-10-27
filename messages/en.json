@@ -646,6 +646,79 @@
     },
     "noStyle": "The interactive map isn't available right now, so places are shown as a list."
   },
+  "trip": {
+    "metaTitle": "My Trip",
+    "eyebrow": "My trip",
+    "list": {
+      "title": "Your trips",
+      "empty": "No trips yet. Start one below, then add places you’ve saved.",
+      "open": "Open {title}",
+      "undated": "No dates yet"
+    },
+    "new": {
+      "title": "Start a trip",
+      "name": "Trip name",
+      "namePlaceholder": "Sydney & the Blue Mountains",
+      "start": "First day",
+      "end": "Last day",
+      "datesHint": "Optional. One day is created per date, up to 60.",
+      "submit": "Create trip",
+      "creating": "Creating…",
+      "failed": "The trip wasn’t created. Check the details and try again."
+    },
+    "header": {
+      "share": "Share",
+      "export": "Export itinerary",
+      "delete": "Delete trip",
+      "deleteConfirm": "Delete this trip?",
+      "deleteYes": "Yes, delete",
+      "cancel": "Cancel"
+    },
+    "days": {
+      "label": "Days",
+      "day": "Day {n}",
+      "summary": "{stops, plural, one {# stop} other {# stops}} · {transit} in transit",
+      "noTransit": "no transit yet",
+      "empty": "Nothing planned for this day yet. Add a saved place below."
+    },
+    "stop": {
+      "time": "Time",
+      "note": "Note",
+      "notePlaceholder": "Booked for 2",
+      "save": "Save",
+      "edit": "Edit {name}",
+      "up": "Move {name} earlier",
+      "down": "Move {name} later",
+      "moveTo": "Move to",
+      "remove": "Remove {name}",
+      "toDay": "Day {n}"
+    },
+    "leg": {
+      "calculating": "Calculating route…",
+      "failed": "Couldn’t calculate this leg.",
+      "retry": "Try again"
+    },
+    "map": {
+      "label": "Day {n} route",
+      "offMapTitle": "Outside the city map",
+      "offMapText": "Some stops on this day are outside the main city, so the route is shown as a list."
+    },
+    "saved": {
+      "title": "Saved, not scheduled",
+      "count": "{count, plural, one {# place} other {# places}}",
+      "empty": "Places you save on the map, in Eat & Drink or Gallery show up here.",
+      "add": "Add to Day {n}"
+    },
+    "error": "That change wasn’t saved. Try again.",
+    "type": {
+      "attraction": "Attraction",
+      "restaurant": "Restaurant",
+      "bar": "Bar",
+      "cafe": "Café",
+      "station": "Station",
+      "village": "Village"
+    }
+  },
   "prepare": {
     "metaTitle": "Prepare for your trip",
     "metaDescription": "A short, ordered checklist of what to sort before you fly, with seasons, packing and the local facts that make arrival easy.",

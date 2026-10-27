@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { NextResponse } from 'next/server'
 
 const m = vi.hoisted(() => ({
-  requireApiUser: vi.fn(),
+  getUser: vi.fn(),
   rateLimit: vi.fn(),
   ownedTripId: vi.fn(),
   currentTripId: vi.fn(),
@@ -11,8 +11,10 @@ const m = vi.hoisted(() => ({
   clearTicks: vi.fn(),
 }))
 
+const DB = vi.hoisted(() => ({ auth: { getUser: () => m.getUser() } }))
+
 vi.mock('server-only', () => ({}))
-vi.mock('@/lib/api/session', () => ({ requireApiUser: m.requireApiUser, NO_STORE: { 'Cache-Control': 'no-store' } }))
+vi.mock('@/lib/supabase/server', () => ({ createClient: async () => DB }))
 vi.mock('@/lib/api/rate-limit', () => ({ rateLimit: m.rateLimit }))
 vi.mock('./current-trip', () => ({ ownedTripId: m.ownedTripId, currentTripId: m.currentTripId }))
 vi.mock('./ticks', () => ({ writeTick: m.writeTick, readTicks: m.readTicks, clearTicks: m.clearTicks }))
@@ -28,7 +30,7 @@ const patch = (body: unknown) =>
 beforeEach(() => {
   vi.clearAllMocks()
   m.rateLimit.mockResolvedValue(null)
-  m.requireApiUser.mockResolvedValue({ user: { id: 'u1' }, db: {} })
+  m.getUser.mockResolvedValue({ data: { user: { id: 'u1' } } })
   m.ownedTripId.mockImplementation(async (_db, _u, id: string) => (id === MINE ? MINE : null))
   m.currentTripId.mockResolvedValue(MINE)
   m.readTicks.mockResolvedValue([1, 4])
@@ -36,7 +38,7 @@ beforeEach(() => {
 
 describe('patchTick', () => {
   it('signed out -> 401 and no write', async () => {
-    m.requireApiUser.mockResolvedValue(NextResponse.json({ error: { code: 'UNAUTHORIZED' } }, { status: 401 }))
+    m.getUser.mockResolvedValue({ data: { user: null } })
     expect((await patchTick(patch({ done: true }), 'checklist', '3')).status).toBe(401)
     expect(m.writeTick).not.toHaveBeenCalled()
   })
@@ -52,13 +54,13 @@ describe('patchTick', () => {
     expect(res.status).toBe(200)
     expect(res.headers.get('Cache-Control')).toBe('no-store')
     expect(await res.json()).toEqual({ trip_id: MINE, id: 3, done: true })
-    expect(m.writeTick).toHaveBeenCalledWith({}, 'checklist', MINE, 3, true)
+    expect(m.writeTick).toHaveBeenCalledWith(DB, 'checklist', MINE, 3, true)
   })
 
   it('no trip_id -> the current trip, created if needed', async () => {
     await patchTick(patch({ packed: false }), 'packing', '9')
-    expect(m.currentTripId).toHaveBeenCalledWith({}, 'u1', { create: true })
-    expect(m.writeTick).toHaveBeenCalledWith({}, 'packing', MINE, 9, false)
+    expect(m.currentTripId).toHaveBeenCalledWith(DB, 'u1', { create: true })
+    expect(m.writeTick).toHaveBeenCalledWith(DB, 'packing', MINE, 9, false)
   })
 
   it('bad body or item id -> 400; unknown item (FK) -> 404', async () => {
@@ -71,20 +73,20 @@ describe('patchTick', () => {
   it('rate limited -> 429 before auth', async () => {
     m.rateLimit.mockResolvedValue(NextResponse.json({}, { status: 429 }))
     expect((await patchTick(patch({ done: true }), 'checklist', '3')).status).toBe(429)
-    expect(m.requireApiUser).not.toHaveBeenCalled()
+    expect(m.getUser).not.toHaveBeenCalled()
   })
 })
 
 describe('getTicks / resetTicks', () => {
   it("another user's or a malformed trip id -> 404", async () => {
-    expect((await getTicks('checklist', THEIRS)).status).toBe(404)
-    expect((await getTicks('checklist', 'not-a-uuid')).status).toBe(404)
+    expect((await getTicks(patch({}), 'checklist', THEIRS)).status).toBe(404)
+    expect((await getTicks(patch({}), 'checklist', 'not-a-uuid')).status).toBe(404)
     expect((await resetTicks(patch({}), 'checklist', THEIRS)).status).toBe(404)
     expect(m.clearTicks).not.toHaveBeenCalled()
   })
 
   it('own trip -> ticked ids', async () => {
-    const res = await getTicks('checklist', MINE)
+    const res = await getTicks(patch({}), 'checklist', MINE)
     expect(await res.json()).toEqual({ items: [{ template_id: 1, done: true }, { template_id: 4, done: true }] })
   })
 })

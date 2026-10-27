@@ -1944,6 +1944,7 @@ export type Database = {
       }
       trip_legs: {
         Row: {
+          attempts: number
           computed_at: string | null
           duration_min: number | null
           fare_max: number | null
@@ -1955,6 +1956,7 @@ export type Database = {
           to_stop: string
         }
         Insert: {
+          attempts?: number
           computed_at?: string | null
           duration_min?: number | null
           fare_max?: number | null
@@ -1966,6 +1968,7 @@ export type Database = {
           to_stop: string
         }
         Update: {
+          attempts?: number
           computed_at?: string | null
           duration_min?: number | null
           fare_max?: number | null
@@ -2208,6 +2211,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_trip: {
+        Args: { p_end?: string; p_start?: string; p_title: string }
+        Returns: string
+      }
       is_editor: { Args: never; Returns: boolean }
       is_open_now: { Args: { p_at: string; p_place: string }; Returns: boolean }
       map_places: {
@@ -2221,6 +2228,11 @@ export type Database = {
         }
         Returns: Json
       }
+      move_trip_stop: {
+        Args: { p_day: string; p_position: number; p_stop: string }
+        Returns: undefined
+      }
+      normalize_trip_day: { Args: { p_day: string }; Returns: undefined }
       search_content: {
         Args: {
           p_interests?: string[]
