@@ -7,7 +7,7 @@ import { AdminForm } from '../_lib/admin-form'
 import { BilingualField, type FieldErrors } from '../_lib/fields'
 import type { FormValues } from '../_lib/values'
 import { saveMedia } from './actions'
-import { UPLOAD_TYPES } from './schema'
+import { checkUpload, UPLOAD_TYPES } from './schema'
 import { uploadMedia } from './upload'
 
 function AssetFields({ values, fe }: { values: FormValues; fe: FieldErrors }) {
@@ -52,8 +52,15 @@ function FileField({ error }: { error?: string }) {
 }
 
 export function UploadForm() {
+  const t = useTranslations('admin')
+  // A file over the cap would be rejected by the platform before the action runs, so check it here first.
+  const validate = (fd: FormData) => {
+    const raw = fd.get('file')
+    const error = checkUpload(raw instanceof File ? raw : null)
+    return error === 'fileTooLarge' ? { fieldErrors: { file: t(`errors.${error}`) } } : null
+  }
   return (
-    <AdminForm action={uploadMedia} backHref="/admin/media">
+    <AdminForm action={uploadMedia} backHref="/admin/media" validate={validate}>
       {(fe) => (
         <>
           <FileField error={fe.file} />

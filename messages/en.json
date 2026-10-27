@@ -455,6 +455,8 @@
       "url": "URL",
       "agency": "Agency",
       "health": "Link health",
+      "changedHint": "The link check saw this page’s title change. Check the page, then accept it as the new baseline.",
+      "acceptPage": "Accept current page",
       "purposes": {
         "tourism": "Tourism",
         "work_study": "Work / study"
@@ -496,7 +498,7 @@
       "newTitle": "Upload image",
       "editTitle": "Edit media",
       "file": "Image file",
-      "fileHint": "JPEG, PNG, WebP or AVIF, up to 10 MB. The original file is stored unchanged; a blur placeholder is generated.",
+      "fileHint": "JPEG, PNG, WebP or AVIF, up to 4 MB. The original file is stored unchanged; a blur placeholder is generated.",
       "credit": "Credit",
       "license": "License",
       "alt": "Alt text",
@@ -528,6 +530,7 @@
       "date": "Use a date such as 2026-10-25.",
       "time": "Use a time such as 09:30.",
       "url": "Enter a full https:// address.",
+      "officialHost": "Use an official gov.au or govt.nz address.",
       "currency": "Use a 3-letter code such as AUD.",
       "lng": "Longitude must be between -180 and 180.",
       "lat": "Latitude must be between -90 and 90.",
@@ -543,7 +546,7 @@
       "saveFailed": "Couldn’t save. Please try again.",
       "fileRequired": "Choose an image to upload.",
       "fileType": "Use a JPEG, PNG, WebP or AVIF image.",
-      "fileTooLarge": "The image must be 10 MB or smaller.",
+      "fileTooLarge": "File too large (max 4 MB).",
       "uploadFailed": "Couldn’t upload the image. Please try again."
     }
   },

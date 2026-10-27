@@ -33,7 +33,11 @@ type Props = {
   onViewport: (bbox: Bbox, zoom: number) => void
   onSelect: (pin: Pin) => void
   onCluster: (c: MapCluster) => void
+  /** The style never loaded (error before `load`, or `STYLE_TIMEOUT_MS` passed): the page falls back to list view. */
+  onStyleError: () => void
 }
+
+export const STYLE_TIMEOUT_MS = 10_000
 
 // Shapes from Map.dc.html (circle, rounded square, diamond, outlined square): never colour alone.
 const SHAPE: Record<LayerKey, string> = {
@@ -178,8 +182,20 @@ export default function MapCanvas(props: Props) {
       const b = map.getBounds()
       propsRef.current.onViewport([b.getWest(), b.getSouth(), b.getEast(), b.getNorth()], map.getZoom())
     }
+    // A bad style URL or key never fires `load`; without this the map and its list stay on "Loading".
+    let loaded = false
+    let failed = false
+    const fail = () => {
+      if (loaded || failed) return
+      failed = true
+      propsRef.current.onStyleError()
+    }
+    const styleTimer = setTimeout(fail, STYLE_TIMEOUT_MS)
+    map.on('error', fail)
     map.on('moveend', emit)
     map.on('load', () => {
+      loaded = true
+      clearTimeout(styleTimer)
       addOverlayLayers(map)
       setReady(true)
       emit()
@@ -188,6 +204,7 @@ export default function MapCanvas(props: Props) {
     map.getCanvas().setAttribute('aria-describedby', propsRef.current.hintId)
 
     return () => {
+      clearTimeout(styleTimer)
       markers.forEach(({ marker }) => marker.remove())
       markers.clear()
       map.remove()

@@ -1,7 +1,11 @@
 import { z } from 'zod'
 import { i18nRequired } from '../_lib/form'
 
-export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+/**
+ * Uploads go through a server action, and a Vercel Function request body is capped at 4.5 MB, so the file is
+ * limited to 4 MB to leave room for the form fields (next.config.ts `bodySizeLimit` matches).
+ */
+export const MAX_UPLOAD_BYTES = 4 * 1024 * 1024
 /** For the file input's `accept` hint only; the server checks the decoded format. */
 export const UPLOAD_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'] as const
 

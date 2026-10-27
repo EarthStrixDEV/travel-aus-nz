@@ -16,10 +16,13 @@ import type { SaveResult } from './form'
 export function AdminForm({
   action,
   backHref,
+  validate,
   children,
 }: {
   action: (formData: FormData) => Promise<SaveResult>
   backHref: string
+  /** Optional check before sending, for errors the request itself would fail on (e.g. a file over the body cap). */
+  validate?: (formData: FormData) => SaveResult | null
   children: (errors: FieldErrors) => ReactNode
 }) {
   const t = useTranslations('admin.form')
@@ -31,6 +34,11 @@ export function AdminForm({
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
+    const invalid = validate?.(formData)
+    if (invalid) {
+      setResult(invalid)
+      return
+    }
     startTransition(async () => {
       const r = await action(formData)
       if (r.error || r.fieldErrors) setResult(r)

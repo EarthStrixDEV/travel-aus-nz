@@ -1,7 +1,8 @@
 'use server'
 
-import { revalidateTag } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { getTranslations } from 'next-intl/server'
+import { z } from 'zod'
 import { requireRole } from '@/lib/auth/profile'
 import { CACHE_TAGS } from '@/lib/content/cache'
 import { createClient } from '@/lib/supabase/server'
@@ -87,16 +88,40 @@ export async function saveOfficialLink(id: number | null, formData: FormData): P
   const d = parsed.data
 
   const supabase = await createClient()
-  // health_status / content_hash / last_checked_at belong to the link-check job; not written here.
+  // health_status / content_hash belong to the link-check job, except that a new URL is a new page: drop the
+  // old title baseline so the next run adopts the new one instead of flagging it as changed.
+  let urlChanged = false
+  if (linkId !== null) {
+    const { data: current, error: readError } = await supabase.from('official_links').select('url').eq('id', linkId).maybeSingle()
+    if (readError) return { error: dbError(readError, t) }
+    urlChanged = current !== null && current.url !== d.url
+  }
   const { error } = await supabase.from('official_links').upsert({
     ...(linkId !== null && { id: linkId }),
     country: d.country ?? null,
     agency: d.agency ?? null,
     title_i18n: toI18n(d, 'title'),
     url: d.url,
+    ...(urlChanged && { content_hash: null, health_status: 'ok' as const }),
   })
   if (error) return { error: dbError(error, t) }
 
   revalidateTag(CACHE_TAGS.entry)
   return {}
+}
+
+/**
+ * An editor checked a page the link-check job flagged as `changed` and accepts it: clear the title baseline
+ * (the next run adopts the current title) and mark the link healthy. Permissions keep their own
+ * `needs_review` flag; the editor clears that on the permission form after checking its text.
+ */
+export async function acceptOfficialLinkPage(formData: FormData): Promise<void> {
+  await requireRole(['editor', 'admin'])
+  const id = z.coerce.number().int().positive().safeParse(formData.get('id'))
+  if (!id.success) return
+  const supabase = await createClient()
+  const { error } = await supabase.from('official_links').update({ content_hash: null, health_status: 'ok' }).eq('id', id.data)
+  if (error) throw new Error('Failed to accept official link page')
+  revalidateTag(CACHE_TAGS.entry)
+  revalidatePath('/[locale]/admin/entry', 'layout')
 }

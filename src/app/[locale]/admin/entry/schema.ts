@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { isAllowedOfficialUrl } from '@/lib/entry/official-host'
 import { checkbox, country, date, i18nOptional, i18nRequired, int, optional, slug } from '../_lib/form'
 
 export const PURPOSES = ['tourism', 'work_study'] as const
@@ -56,6 +57,9 @@ export const officialLinkSchema = z.object({
   country: country.optional(),
   agency: optional,
   ...i18nRequired('title'),
-  // Official government pages only, so https.
-  url: z.url({ protocol: /^https$/, error: 'url' }).max(2000, 'tooLong'),
+  // Official government pages only: https on a gov.au / govt.nz host (the link-check job fetches this URL).
+  url: z
+    .url({ protocol: /^https$/, error: 'url' })
+    .max(2000, 'tooLong')
+    .refine(isAllowedOfficialUrl, 'officialHost'),
 })

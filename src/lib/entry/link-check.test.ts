@@ -73,6 +73,8 @@ const page = (title: string, status = 200, url = '') => {
   return res
 }
 
+const redirect = (location: string, status = 301) => new Response(null, { status, headers: { location } })
+
 const LINK_URL = 'https://immi.homeaffairs.gov.au'
 const seed = (over: Record<string, Row[]> = {}) => ({
   official_links: [{ id: 1, url: LINK_URL, health_status: 'ok', content_hash: null, last_checked_at: null }],
@@ -187,10 +189,11 @@ describe('checkLinks: broken', () => {
 describe('checkLinks: page title hash', () => {
   it('follows redirects, records the final url and the title hash, and adopts the first hash as the baseline', async () => {
     const { db, tables } = fakeDb(seed())
-    const fetchImpl = vi.fn(async () => page('Home Affairs', 200, 'https://immi.homeaffairs.gov.au/en'))
+    const fetchImpl = vi.fn(async (url: string) => (url === LINK_URL ? redirect('/en') : page('Home Affairs')))
     await checkLinks(db, fetchImpl as unknown as typeof fetch, DAY1)
 
-    expect(fetchImpl).toHaveBeenCalledWith(LINK_URL, expect.objectContaining({ method: 'GET', redirect: 'follow', signal: expect.any(AbortSignal) }))
+    expect(fetchImpl).toHaveBeenCalledWith(LINK_URL, expect.objectContaining({ method: 'GET', redirect: 'manual', signal: expect.any(AbortSignal) }))
+    expect(fetchImpl).toHaveBeenLastCalledWith('https://immi.homeaffairs.gov.au/en', expect.objectContaining({ redirect: 'manual' }))
     expect(tables.link_checks[0]).toMatchObject({ status_code: 200, final_url: 'https://immi.homeaffairs.gov.au/en', content_hash: sha('Home Affairs') })
     expect(tables.official_links[0]).toMatchObject({ content_hash: sha('Home Affairs'), health_status: 'ok' })
   })
@@ -215,5 +218,88 @@ describe('checkLinks: page title hash', () => {
     await checkLinks(db, same, DAY1)
     expect((await checkLinks(db, same, DAY2)).flagged).toBe(0)
     expect(tables.permission_types.every((p) => p.needs_review === false)).toBe(true)
+  })
+})
+
+describe('checkLinks: host allowlist (SSRF)', () => {
+  const linkTo = (url: string) => seed({ official_links: [{ id: 1, url, health_status: 'ok', content_hash: null }] })
+
+  it.each([
+    'https://169.254.169.254/latest/meta-data',
+    'https://example.com/visa',
+    'https://evilgov.au/',
+    'https://immi.homeaffairs.gov.au.evil.com/',
+    'http://immi.homeaffairs.gov.au/',
+  ])('an off-list or non-https url (%s) is never fetched and is recorded as a failed check', async (url) => {
+    const { db, tables } = fakeDb(linkTo(url))
+    const fetchImpl = vi.fn(async () => page('x'))
+    const result = await checkLinks(db, fetchImpl as unknown as typeof fetch, DAY1)
+    expect(fetchImpl).not.toHaveBeenCalled()
+    expect(result.checked).toBe(1)
+    expect(tables.link_checks[0]).toMatchObject({ link_id: 1, status_code: null, content_hash: null })
+  })
+
+  it('accepts gov.au, *.gov.au, govt.nz and *.govt.nz hosts', async () => {
+    const urls = ['https://gov.au/', 'https://www.border.gov.au/', 'https://govt.nz/', 'https://www.immigration.govt.nz/']
+    const { db } = fakeDb(seed({ official_links: urls.map((url, i) => ({ id: i + 1, url, health_status: 'ok', content_hash: null })) }))
+    const fetchImpl = vi.fn(async () => page('ok'))
+    await checkLinks(db, fetchImpl as unknown as typeof fetch, DAY1)
+    expect(fetchImpl.mock.calls.map((c) => (c as unknown[])[0])).toEqual(urls)
+  })
+
+  it('a redirect to an off-list host is not followed and counts as a failed check (two in a row -> broken)', async () => {
+    const { db, tables } = fakeDb(seed())
+    const fetchImpl = vi.fn(async (url: string) => (url === LINK_URL ? redirect('http://10.0.0.1/admin', 302) : page('internal')))
+    await checkLinks(db, fetchImpl as unknown as typeof fetch, DAY1)
+    expect(fetchImpl).toHaveBeenCalledTimes(1)
+    expect(tables.link_checks[0]).toMatchObject({ status_code: null, final_url: 'http://10.0.0.1/admin', content_hash: null })
+
+    await checkLinks(db, fetchImpl as unknown as typeof fetch, DAY2)
+    expect(fetchImpl).toHaveBeenCalledTimes(2)
+    expect(tables.official_links[0].health_status).toBe('broken')
+  })
+
+  it('an allowlisted redirect chain is followed (relative and absolute Location)', async () => {
+    const { db, tables } = fakeDb(seed())
+    const hops: Record<string, Response | (() => Response)> = {}
+    const fetchImpl = vi.fn(async (url: string) => {
+      if (url === LINK_URL) return redirect('https://www.homeaffairs.gov.au/visas', 308)
+      if (url === 'https://www.homeaffairs.gov.au/visas') return redirect('/visas/visitor', 302)
+      return page('Visitor visa')
+    })
+    void hops
+    await checkLinks(db, fetchImpl as unknown as typeof fetch, DAY1)
+    expect(fetchImpl).toHaveBeenCalledTimes(3)
+    expect(tables.link_checks[0]).toMatchObject({
+      status_code: 200,
+      final_url: 'https://www.homeaffairs.gov.au/visas/visitor',
+      content_hash: sha('Visitor visa'),
+    })
+  })
+
+  it('gives up after 5 redirects (failed check)', async () => {
+    const { db, tables } = fakeDb(seed())
+    let n = 0
+    const fetchImpl = vi.fn(async () => redirect(`/hop${++n}`))
+    await checkLinks(db, fetchImpl as unknown as typeof fetch, DAY1)
+    expect(fetchImpl).toHaveBeenCalledTimes(6) // the original request + 5 followed redirects
+    expect(tables.link_checks[0]).toMatchObject({ status_code: null, content_hash: null })
+  })
+
+  it('reads at most ~1 MB of the body', async () => {
+    const { db, tables } = fakeDb(seed())
+    const CHUNK = 64 * 1024
+    let pulled = 0
+    const body = new ReadableStream<Uint8Array>({
+      pull(ctl) {
+        const chunk = new TextEncoder().encode(pulled === 0 ? '<title>Big</title>'.padEnd(CHUNK, ' ') : 'x'.repeat(CHUNK))
+        pulled += chunk.byteLength
+        ctl.enqueue(chunk)
+      },
+    })
+    const fetchImpl = vi.fn(async () => new Response(body, { status: 200 }))
+    await checkLinks(db, fetchImpl as unknown as typeof fetch, DAY1) // would never finish if the whole (endless) body were read
+    expect(pulled).toBeLessThanOrEqual(1024 * 1024 + 2 * CHUNK)
+    expect(tables.link_checks[0]).toMatchObject({ status_code: 200, content_hash: sha('Big') })
   })
 })

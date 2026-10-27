@@ -70,7 +70,9 @@ export function MapView({ cities, styleUrl }: { cities: MapCity[]; styleUrl: str
   const locale = useLocale() as Locale
   const searchParams = useSearchParams()
   const reducedMotion = useReducedMotion()
-  const listOnly = styleUrl === null
+  // No style configured (production, R7) or the configured one failed to load: list view only.
+  const [styleFailed, setStyleFailed] = useState(false)
+  const listOnly = styleUrl === null || styleFailed
 
   // R1: `?place=<slug>` opens that drawer and centres the map on it.
   const [deepLink] = useState(() => {
@@ -354,7 +356,7 @@ export function MapView({ cities, styleUrl }: { cities: MapCity[]; styleUrl: str
         </div>
       )}
 
-      {styleUrl && (
+      {styleUrl && !styleFailed && (
         <div role="region" aria-label={t('canvas')} className="absolute inset-0 z-0">
           <MapCanvas
             styleUrl={styleUrl}
@@ -373,6 +375,7 @@ export function MapView({ cities, styleUrl }: { cities: MapCity[]; styleUrl: str
             onViewport={(bbox, z) => setMapViewport({ bbox, zoom: z })}
             onSelect={(p) => select(p.slug, false)}
             onCluster={goCluster}
+            onStyleError={() => setStyleFailed(true)}
           />
         </div>
       )}

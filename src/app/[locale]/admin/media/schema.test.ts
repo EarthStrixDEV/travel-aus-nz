@@ -21,6 +21,11 @@ describe('checkUpload', () => {
   it('accepts a non-empty file within the size cap (format is checked from the bytes later)', () => {
     expect(checkUpload(file('image/jpeg', 10))).toBeNull()
   })
+  it('caps uploads at 4 MB, under the 4.5 MB Vercel Function body limit', () => {
+    expect(MAX_UPLOAD_BYTES).toBe(4 * 1024 * 1024)
+    expect(checkUpload(file('image/jpeg', 4.1 * 1024 * 1024))).toBe('fileTooLarge')
+    expect(checkUpload(file('image/jpeg', MAX_UPLOAD_BYTES))).toBeNull()
+  })
   it('rejects a missing/empty file and oversized files', () => {
     expect(checkUpload(null)).toBe('fileRequired')
     expect(checkUpload(file('image/jpeg', 0))).toBe('fileRequired')

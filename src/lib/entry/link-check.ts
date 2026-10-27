@@ -1,7 +1,10 @@
 import { createHash } from 'node:crypto'
 import type { Client } from '@/lib/content/shared'
+import { isAllowedOfficialUrl } from './official-host'
 
 const TIMEOUT_MS = 10_000
+const MAX_REDIRECTS = 5
+const MAX_BODY_BYTES = 1024 * 1024
 const TITLE_RE = /<title[^>]*>([\s\S]*?)<\/title>/i
 
 /** sha-256 of the page `<title>` (trimmed, whitespace collapsed), or null when the page has none. */
@@ -14,19 +17,51 @@ type Probe = { status: number | null; finalUrl: string | null; hash: string | nu
 
 const failed = (status: number | null) => status === null || status >= 400
 
-/** One GET: follows redirects, gives up after 10 s. A network error or timeout is a failed check (status null). */
+/** Reads the body as text, stopping after `MAX_BODY_BYTES` (the title is near the top; pages can be huge). */
+async function readCapped(res: Response): Promise<string> {
+  if (!res.body) return ''
+  const reader = res.body.getReader()
+  const decoder = new TextDecoder()
+  let text = ''
+  let read = 0
+  while (read < MAX_BODY_BYTES) {
+    const { done, value } = await reader.read()
+    if (done) break
+    read += value.byteLength
+    text += decoder.decode(value, { stream: true })
+  }
+  await reader.cancel().catch(() => {})
+  return text
+}
+
+/**
+ * One GET with redirects followed by hand (at most `MAX_REDIRECTS`), each hop re-checked against the official
+ * host allowlist; gives up after 10 s overall. An off-list URL or redirect is never fetched and, like a network
+ * error, timeout or too many redirects, is a failed check (status null).
+ */
 async function probe(url: string, fetchImpl: typeof fetch): Promise<Probe> {
   const ctl = new AbortController()
   const timer = setTimeout(() => ctl.abort(), TIMEOUT_MS)
+  let current = url
   try {
-    const res = await fetchImpl(url, {
-      method: 'GET',
-      redirect: 'follow',
-      signal: ctl.signal,
-      headers: { accept: 'text/html,application/xhtml+xml', 'user-agent': 'TravelAusNZ-link-check/1.0' },
-    })
-    const hash = failed(res.status) ? null : pageTitleHash(await res.text())
-    return { status: res.status, finalUrl: res.url || url, hash }
+    for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
+      if (!isAllowedOfficialUrl(current)) return { status: null, finalUrl: current, hash: null }
+      const res = await fetchImpl(current, {
+        method: 'GET',
+        redirect: 'manual',
+        signal: ctl.signal,
+        headers: { accept: 'text/html,application/xhtml+xml', 'user-agent': 'TravelAusNZ-link-check/1.0' },
+      })
+      const location = res.headers.get('location')
+      if (res.status >= 300 && res.status < 400 && location) {
+        await res.body?.cancel().catch(() => {})
+        current = new URL(location, current).toString()
+        continue
+      }
+      const hash = failed(res.status) ? null : pageTitleHash(await readCapped(res))
+      return { status: res.status, finalUrl: current, hash }
+    }
+    return { status: null, finalUrl: current, hash: null }
   } catch {
     return { status: null, finalUrl: null, hash: null }
   } finally {

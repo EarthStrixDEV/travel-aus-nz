@@ -54,4 +54,14 @@ describe('officialLinkSchema', () => {
     expect(officialLinkSchema.safeParse({ ...link, title_en: undefined }).success).toBe(false)
     expect(officialLinkSchema.safeParse({ ...link, url: 'http://immi.homeaffairs.gov.au/' }).success).toBe(false)
   })
+  it('only accepts gov.au / govt.nz hosts (same allowlist as the link-check job)', () => {
+    for (const url of ['https://www.immigration.govt.nz/', 'https://govt.nz/', 'https://gov.au/']) {
+      expect(officialLinkSchema.safeParse({ ...link, url }).success).toBe(true)
+    }
+    for (const url of ['https://example.com/', 'https://evilgov.au/', 'https://immi.homeaffairs.gov.au.evil.com/']) {
+      const r = officialLinkSchema.safeParse({ ...link, url })
+      expect(r.success).toBe(false)
+      if (!r.success) expect(r.error.issues[0]).toMatchObject({ message: 'officialHost', path: ['url'] })
+    }
+  })
 })

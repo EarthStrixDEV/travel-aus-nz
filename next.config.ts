@@ -9,8 +9,9 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 const storageUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL) : null;
 
 const nextConfig: NextConfig = {
-  // Admin media uploads go through a server action (cap enforced in admin/media/schema.ts: 10 MB + form fields).
-  experimental: { serverActions: { bodySizeLimit: "11mb" } },
+  // Admin media uploads go through a server action: 4 MB file cap (admin/media/schema.ts) + form fields,
+  // kept under Vercel's 4.5 MB Function request body limit.
+  experimental: { serverActions: { bodySizeLimit: "4.5mb" } },
   images: {
     // Spec §6 media rules: AVIF/WebP in exactly three widths (480 / 960 / 1920), see lib/media/image-config.ts.
     ...imageWidthConfig,
