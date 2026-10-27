@@ -7,6 +7,7 @@ export const CACHE_TAGS = {
   gallery: 'gallery',
   fx: 'fx',
   entry: 'entry',
+  transport: 'transport',
 } as const
 
 /** Wraps `unstable_cache` with a named tag so server actions can `revalidateTag(CACHE_TAGS.x)`. */

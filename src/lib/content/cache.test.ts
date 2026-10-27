@@ -21,6 +21,6 @@ describe('cachedContent', () => {
   })
 
   it('exposes the tag set', () => {
-    expect(Object.keys(CACHE_TAGS).sort()).toEqual(['entry', 'fx', 'gallery', 'home', 'map', 'venues'])
+    expect(Object.keys(CACHE_TAGS).sort()).toEqual(['entry', 'fx', 'gallery', 'home', 'map', 'transport', 'venues'])
   })
 })

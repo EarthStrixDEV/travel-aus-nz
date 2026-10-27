@@ -1129,5 +1129,121 @@
       },
       "notice": "Entry rules change. Always confirm with the official government source before booking or travelling. This page is general guidance, not legal or immigration advice."
     }
+  },
+  "transport": {
+    "metaTitle": "Public transport",
+    "metaDescription": "Plan trips by train, tram, bus and ferry in Australian and New Zealand cities, with travel times, fares, transit cards and scenic rail and ferry routes.",
+    "eyebrow": "Public transport",
+    "title": "Getting around, without a car.",
+    "lede": "Trains, trams, buses and ferries within and between the cities we cover, with honest travel times, fares and how often they run.",
+    "mode": {
+      "train": "Train",
+      "metro": "Metro",
+      "tram": "Tram",
+      "bus": "Bus",
+      "coach": "Coach",
+      "ferry": "Ferry",
+      "walk": "Walk"
+    },
+    "duration": {
+      "hm": "{h} h {m}",
+      "h": "{h} h",
+      "m": "{m} min"
+    },
+    "planner": {
+      "label": "Journey planner",
+      "city": "City",
+      "from": "From",
+      "to": "To",
+      "fromPlaceholder": "Station, place or lat,lng",
+      "toPlaceholder": "Where to?",
+      "depart": "Depart",
+      "timeNote": "Times are local to {city}.",
+      "swap": "Swap from and to",
+      "submit": "Find routes",
+      "searching": "Finding routes…",
+      "suggestions": "Suggested places",
+      "noSuggestions": "No matching places",
+      "modes": "Modes",
+      "chip": {
+        "train": "Train",
+        "tram": "Tram",
+        "bus": "Bus",
+        "ferry": "Ferry"
+      },
+      "stepFree": "Step-free routes only",
+      "stepFreeNote": "Step-free based on our stop data — check with the operator.",
+      "errors": {
+        "fromRequired": "Enter where you are starting from.",
+        "toRequired": "Enter where you are going.",
+        "pick": "Choose a place from the list, or enter lat,lng.",
+        "departRequired": "Choose a departure date and time.",
+        "modesRequired": "Choose at least one mode."
+      }
+    },
+    "results": {
+      "label": "Route options",
+      "count": "{count, plural, =1 {1 option} other {# options}}",
+      "found": "{count, plural, =1 {Found 1 route.} other {Found # routes.}}",
+      "loading": "Finding routes…",
+      "selected": "Selected route",
+      "noResult": "No routes match. Try another time, turn on more modes or turn off step-free.",
+      "notFound": "We could not find that place. Choose one from the suggestions.",
+      "invalid": "Check the from, to and departure time, then try again.",
+      "rateLimited": "Too many searches, try again in a few minutes.",
+      "failed": "Routes could not be loaded. Try again.",
+      "unavailable": "Live routes are unavailable right now. Try again in a few minutes.",
+      "fallbackLead": "Meanwhile, a curated journey between these places:",
+      "days": "{count, plural, =1 {1 day} other {# days}}",
+      "priceFrom": "From {price}",
+      "checkFare": "Check fare with operator",
+      "arrive": "Arrive"
+    },
+    "explorer": {
+      "eyebrow": "Route explorer",
+      "title": "Lines in {city}",
+      "city": "City",
+      "legend": "Line styles",
+      "legendTrain": "Train / metro",
+      "legendTram": "Tram / light rail",
+      "legendBus": "Bus / coach",
+      "legendFerry": "Ferry",
+      "legendSelected": "Selected line",
+      "time": "Time",
+      "every": "Every",
+      "fare": "Fare",
+      "headway": "{peak}–{offpeak} min",
+      "headwayOne": "{min} min",
+      "unknown": "—",
+      "stops": "{count, plural, =1 {1 stop} other {# stops}}",
+      "allStops": "Stops in order",
+      "loading": "Loading lines…",
+      "error": "Lines could not be loaded.",
+      "retry": "Try again",
+      "empty": "No lines for {city} yet."
+    },
+    "scenic": {
+      "label": "Scenic journeys",
+      "eyebrow": "Journeys as experiences",
+      "title": "Scenic rail & ferry routes",
+      "country": {
+        "au": "Australia",
+        "nz": "New Zealand"
+      },
+      "fareFrom": "From {price}"
+    },
+    "tips": {
+      "label": "Practical tips",
+      "eyebrow": "Practical tips",
+      "title": "Cards, passes & access",
+      "cards": "Transit cards",
+      "cardsFallback": "Sydney: Opal, or tap a contactless card. Melbourne: myki. Auckland: AT HOP or contactless.",
+      "contactless": "Contactless bank cards accepted",
+      "official": "Official site: {name}",
+      "passes": "Passes & caps",
+      "passesFallback": "Daily and weekly fare caps apply on most city networks, so a day of hopping rarely costs more than one cap. Book long-distance rail and Interislander sailings ahead in summer.",
+      "access": "Accessibility",
+      "accessText": "Major city stations are largely step-free; check each operator's station guide before you go. Ferries at main wharves have ramp access, and bus drivers can deploy a ramp on request."
+    }
   }
 }
