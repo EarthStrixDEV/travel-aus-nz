@@ -7,6 +7,7 @@ export type ApiErrorCode =
   | 'NOT_FOUND'
   | 'RATE_LIMITED'
   | 'FX_UNAVAILABLE'
+  | 'ROUTING_UNAVAILABLE'
   | 'INTERNAL';
 
 export function apiError(code: ApiErrorCode, message: string, status: number): NextResponse {

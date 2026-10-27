@@ -1,0 +1,88 @@
+{
+  "routes": [
+    {
+      "legs": [
+        {
+          "steps": [
+            { "travelMode": "WALK", "distanceMeters": 70, "staticDuration": "60s" },
+            { "travelMode": "WALK", "distanceMeters": 150, "staticDuration": "120s" },
+            {
+              "travelMode": "TRANSIT",
+              "distanceMeters": 6100,
+              "staticDuration": "600s",
+              "transitDetails": {
+                "stopDetails": {
+                  "departureStop": { "name": "Central Station", "location": { "latLng": { "latitude": -33.88306, "longitude": 151.20629 } } },
+                  "departureTime": "2026-11-01T22:04:00Z",
+                  "arrivalStop": { "name": "Bondi Junction Station", "location": { "latLng": { "latitude": -33.89148, "longitude": 151.24778 } } },
+                  "arrivalTime": "2026-11-01T22:14:00Z"
+                },
+                "headsign": "Bondi Junction",
+                "stopCount": 4,
+                "transitLine": {
+                  "agencies": [{ "name": "Sydney Trains" }],
+                  "name": "Eastern Suburbs & Illawarra Line",
+                  "nameShort": "T4",
+                  "vehicle": { "type": "HEAVY_RAIL" }
+                }
+              }
+            },
+            { "travelMode": "WALK", "distanceMeters": 40, "staticDuration": "45s" },
+            {
+              "travelMode": "TRANSIT",
+              "distanceMeters": 3200,
+              "staticDuration": "720s",
+              "transitDetails": {
+                "stopDetails": {
+                  "departureStop": { "name": "Bondi Junction Interchange, Stand D", "location": { "latLng": { "latitude": -33.89121, "longitude": 151.24811 } } },
+                  "departureTime": "2026-11-01T22:20:00Z",
+                  "arrivalStop": { "name": "Bondi Beach, Campbell Pde", "location": { "latLng": { "latitude": -33.89065, "longitude": 151.27474 } } },
+                  "arrivalTime": "2026-11-01T22:32:00Z"
+                },
+                "headsign": "North Bondi",
+                "stopCount": 9,
+                "transitLine": {
+                  "agencies": [{ "name": "Transdev John Holland" }],
+                  "nameShort": "333",
+                  "vehicle": { "type": "BUS" }
+                }
+              }
+            },
+            { "travelMode": "WALK", "distanceMeters": 110, "staticDuration": "100s" },
+            { "travelMode": "WALK", "distanceMeters": 90, "staticDuration": "80s" }
+          ]
+        }
+      ]
+    },
+    {
+      "legs": [
+        {
+          "steps": [
+            { "travelMode": "WALK", "distanceMeters": 300, "staticDuration": "240s" },
+            {
+              "travelMode": "TRANSIT",
+              "distanceMeters": 8000,
+              "staticDuration": "2220s",
+              "transitDetails": {
+                "stopDetails": {
+                  "departureStop": { "name": "Central Station, Eddy Av, Stand D", "location": { "latLng": { "latitude": -33.88302, "longitude": 151.20743 } } },
+                  "departureTime": "2026-11-01T22:03:00Z",
+                  "arrivalStop": { "name": "Bondi Beach, Campbell Pde", "location": { "latLng": { "latitude": -33.89065, "longitude": 151.27474 } } },
+                  "arrivalTime": "2026-11-01T22:40:00Z"
+                },
+                "headsign": "North Bondi",
+                "stopCount": 31,
+                "transitLine": {
+                  "agencies": [{ "name": "Transdev John Holland" }],
+                  "nameShort": "333",
+                  "vehicle": { "type": "BUS" }
+                }
+              }
+            },
+            { "travelMode": "WALK", "distanceMeters": 140, "staticDuration": "120s" }
+          ]
+        }
+      ]
+    }
+  ]
+}
