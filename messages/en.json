@@ -666,9 +666,28 @@
       "creating": "Creating…",
       "failed": "The trip wasn’t created. Check the details and try again."
     },
-    "header": {
-      "share": "Share",
+    "share": {
+      "open": "Share",
+      "title": "Share a read-only link",
+      "text": "Anyone with the link can see this trip’s days, stops and routes. Your notes and saved places stay private.",
+      "link": "Link",
+      "creating": "Creating the link…",
+      "copy": "Copy link",
+      "copied": "Link copied.",
+      "revoke": "Turn off link",
+      "revoked": "The link is off. Anyone who had it now sees “not found”.",
+      "error": "That didn’t work. Try again.",
+      "close": "Close",
       "export": "Export itinerary",
+      "ics": "Calendar file (.ics)",
+      "pdf": "Print or save as PDF"
+    },
+    "shared": {
+      "eyebrow": "Shared trip",
+      "readOnly": "Read-only. Times are local to each city.",
+      "emptyDay": "Nothing planned for this day."
+    },
+    "header": {
       "delete": "Delete trip",
       "deleteConfirm": "Delete this trip?",
       "deleteYes": "Yes, delete",

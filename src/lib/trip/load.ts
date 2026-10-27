@@ -2,7 +2,7 @@ import { ewkbToGeometry, geometryBbox } from '@/lib/content/geo'
 import { text, type Client, type TransitMode } from '@/lib/content/shared'
 import type { Locale } from '@/lib/i18n/t'
 import type { Json } from '@/lib/supabase/database.types'
-import { isOffMap, transitMinutes, type LegStatus, type SavedPlace, type TripData, type TripLeg, type TripPlace, type TripSummary } from './model'
+import { isOffMap, transitMinutes, type LegStatus, type SavedPlace, type TripData, type TripDay, type TripLeg, type TripPlace, type TripSummary } from './model'
 
 /** Reads for My Trip through the user's session client (RLS: owner only). */
 
@@ -13,7 +13,7 @@ type PlaceRow = {
   geom: string | null
   name_i18n: Json
   area_i18n: Json | null
-  city: { slug: string; bbox: string | null } | null
+  city: { slug: string; bbox: string | null; timezone: string } | null
 }
 
 type DayRow = {
@@ -50,6 +50,7 @@ function toPlace(r: PlaceRow, locale: Locale): TripPlace {
     lat: point?.type === 'Point' ? point.coordinates[1] : null,
     citySlug: r.city?.slug ?? null,
     cityBbox: bbox ? geometryBbox(bbox) : null,
+    cityTimezone: r.city?.timezone ?? null,
   }
 }
 
@@ -69,7 +70,38 @@ export async function listTrips(db: Client, userId: string): Promise<TripSummary
   return (data ?? []).map((t) => ({ id: t.id, title: t.title, startDate: t.start_date, endDate: t.end_date }))
 }
 
-/** Days with stops in order, each stop's leg to the next, and saved places not yet on this trip. Null when not the user's live trip. */
+/** A trip's days with stops in order and each stop's leg to the next. `db` decides visibility (session or service). */
+export async function loadDays(db: Client, tripId: string, locale: Locale): Promise<TripDay[]> {
+  const { data: dayRows, error } = await db
+    .from('trip_days')
+    .select('id, day_no, date, title, stops:trip_stops(id, position, time, note, place:places(id, slug, type, geom, name_i18n, area_i18n, city:cities(slug, bbox, timezone)))')
+    .eq('trip_id', tripId)
+    .order('day_no')
+  if (error) throw error
+  const days = (dayRows ?? []) as unknown as DayRow[]
+
+  const stopIds = days.flatMap((d) => (d.stops ?? []).map((s) => s.id))
+  const { data: legs, error: legsError } = stopIds.length
+    ? await db.from('trip_legs').select('from_stop, to_stop, mode, duration_min, summary, fare_min, fare_max, status').in('from_stop', stopIds)
+    : { data: [] as LegRow[], error: null }
+  if (legsError) throw legsError
+  const legByPair = new Map(((legs ?? []) as LegRow[]).map((l) => [`${l.from_stop}>${l.to_stop}`, toLeg(l)]))
+
+  return days.map((d) => {
+    const ordered = [...(d.stops ?? [])].filter((s) => s.place).sort((a, b) => a.position - b.position)
+    const stops = ordered.map((s, i) => ({
+      id: s.id,
+      position: s.position,
+      time: s.time ? s.time.slice(0, 5) : null,
+      note: s.note ?? '',
+      place: toPlace(s.place!, locale),
+      legToNext: ordered[i + 1] ? (legByPair.get(`${s.id}>${ordered[i + 1].id}`) ?? null) : null,
+    }))
+    return { id: d.id, dayNo: d.day_no, date: d.date, title: d.title ?? '', stops, transitMin: transitMinutes(stops), offMap: isOffMap(stops) }
+  })
+}
+
+/** Days, legs and saved places not yet on this trip. Null when not the user's live trip. */
 export async function loadTrip(db: Client, userId: string, tripId: string, locale: Locale): Promise<TripData | null> {
   const { data: trip, error } = await db
     .from('trips')
@@ -81,26 +113,13 @@ export async function loadTrip(db: Client, userId: string, tripId: string, local
   if (error) throw error
   if (!trip) return null
 
-  const { data: dayRows, error: daysError } = await db
-    .from('trip_days')
-    .select('id, day_no, date, title, stops:trip_stops(id, position, time, note, place:places(id, slug, type, geom, name_i18n, area_i18n, city:cities(slug, bbox)))')
-    .eq('trip_id', tripId)
-    .order('day_no')
-  if (daysError) throw daysError
-  const days = (dayRows ?? []) as unknown as DayRow[]
-
-  const stopIds = days.flatMap((d) => (d.stops ?? []).map((s) => s.id))
-  const [legs, saved] = await Promise.all([
-    stopIds.length
-      ? db.from('trip_legs').select('from_stop, to_stop, mode, duration_min, summary, fare_min, fare_max, status').in('from_stop', stopIds)
-      : Promise.resolve({ data: [] as LegRow[], error: null }),
+  const [days, saved] = await Promise.all([
+    loadDays(db, tripId, locale),
     db.from('saved_items').select('entity_id').eq('user_id', userId).eq('entity_type', 'place').order('created_at', { ascending: false }),
   ])
-  if (legs.error) throw legs.error
   if (saved.error) throw saved.error
-  const legByPair = new Map((legs.data as LegRow[]).map((l) => [`${l.from_stop}>${l.to_stop}`, toLeg(l)]))
 
-  const scheduled = new Set(days.flatMap((d) => (d.stops ?? []).flatMap((s) => (s.place ? [s.place.id] : []))))
+  const scheduled = new Set(days.flatMap((d) => d.stops.map((s) => s.place.id)))
   const unscheduledIds = (saved.data ?? []).map((s) => s.entity_id).filter((id) => !scheduled.has(id))
   let savedUnscheduled: SavedPlace[] = []
   if (unscheduledIds.length) {
@@ -117,23 +136,5 @@ export async function loadTrip(db: Client, userId: string, tripId: string, local
     })
   }
 
-  return {
-    id: trip.id,
-    title: trip.title,
-    startDate: trip.start_date,
-    endDate: trip.end_date,
-    days: days.map((d) => {
-      const ordered = [...(d.stops ?? [])].filter((s) => s.place).sort((a, b) => a.position - b.position)
-      const stops = ordered.map((s, i) => ({
-        id: s.id,
-        position: s.position,
-        time: s.time ? s.time.slice(0, 5) : null,
-        note: s.note ?? '',
-        place: toPlace(s.place!, locale),
-        legToNext: ordered[i + 1] ? (legByPair.get(`${s.id}>${ordered[i + 1].id}`) ?? null) : null,
-      }))
-      return { id: d.id, dayNo: d.day_no, date: d.date, title: d.title ?? '', stops, transitMin: transitMinutes(stops), offMap: isOffMap(stops) }
-    }),
-    savedUnscheduled,
-  }
+  return { id: trip.id, title: trip.title, startDate: trip.start_date, endDate: trip.end_date, days, savedUnscheduled }
 }

@@ -13,6 +13,7 @@ const place = (lng: number | null, lat: number | null, bbox = SYDNEY): TripPlace
   lat,
   citySlug: 'sydney',
   cityBbox: bbox,
+  cityTimezone: 'Australia/Sydney',
 })
 
 const leg = (status: TripLeg['status'], durationMin: number): TripLeg => ({ mode: 'train', durationMin, summary: null, fareMin: null, fareMax: null, status })

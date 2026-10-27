@@ -15,6 +15,8 @@ export type TripPlace = {
   lat: number | null
   citySlug: string | null
   cityBbox: Bbox | null
+  /** IANA zone of the place's city (ICS export); null when the place has no city. */
+  cityTimezone: string | null
 }
 
 export type LegStatus = 'stale' | 'ok' | 'failed'

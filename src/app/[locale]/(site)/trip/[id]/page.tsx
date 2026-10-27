@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { setRequestLocale } from 'next-intl/server'
 import { z } from 'zod'
+import { ShareExport } from '@/components/trip/share-export'
 import { TripView } from '@/components/trip/trip-view'
 import { requireUser } from '@/lib/auth/profile'
 import { resolveMapStyle } from '@/lib/content/places'
@@ -24,7 +25,11 @@ export default async function TripPage({ params }: Params) {
 
   return (
     <div className="mx-auto max-w-[1440px] px-[clamp(16px,4vw,56px)] pt-16 pb-24 md:pt-24 md:pb-36">
-      <TripView trip={trip} styleUrl={resolveMapStyle(process.env.NEXT_PUBLIC_MAP_STYLE_URL, process.env.NODE_ENV)} />
+      <TripView
+        trip={trip}
+        styleUrl={resolveMapStyle(process.env.NEXT_PUBLIC_MAP_STYLE_URL, process.env.NODE_ENV)}
+        header={<ShareExport tripId={trip.id} />}
+      />
     </div>
   )
 }
