@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/components/transport/route-legs.tsx"
+        ],
+        "createdAt": "2026-10-27T16:27:59.643Z",
+        "reason": "Claude: V_STROKE are mode line glyphs (solid/dashed/dotted route strokes from design/pages/Transport.dc.html .v-* classes), not card accent borders"
+      }
+    ]
+  }
+}
